@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 2,
+  "defaultEnvironment": "kitchen",
+  "environments": [
+    {
+      "id": "kitchen",
+      "label": "Kitchen - SPZ",
+      "visualMode": "spz",
+      "xmlPath": "./assets/environments/kitchen/collision.xml",
+      "spzPath": "./assets/environments/kitchen/kitcken.spz",
+      "transformPath": "./assets/environments/kitchen/transform.json",
+      "camera": null,
+      "spawn": {
+        "schemaVersion": 1,
+        "position": [-0.975, -0.675],
+        "yaw": 0.605545,
+        "clearanceMeters": 1.5295,
+        "sceneId": "kitchen"
+      }
+    },
+    {
+      "id": "meeting_room",
+      "label": "Meeting Room - SPZ",
+      "visualMode": "spz",
+      "xmlPath": "./assets/environments/meeting_room/collision.xml",
+      "spzPath": "./assets/environments/meeting_room/meeting_room.spz",
+      "transformPath": "./assets/environments/meeting_room/transform.json",
+      "camera": null,
+      "spawnPath": "./assets/environments/meeting_room/spawn.json"
+    },
+    {
+      "id": "scenesmith_room_005",
+      "label": "SceneSmith Bedroom 005 - Mesh",
+      "visualMode": "mesh",
+      "xmlPath": "./assets/environments/scenesmith_room_005/scene.xml",
+      "filesPath": "./assets/environments/scenesmith_room_005/index.json",
+      "camera": {
+        "position": [3.3, 2.2, -3.1],
+        "target": [1.8, 0.65, -1.6]
+      },
+      "spawnPath": "./assets/environments/scenesmith_room_005/spawn.json"
+    },
+    {
+      "id": "scenesmith_room_030",
+      "label": "SceneSmith Living Room 030 - Mesh",
+      "visualMode": "mesh",
+      "xmlPath": "./assets/environments/scenesmith_room_030/scene.xml",
+      "filesPath": "./assets/environments/scenesmith_room_030/index.json",
+      "camera": null,
+      "spawnPath": "./assets/environments/scenesmith_room_030/spawn.json"
+    },
+    {
+      "id": "scenesmith_room_036",
+      "label": "SceneSmith Dining Room 036 - Mesh",
+      "visualMode": "mesh",
+      "xmlPath": "./assets/environments/scenesmith_room_036/scene.xml",
+      "filesPath": "./assets/environments/scenesmith_room_036/index.json",
+      "camera": {
+        "position": [4.9, 3.2, -4.1],
+        "target": [3.8, 0.55, -2.05]
+      },
+      "spawnPath": "./assets/environments/scenesmith_room_036/spawn.json"
+    },
+    {
+      "id": "scenesmith_room_125",
+      "label": "SceneSmith Office 125 - Mesh",
+      "visualMode": "mesh",
+      "xmlPath": "./assets/environments/scenesmith_room_125/scene.xml",
+      "filesPath": "./assets/environments/scenesmith_room_125/index.json",
+      "camera": null,
+      "spawnPath": "./assets/environments/scenesmith_room_125/spawn.json"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "defaultRobot": "ranger_mini_v3_piper",
+  "robots": [
+    "ranger_mini_v3_piper"
+  ]
+}
+

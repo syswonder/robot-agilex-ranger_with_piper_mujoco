@@ -1,0 +1,354 @@
+<mujoco model="scene_scene_036">
+  <compiler angle="radian" boundmass="0.001" boundinertia="0.001" meshdir="meshes" texturedir="meshes/scenesmith" />
+  <visual>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.8 0.8 0.8" specular="0.1 0.1 0.1" />
+  </visual>
+  <asset>
+    <texture type="skybox" colorspace="auto" name="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
+    <texture type="2d" colorspace="auto" name="grid" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="512" height="512" />
+    <texture type="2d" colorspace="linear" name="dining_room_floors_floor_tex" file="dining_room_floors_floor_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_north_wall_wall_tex" file="dining_room_north_wall_wall_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_window_1_window_tex" file="dining_room_window_1_window_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_dining_table_1767839772_dining_table_tex" file="dining_room_dining_table_1767839772_dining_table_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" file="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_rug_1767840466_rug_tex" file="dining_room_rug_1767840466_rug_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_plant_stand_1767840435_plant_stand_tex" file="dining_room_plant_stand_1767840435_plant_stand_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_buffet_cabinet_1767841005_buffet_cabinet_tex" file="dining_room_buffet_cabinet_1767841005_buffet_cabinet_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_painting_1767841585_painting_tex" file="dining_room_painting_1767841585_painting_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_wall_sconce_1767841413_wall_sconce_tex" file="dining_room_wall_sconce_1767841413_wall_sconce_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_mirror_1767841460_mirror_tex" file="dining_room_mirror_1767841460_mirror_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_print_1767841413_print_tex" file="dining_room_print_1767841413_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_clock_1767841413_clock_tex" file="dining_room_clock_1767841413_clock_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_print_1767841585_print_s1.3_1.3_1.3_tex" file="dining_room_print_1767841585_print_s1.3_1.3_1.3_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_print_1767842082_print_tex" file="dining_room_print_1767842082_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_chandelier_1767842496_chandelier_s1.35_1.35_1.35_tex" file="dining_room_chandelier_1767842496_chandelier_s1.35_1.35_1.35_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_recessed_light_1767842496_recessed_light_tex" file="dining_room_recessed_light_1767842496_recessed_light_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_smoke_detector_1767842496_smoke_detector_tex" file="dining_room_smoke_detector_1767842496_smoke_detector_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_vase_1767843289_vase_tex" file="dining_room_vase_1767843289_vase_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_tex" file="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_fruit_bowl_1767843289_fruit_bowl_tex" file="dining_room_fruit_bowl_1767843289_fruit_bowl_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_apple_1767843416_apple_tex" file="dining_room_apple_1767843416_apple_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_small_orange_fruit_1767843564_small_orange_fruit_tex" file="dining_room_small_orange_fruit_1767843564_small_orange_fruit_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_candle_holder_1767843859_candle_holder_tex" file="dining_room_candle_holder_1767843859_candle_holder_texture.png" />
+    <texture type="2d" colorspace="linear" name="dining_room_taper_candle_1767843859_taper_candle_tex" file="dining_room_taper_candle_1767843859_taper_candle_texture.png" />
+    <material name="grid" texture="grid" texrepeat="10 10" />
+    <material name="dining_room_floors_floor_tex" texture="dining_room_floors_floor_tex" />
+    <material name="dining_room_north_wall_wall_tex" texture="dining_room_north_wall_wall_tex" />
+    <material name="dining_room_window_1_window_tex" texture="dining_room_window_1_window_tex" />
+    <material name="dining_room_dining_table_1767839772_dining_table_tex" texture="dining_room_dining_table_1767839772_dining_table_tex" />
+    <material name="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" texture="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" />
+    <material name="dining_room_rug_1767840466_rug_tex" texture="dining_room_rug_1767840466_rug_tex" />
+    <material name="dining_room_plant_stand_1767840435_plant_stand_tex" texture="dining_room_plant_stand_1767840435_plant_stand_tex" />
+    <material name="dining_room_buffet_cabinet_1767841005_buffet_cabinet_tex" texture="dining_room_buffet_cabinet_1767841005_buffet_cabinet_tex" />
+    <material name="dining_room_painting_1767841585_painting_tex" texture="dining_room_painting_1767841585_painting_tex" />
+    <material name="dining_room_wall_sconce_1767841413_wall_sconce_tex" texture="dining_room_wall_sconce_1767841413_wall_sconce_tex" />
+    <material name="dining_room_mirror_1767841460_mirror_tex" texture="dining_room_mirror_1767841460_mirror_tex" />
+    <material name="dining_room_print_1767841413_print_tex" texture="dining_room_print_1767841413_print_tex" />
+    <material name="dining_room_clock_1767841413_clock_tex" texture="dining_room_clock_1767841413_clock_tex" />
+    <material name="dining_room_print_1767841585_print_s1.3_1.3_1.3_tex" texture="dining_room_print_1767841585_print_s1.3_1.3_1.3_tex" />
+    <material name="dining_room_print_1767842082_print_tex" texture="dining_room_print_1767842082_print_tex" />
+    <material name="dining_room_chandelier_1767842496_chandelier_s1.35_1.35_1.35_tex" texture="dining_room_chandelier_1767842496_chandelier_s1.35_1.35_1.35_tex" />
+    <material name="dining_room_recessed_light_1767842496_recessed_light_tex" texture="dining_room_recessed_light_1767842496_recessed_light_tex" />
+    <material name="dining_room_smoke_detector_1767842496_smoke_detector_tex" texture="dining_room_smoke_detector_1767842496_smoke_detector_tex" />
+    <material name="dining_room_vase_1767843289_vase_tex" texture="dining_room_vase_1767843289_vase_tex" />
+    <material name="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_tex" texture="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_tex" />
+    <material name="dining_room_fruit_bowl_1767843289_fruit_bowl_tex" texture="dining_room_fruit_bowl_1767843289_fruit_bowl_tex" />
+    <material name="dining_room_apple_1767843416_apple_tex" texture="dining_room_apple_1767843416_apple_tex" />
+    <material name="dining_room_small_orange_fruit_1767843564_small_orange_fruit_tex" texture="dining_room_small_orange_fruit_1767843564_small_orange_fruit_tex" />
+    <material name="dining_room_candle_holder_1767843859_candle_holder_tex" texture="dining_room_candle_holder_1767843859_candle_holder_tex" />
+    <material name="dining_room_taper_candle_1767843859_taper_candle_tex" texture="dining_room_taper_candle_1767843859_taper_candle_tex" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_floor_visual_visual_mesh" file="scenesmith/dining_room_floors_floor.obj" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_north_wall_visual_visual_mesh" file="scenesmith/dining_room_north_wall_wall.obj" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_window_1_visual_visual_mesh" file="scenesmith/dining_room_window_1_window.obj" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_south_wall_visual_visual_mesh" file="scenesmith/dining_room_south_wall_wall.obj" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_east_wall_visual_visual_mesh" file="scenesmith/dining_room_east_wall_wall.obj" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_window_3_visual_visual_mesh" file="scenesmith/dining_room_window_3_window.obj" />
+    <mesh name="room_geometry_dining_room_room_geometry_body_link_west_wall_visual_visual_mesh" file="scenesmith/dining_room_west_wall_wall.obj" />
+    <mesh name="dining_room_dining_table_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_dining_table_1767839772_dining_table.obj" />
+    <mesh name="dining_room_dining_chair_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2.obj" />
+    <mesh name="dining_room_rug_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_rug_1767840466_rug.obj" />
+    <mesh name="dining_room_plant_stand_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_plant_stand_1767840435_plant_stand.obj" />
+    <mesh name="dining_room_buffet_cabinet_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_buffet_cabinet_1767841005_buffet_cabinet.obj" />
+    <mesh name="dining_room_painting_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_painting_1767841585_painting.obj" />
+    <mesh name="dining_room_wall_sconce_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_wall_sconce_1767841413_wall_sconce.obj" />
+    <mesh name="dining_room_mirror_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_mirror_1767841460_mirror.obj" />
+    <mesh name="dining_room_print_1_base_link_visual_visual_mesh" file="scenesmith/dining_room_print_1767841413_print.obj" />
+    <mesh name="dining_room_clock_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_clock_1767841413_clock.obj" />
+    <mesh name="dining_room_print_2_base_link_visual_visual_mesh" file="scenesmith/dining_room_print_1767841585_print_s1.3_1.3_1.3.obj" />
+    <mesh name="dining_room_print_3_base_link_visual_visual_mesh" file="scenesmith/dining_room_print_1767842082_print.obj" />
+    <mesh name="dining_room_chandelier_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_chandelier_1767842496_chandelier_s1.35_1.35_1.35.obj" />
+    <mesh name="dining_room_recessed_light_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_recessed_light_1767842496_recessed_light.obj" />
+    <mesh name="dining_room_smoke_detector_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_smoke_detector_1767842496_smoke_detector.obj" />
+    <mesh name="dining_room_vase_0_f0_c_base_link_visual_visual_mesh" file="scenesmith/dining_room_vase_1767843289_vase.obj" />
+    <mesh name="dining_room_eucalyptus_sprig_0_f0_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig.obj" />
+    <mesh name="dining_room_fruit_bowl_0_f1_c_base_link_visual_visual_mesh" file="scenesmith/dining_room_fruit_bowl_1767843289_fruit_bowl.obj" />
+    <mesh name="dining_room_apple_0_f1_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_apple_1767843416_apple.obj" />
+    <mesh name="dining_room_small_orange_fruit_0_f1_2_base_link_visual_visual_mesh" file="scenesmith/dining_room_small_orange_fruit_1767843564_small_orange_fruit.obj" />
+    <mesh name="dining_room_candle_holder_0_s0_0_base_link_visual_visual_mesh" file="scenesmith/dining_room_candle_holder_1767843859_candle_holder.obj" />
+    <mesh name="dining_room_taper_candle_0_s0_1_base_link_visual_visual_mesh" file="scenesmith/dining_room_taper_candle_1767843859_taper_candle.obj" />
+  </asset>
+  <worldbody>
+    <body name="room_geometry_dining_room" pos="2.75 2.25 0">
+      <body name="room_geometry_dining_room_room_geometry_body_link">
+        <geom name="room_geometry_dining_room_room_geometry_body_link_floor_collision_collision" size="2.75 2.25 0.05" pos="0 0 -0.05" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_north_wall_collision_collision" size="2.75 0.025 1.35" pos="0 2.225 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_south_wall_collision_0_collision" size="1.10247 0.025 1.35" pos="-1.64753 -2.225 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_south_wall_collision_1_collision" size="1.19753 0.025 1.35" pos="1.55247 -2.225 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_east_wall_collision_collision" size="0.025 2.25 1.35" pos="2.725 0 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_west_wall_collision_collision" size="0.025 2.25 1.35" pos="-2.725 0 1.35" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_floor_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_floors_floor_tex" mesh="room_geometry_dining_room_room_geometry_body_link_floor_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_north_wall_visual_visual" pos="0 2.225 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_window_1_visual_visual" pos="-1.28798 2.225 1.5" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="dining_room_window_1_window_tex" mesh="room_geometry_dining_room_room_geometry_body_link_window_1_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_window_2_visual_visual" pos="1.08721 2.225 1.5" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="dining_room_window_1_window_tex" mesh="room_geometry_dining_room_room_geometry_body_link_window_1_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_north_wall_exterior_visual_visual" pos="0 2.275 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_south_wall_visual_visual" pos="0 -2.225 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_south_wall_exterior_visual_visual" pos="0 -2.275 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_east_wall_visual_visual" pos="2.725 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_window_3_visual_visual" pos="2.725 0.255538 1.5" type="mesh" contype="0" conaffinity="0" material="dining_room_window_1_window_tex" mesh="room_geometry_dining_room_room_geometry_body_link_window_3_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_east_wall_exterior_visual_visual" pos="2.775 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_west_wall_visual_visual" pos="-2.725 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_west_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_dining_room_room_geometry_body_link_west_wall_exterior_visual_visual" pos="-2.775 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="dining_room_north_wall_wall_tex" mesh="room_geometry_dining_room_room_geometry_body_link_west_wall_visual_visual_mesh" group="1" />
+      </body>
+    </body>
+    <body name="dining_room_dining_table_0" pos="2.75682 2.19945 -0.00042291" quat="0.999997 -0.000150145 -0.000174298 -0.00258654">
+      <body name="dining_room_dining_table_0_base_link">
+        <geom name="dining_room_dining_table_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_table_1767839772_dining_table_tex" mesh="dining_room_dining_table_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_table_0_static_collision" type="box" pos="0 0 0.3772149" size="0.7 0.7043651 0.3772149" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_dining_chair_0" pos="2.79206 3.21906 -0.000710933" quat="0.00341629 -0.00082133 -0.000122474 -0.999994">
+      <body name="dining_room_dining_chair_0_base_link">
+        <geom name="dining_room_dining_chair_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" mesh="dining_room_dining_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_chair_0_static_collision" type="box" pos="0 0 0.4215474" size="0.288 0.2667027 0.4215474" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_dining_chair_1" pos="2.73697 1.14078 -0.000710933" quat="0.999999 0.00012065 -0.0008216 0.00119597">
+      <body name="dining_room_dining_chair_1_base_link">
+        <geom name="dining_room_dining_chair_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" mesh="dining_room_dining_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_chair_1_static_collision" type="box" pos="0 0 0.4215474" size="0.288 0.2667027 0.4215474" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_dining_chair_2" pos="3.69724 2.67878 -0.000710933" quat="0.515165 0.000765958 -0.000320768 0.85709">
+      <body name="dining_room_dining_chair_2_base_link">
+        <geom name="dining_room_dining_chair_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" mesh="dining_room_dining_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_chair_2_static_collision" type="box" pos="0 0 0.4215474" size="0.288 0.2667027 0.4215474" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_dining_chair_3" pos="3.65985 1.77218 -0.000710933" quat="0.876766 0.00050011 -0.000662927 0.480916">
+      <body name="dining_room_dining_chair_3_base_link">
+        <geom name="dining_room_dining_chair_3_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" mesh="dining_room_dining_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_chair_3_static_collision" type="box" pos="0 0 0.4215474" size="0.288 0.2667027 0.4215474" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_dining_chair_4" pos="1.87152 2.72686 -0.000710933" quat="0.514847 -0.000642856 -0.000525661 -0.857282">
+      <body name="dining_room_dining_chair_4_base_link">
+        <geom name="dining_room_dining_chair_4_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" mesh="dining_room_dining_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_chair_4_static_collision" type="box" pos="0 0 0.4215474" size="0.288 0.2667027 0.4215474" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_dining_chair_5" pos="1.85544 1.71621 -0.000710933" quat="0.863812 -0.000310636 -0.000770122 -0.503814">
+      <body name="dining_room_dining_chair_5_base_link">
+        <geom name="dining_room_dining_chair_5_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_dining_chair_1767839772_dining_chair_s1.2_1.2_1.2_tex" mesh="dining_room_dining_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_dining_chair_5_static_collision" type="box" pos="0 0 0.4215474" size="0.288 0.2667027 0.4215474" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_rug_0" pos="2.78156 2.17469 0" quat="0.999988 0 0 -0.00492427">
+      <body name="dining_room_rug_0_base_link">
+        <geom name="dining_room_rug_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_rug_1767840466_rug_tex" mesh="dining_room_rug_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_rug_0_static_collision" type="box" pos="0 0 0.0015" size="1.5 1.5 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_plant_stand_0" pos="0.309749 0.276151 -0.000400906" quat="0.999921 0.000856698 0.00100325 0.0125123">
+      <body name="dining_room_plant_stand_0_base_link">
+        <geom name="dining_room_plant_stand_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_plant_stand_1767840435_plant_stand_tex" mesh="dining_room_plant_stand_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_plant_stand_0_static_collision" type="box" pos="1e-08 0 0.612449" size="0.225 0.2251561 0.612449" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_buffet_cabinet_0" pos="0.35898 2.24914 -0.00168452" quat="0.707102 0.000842414 -0.00122627 -0.70711">
+      <body name="dining_room_buffet_cabinet_0_base_link">
+        <geom name="dining_room_buffet_cabinet_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_buffet_cabinet_1767841005_buffet_cabinet_tex" mesh="dining_room_buffet_cabinet_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_buffet_cabinet_0_static_collision" type="box" pos="0 0 0.4180336" size="0.8 0.3004167 0.4180336" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_painting_0" pos="0.05 2.22452 1.53055" quat="0.707106 -0.000991848 -0.000991848 -0.707106">
+      <body name="dining_room_painting_0_base_link">
+        <geom name="dining_room_painting_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_painting_1767841585_painting_tex" mesh="dining_room_painting_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_painting_0_static_collision" type="box" pos="0 0.0157391 0" size="0.9453919 0.0157391 0.55" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_wall_sconce_0" pos="0.05 0.88132 1.55705" quat="0.707103 -0.00221002 -0.00221002 -0.707103">
+      <body name="dining_room_wall_sconce_0_base_link">
+        <geom name="dining_room_wall_sconce_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_wall_sconce_1767841413_wall_sconce_tex" mesh="dining_room_wall_sconce_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_wall_sconce_0_static_collision" type="box" pos="0 0.0958321 0" size="0.1 0.0958321 0.1976811" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_wall_sconce_1" pos="0.05 3.6314 1.56084" quat="0.707078 0.00638992 0.00638992 -0.707078">
+      <body name="dining_room_wall_sconce_1_base_link">
+        <geom name="dining_room_wall_sconce_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_wall_sconce_1767841413_wall_sconce_tex" mesh="dining_room_wall_sconce_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_wall_sconce_1_static_collision" type="box" pos="0 0.0958321 0" size="0.1 0.0958321 0.1976811" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_mirror_0" pos="5.45 0.930591 1.59518" quat="0.707092 -0.00456335 0.00456335 0.707092">
+      <body name="dining_room_mirror_0_base_link">
+        <geom name="dining_room_mirror_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_mirror_1767841460_mirror_tex" mesh="dining_room_mirror_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_mirror_0_static_collision" type="box" pos="0 0.02053604 0" size="0.5 0.02053604 0.5057733" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_print_1" pos="4.28529 0.05 1.48482" quat="0.999999 0 -0.00172729 0">
+      <body name="dining_room_print_1_base_link">
+        <geom name="dining_room_print_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_print_1767841413_print_tex" mesh="dining_room_print_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_print_1_static_collision" type="box" pos="0 0.02186997 0" size="0.439413 0.02186997 0.6" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_clock_0" pos="1.20265 0.05 1.74294" quat="0.999993 0 0.00371741 0">
+      <body name="dining_room_clock_0_base_link">
+        <geom name="dining_room_clock_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_clock_1767841413_clock_tex" mesh="dining_room_clock_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_clock_0_static_collision" type="box" pos="0 0.01994316 0" size="0.25 0.01994316 0.25527" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_print_2" pos="2.69144 4.45 1.55" quat="0 -0.000233046 0 1">
+      <body name="dining_room_print_2_base_link">
+        <geom name="dining_room_print_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_print_1767841585_print_s1.3_1.3_1.3_tex" mesh="dining_room_print_2_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_print_2_static_collision" type="box" pos="0 0.01969472 0" size="0.39 0.01969472 0.5780883" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_print_3" pos="5.45 3.82735 1.50593" quat="0.707101 -0.00292751 0.00292751 0.707101">
+      <body name="dining_room_print_3_base_link">
+        <geom name="dining_room_print_3_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_print_1767842082_print_tex" mesh="dining_room_print_3_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_print_3_static_collision" type="box" pos="0 0.01464045 0" size="0.3 0.01464045 0.446002" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_chandelier_0" pos="2.80997 2.25423 2.7" quat="0.999995 0 0 -0.00319362">
+      <body name="dining_room_chandelier_0_base_link">
+        <geom name="dining_room_chandelier_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_chandelier_1767842496_chandelier_s1.35_1.35_1.35_tex" mesh="dining_room_chandelier_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_chandelier_0_static_collision" type="box" pos="0 0 -0.4590415" size="0.54 0.4983872 0.4590415" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_recessed_light_0" pos="0.918149 0.905334 2.7" quat="0.999999 0 0 0.00164457">
+      <body name="dining_room_recessed_light_0_base_link">
+        <geom name="dining_room_recessed_light_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_recessed_light_1767842496_recessed_light_tex" mesh="dining_room_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_recessed_light_0_static_collision" type="box" pos="0 0 -0.004444455" size="0.075 0.06024842 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_recessed_light_1" pos="4.58623 0.899664 2.7" quat="1 0 0 0.000907321">
+      <body name="dining_room_recessed_light_1_base_link">
+        <geom name="dining_room_recessed_light_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_recessed_light_1767842496_recessed_light_tex" mesh="dining_room_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_recessed_light_1_static_collision" type="box" pos="0 0 -0.004444455" size="0.075 0.06024842 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_recessed_light_2" pos="0.904086 3.55319 2.7" quat="0.999961 0 0 -0.00887746">
+      <body name="dining_room_recessed_light_2_base_link">
+        <geom name="dining_room_recessed_light_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_recessed_light_1767842496_recessed_light_tex" mesh="dining_room_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_recessed_light_2_static_collision" type="box" pos="0 0 -0.004444455" size="0.075 0.06024842 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_recessed_light_3" pos="4.6277 3.58193 2.7" quat="0.999996 0 0 0.00267645">
+      <body name="dining_room_recessed_light_3_base_link">
+        <geom name="dining_room_recessed_light_3_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_recessed_light_1767842496_recessed_light_tex" mesh="dining_room_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_recessed_light_3_static_collision" type="box" pos="0 0 -0.004444455" size="0.075 0.06024842 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_smoke_detector_0" pos="0.65 0.65 2.7">
+      <body name="dining_room_smoke_detector_0_base_link">
+        <geom name="dining_room_smoke_detector_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_smoke_detector_1767842496_smoke_detector_tex" mesh="dining_room_smoke_detector_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_smoke_detector_0_static_collision" type="box" pos="0 0 -0.01566243" size="0.06 0.05988968 0.01566243" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_recessed_light_4" pos="2.77249 0.887821 2.7" quat="0.999988 0 0 0.00480957">
+      <body name="dining_room_recessed_light_4_base_link">
+        <geom name="dining_room_recessed_light_4_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_recessed_light_1767842496_recessed_light_tex" mesh="dining_room_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_recessed_light_4_static_collision" type="box" pos="0 0 -0.004444455" size="0.075 0.06024842 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_recessed_light_5" pos="2.7448 3.56788 2.7" quat="0.999998 0 0 -0.00199975">
+      <body name="dining_room_recessed_light_5_base_link">
+        <geom name="dining_room_recessed_light_5_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_recessed_light_1767842496_recessed_light_tex" mesh="dining_room_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_recessed_light_5_static_collision" type="box" pos="0 0 -0.004444455" size="0.075 0.06024842 0.005" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_vase_0_f0_c" pos="2.63649 2.15005 0.753117" quat="0.997736 -0.000667291 -0.000116545 0.0672417">
+      <body name="dining_room_vase_0_f0_c_base_link">
+        <geom name="dining_room_vase_0_f0_c_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_vase_1767843289_vase_tex" mesh="dining_room_vase_0_f0_c_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_vase_0_f0_c_static_collision" type="box" pos="0 0 0.1202601" size="0.07 0.06309915 0.1202601" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_eucalyptus_sprig_0_f0_0" pos="2.647 2.18315 0.762954" quat="0.486829 0.162232 0.00989207 -0.858243">
+      <body name="dining_room_eucalyptus_sprig_0_f0_0_base_link">
+        <geom name="dining_room_eucalyptus_sprig_0_f0_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_tex" mesh="dining_room_eucalyptus_sprig_0_f0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_eucalyptus_sprig_0_f0_0_static_collision" type="box" pos="0 0 0.1415385" size="0.03 0.03091181 0.1415385" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_eucalyptus_sprig_0_f0_1" pos="2.59296 2.09965 0.810124" quat="0.867542 -0.116731 0.0826428 -0.476356">
+      <body name="dining_room_eucalyptus_sprig_0_f0_1_base_link">
+        <geom name="dining_room_eucalyptus_sprig_0_f0_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_tex" mesh="dining_room_eucalyptus_sprig_0_f0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_eucalyptus_sprig_0_f0_1_static_collision" type="box" pos="0 0 0.1415385" size="0.03 0.03091181 0.1415385" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_eucalyptus_sprig_0_f0_2" pos="2.6723 2.14322 1.09192" quat="0.10096 -0.440172 0.865229 -0.217797">
+      <body name="dining_room_eucalyptus_sprig_0_f0_2_base_link">
+        <geom name="dining_room_eucalyptus_sprig_0_f0_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_eucalyptus_sprig_1767843289_eucalyptus_sprig_tex" mesh="dining_room_eucalyptus_sprig_0_f0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_eucalyptus_sprig_0_f0_2_static_collision" type="box" pos="0 0 0.1415385" size="0.03 0.03091181 0.1415385" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_fruit_bowl_0_f1_c" pos="2.89715 2.26875 0.752848" quat="0.99425 0.00065076 -0.000651006 -0.107076">
+      <body name="dining_room_fruit_bowl_0_f1_c_base_link">
+        <geom name="dining_room_fruit_bowl_0_f1_c_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_fruit_bowl_1767843289_fruit_bowl_tex" mesh="dining_room_fruit_bowl_0_f1_c_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_fruit_bowl_0_f1_c_static_collision" type="box" pos="0 0 0.02960448" size="0.14 0.1437913 0.02960448" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_apple_0_f1_0" pos="2.85468 2.22091 0.758014" quat="0.996089 -0.0215304 -0.00717918 -0.0853914">
+      <body name="dining_room_apple_0_f1_0_base_link">
+        <geom name="dining_room_apple_0_f1_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_apple_1767843416_apple_tex" mesh="dining_room_apple_0_f1_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_apple_0_f1_0_static_collision" type="box" pos="0 0 0.04068307" size="0.04 0.03645368 0.04068307" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_apple_0_f1_1" pos="2.86206 2.29637 0.758525" quat="0.994072 0.0162178 -0.0062791 -0.107326">
+      <body name="dining_room_apple_0_f1_1_base_link">
+        <geom name="dining_room_apple_0_f1_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_apple_1767843416_apple_tex" mesh="dining_room_apple_0_f1_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_apple_0_f1_1_static_collision" type="box" pos="0 0 0.04068307" size="0.04 0.03645368 0.04068307" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_small_orange_fruit_0_f1_2" pos="2.95806 2.20621 0.760221" quat="0.964463 -0.0475066 -0.0446902 -0.256042">
+      <body name="dining_room_small_orange_fruit_0_f1_2_base_link">
+        <geom name="dining_room_small_orange_fruit_0_f1_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_small_orange_fruit_1767843564_small_orange_fruit_tex" mesh="dining_room_small_orange_fruit_0_f1_2_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_small_orange_fruit_0_f1_2_static_collision" type="box" pos="0 0 0.03735947" size="0.0375 0.04019959 0.03735947" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_candle_holder_0_s0_0" pos="0.215332 2.80914 0.83123" quat="0.656066 -0.000166678 -0.00330397 -0.754696">
+      <body name="dining_room_candle_holder_0_s0_0_base_link">
+        <geom name="dining_room_candle_holder_0_s0_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_candle_holder_1767843859_candle_holder_tex" mesh="dining_room_candle_holder_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_candle_holder_0_s0_0_static_collision" type="box" pos="0 0 0.01060642" size="0.03 0.03012442 0.01060642" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_taper_candle_0_s0_1" pos="0.215385 2.80917 0.852348" quat="0.654427 0.000953343 0.00187891 -0.756122">
+      <body name="dining_room_taper_candle_0_s0_1_base_link">
+        <geom name="dining_room_taper_candle_0_s0_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_taper_candle_1767843859_taper_candle_tex" mesh="dining_room_taper_candle_0_s0_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_taper_candle_0_s0_1_static_collision" type="box" pos="0 0 0.08051277" size="0.01 0.01020579 0.08051277" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_candle_holder_0_s1_0" pos="0.235282 2.68918 0.83188" quat="0.743131 -0.000632734 -0.00313917 -0.669138">
+      <body name="dining_room_candle_holder_0_s1_0_base_link">
+        <geom name="dining_room_candle_holder_0_s1_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_candle_holder_1767843859_candle_holder_tex" mesh="dining_room_candle_holder_0_s0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_candle_holder_0_s1_0_static_collision" type="box" pos="0 0 0.01060642" size="0.03 0.03012442 0.01060642" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_taper_candle_0_s1_1" pos="0.235318 2.68924 0.852998" quat="0.740228 -0.0001696 0.00221582 -0.672352">
+      <body name="dining_room_taper_candle_0_s1_1_base_link">
+        <geom name="dining_room_taper_candle_0_s1_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_taper_candle_1767843859_taper_candle_tex" mesh="dining_room_taper_candle_0_s0_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_taper_candle_0_s1_1_static_collision" type="box" pos="0 0 0.08051277" size="0.01 0.01020579 0.08051277" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_fruit_bowl_0" pos="0.367922 1.80034 0.832797" quat="0.772463 0.00188972 0.000701352 -0.635056">
+      <body name="dining_room_fruit_bowl_0_base_link">
+        <geom name="dining_room_fruit_bowl_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_fruit_bowl_1767843289_fruit_bowl_tex" mesh="dining_room_fruit_bowl_0_f1_c_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_fruit_bowl_0_static_collision" type="box" pos="0 0 0.02960448" size="0.14 0.1437913 0.02960448" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="dining_room_vase_0" pos="0.392774 0.237804 1.22401" quat="0.989295 0.000852966 0.000791737 0.145923">
+      <body name="dining_room_vase_0_base_link">
+        <geom name="dining_room_vase_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="dining_room_vase_1767843289_vase_tex" mesh="dining_room_vase_0_f0_c_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="dining_room_vase_0_static_collision" type="box" pos="0 0 0.1202601" size="0.07 0.06309915 0.1202601" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+  </worldbody>
+</mujoco>

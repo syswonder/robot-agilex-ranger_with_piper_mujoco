@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "meeting_room",
+  "source": {
+    "spzPath": "./assets/environments/meeting_room/meeting_room.spz",
+    "byteLength": 53019864,
+    "sha256": "556bb8ade3f84c5d18e2ef31889b57d9109be62dfb3bba5887db2223c6b2e24e",
+    "splatCount": 4792467
+  },
+  "estimator": {
+    "method": "floor-plane-leveling-robust-height",
+    "sourceCoordinates": "RUB",
+    "targetCeilingHeightMeters": 3,
+    "floorQuantile": 0.01,
+    "ceilingQuantile": 0.99,
+    "horizontalQuantile": 0.01,
+    "centerHorizontal": true,
+    "confidence": "medium",
+    "scaleConfidence": "high",
+    "outlierExpansionRatio": 1.012635448,
+    "floorPlane": {
+      "enabled": true,
+      "plane": [
+        0.016204185,
+        -0.030269848,
+        -0.403723598
+      ],
+      "normal": [
+        -0.016194643,
+        0.999411101,
+        0.030252022
+      ],
+      "tiltDegrees": 1.966433962,
+      "candidateCells": 1069,
+      "inlierCells": 809,
+      "coverage": 0.756782039,
+      "residualRmse": 0.004739322,
+      "residualThreshold": 0.012928711,
+      "residualRatio": 0.366573421,
+      "confidence": "medium"
+    }
+  },
+  "transform": {
+    "rotationQuaternion": [
+      -0.015128238,
+      0,
+      -0.008098514,
+      0.999852764
+    ],
+    "rotationDegrees": [
+      -1.73357771,
+      0.014039328,
+      -0.927925259
+    ],
+    "scale": 4.39867482,
+    "position": [
+      0.917795561,
+      1.797329655,
+      3.191624755
+    ],
+    "groundY": 0
+  },
+  "bounds": {
+    "robustAfterRotation": {
+      "min": [
+        -1.225875796,
+        -0.408607076,
+        -1.753471947
+      ],
+      "max": [
+        0.808570313,
+        0.273416516,
+        0.30229636
+      ]
+    },
+    "robustWorld": {
+      "min": [
+        -4.474433435,
+        0,
+        -4.521328144
+      ],
+      "max": [
+        4.474433435,
+        3,
+        4.521328144
+      ]
+    }
+  }
+}

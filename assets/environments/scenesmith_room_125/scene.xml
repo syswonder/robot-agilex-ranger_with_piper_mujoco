@@ -1,0 +1,297 @@
+<mujoco model="scene_room_retry_w2_Room_scene_125_73lhb9ey">
+  <compiler angle="radian" boundmass="0.001" boundinertia="0.001" meshdir="meshes" texturedir="meshes/scenesmith" />
+  <visual>
+    <headlight ambient="0.4 0.4 0.4" diffuse="0.8 0.8 0.8" specular="0.1 0.1 0.1" />
+  </visual>
+  <asset>
+    <texture type="skybox" colorspace="auto" name="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
+    <texture type="2d" colorspace="auto" name="grid" builtin="checker" mark="edge" rgb1="0.2 0.3 0.4" rgb2="0.1 0.2 0.3" markrgb="0.8 0.8 0.8" width="512" height="512" />
+    <texture type="2d" colorspace="linear" name="office_floors_floor_tex" file="office_floors_floor_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_north_wall_wall_tex" file="office_north_wall_wall_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_window_1_window_tex" file="office_window_1_window_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_chair_1767878450_dental_chair_tex" file="office_dental_chair_1767878450_dental_chair_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dentist_stool_1767878450_dentist_stool_tex" file="office_dentist_stool_1767878450_dentist_stool_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_side_chair_1767878450_side_chair_tex" file="office_side_chair_1767878450_side_chair_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_base_cabinet_1767880182_E_body_1_combined_tex" file="office_dental_base_cabinet_1767880182_E_body_1_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_base_cabinet_1767880182_E_door_3_11_combined_tex" file="office_dental_base_cabinet_1767880182_E_door_3_11_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_base_cabinet_1767880182_E_drawer_1_17_combined_tex" file="office_dental_base_cabinet_1767880182_E_drawer_1_17_combined_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_photograph_1767880584_photograph_tex" file="office_photograph_1767880584_photograph_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_abstract_print_1767880762_abstract_print_tex" file="office_abstract_print_1767880762_abstract_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_monitor_1767880584_monitor_tex" file="office_monitor_1767880584_monitor_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_diploma_1767880762_diploma_tex" file="office_diploma_1767880762_diploma_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_clock_1767880633_clock_tex" file="office_clock_1767880633_clock_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_botanical_print_1767880762_botanical_print_tex" file="office_botanical_print_1767880762_botanical_print_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_wall_sign_1767880631_wall_sign_tex" file="office_wall_sign_1767880631_wall_sign_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_troffer_light_1767881502_troffer_light_tex" file="office_troffer_light_1767881502_troffer_light_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_recessed_light_1767881502_recessed_light_tex" file="office_recessed_light_1767881502_recessed_light_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_smoke_detector_1767881502_smoke_detector_tex" file="office_smoke_detector_1767881502_smoke_detector_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_sprinkler_head_1767881564_sprinkler_head_tex" file="office_sprinkler_head_1767881564_sprinkler_head_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_exam_light_1767881916_dental_exam_light_tex" file="office_dental_exam_light_1767881916_dental_exam_light_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_handpiece_drill_tool_1767882530_dental_handpiece_drill_tool_s0.75_0.75_0.75_tex" file="office_dental_handpiece_drill_tool_1767882530_dental_handpiece_drill_tool_s0.75_0.75_0.75_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_saliva_ejector_suction_tip_1767882280_saliva_ejector_suction_tip_tex" file="office_saliva_ejector_suction_tip_1767882280_saliva_ejector_suction_tip_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_disinfectant_wipes_tub_1767882455_disinfectant_wipes_tub_tex" file="office_disinfectant_wipes_tub_1767882455_disinfectant_wipes_tub_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_instrument_tray_1767882280_dental_instrument_tray_tex" file="office_dental_instrument_tray_1767882280_dental_instrument_tray_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_mouth_mirror_1767882280_dental_mouth_mirror_tex" file="office_dental_mouth_mirror_1767882280_dental_mouth_mirror_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_explorer_probe_tool_1767882280_dental_explorer_probe_tool_tex" file="office_dental_explorer_probe_tool_1767882280_dental_explorer_probe_tool_texture.png" />
+    <texture type="2d" colorspace="linear" name="office_dental_cotton_pliers_1767882455_dental_cotton_pliers_tex" file="office_dental_cotton_pliers_1767882455_dental_cotton_pliers_texture.png" />
+    <material name="grid" texture="grid" texrepeat="10 10" />
+    <material name="office_floors_floor_tex" texture="office_floors_floor_tex" />
+    <material name="office_north_wall_wall_tex" texture="office_north_wall_wall_tex" />
+    <material name="office_window_1_window_tex" texture="office_window_1_window_tex" />
+    <material name="office_dental_chair_1767878450_dental_chair_tex" texture="office_dental_chair_1767878450_dental_chair_tex" />
+    <material name="office_dentist_stool_1767878450_dentist_stool_tex" texture="office_dentist_stool_1767878450_dentist_stool_tex" />
+    <material name="office_side_chair_1767878450_side_chair_tex" texture="office_side_chair_1767878450_side_chair_tex" />
+    <material name="office_dental_base_cabinet_1767880182_E_body_1_combined_tex" texture="office_dental_base_cabinet_1767880182_E_body_1_combined_tex" />
+    <material name="office_dental_base_cabinet_1767880182_E_door_3_11_combined_tex" texture="office_dental_base_cabinet_1767880182_E_door_3_11_combined_tex" />
+    <material name="office_dental_base_cabinet_1767880182_E_drawer_1_17_combined_tex" texture="office_dental_base_cabinet_1767880182_E_drawer_1_17_combined_tex" />
+    <material name="office_photograph_1767880584_photograph_tex" texture="office_photograph_1767880584_photograph_tex" />
+    <material name="office_abstract_print_1767880762_abstract_print_tex" texture="office_abstract_print_1767880762_abstract_print_tex" />
+    <material name="office_monitor_1767880584_monitor_tex" texture="office_monitor_1767880584_monitor_tex" />
+    <material name="office_diploma_1767880762_diploma_tex" texture="office_diploma_1767880762_diploma_tex" />
+    <material name="office_clock_1767880633_clock_tex" texture="office_clock_1767880633_clock_tex" />
+    <material name="office_botanical_print_1767880762_botanical_print_tex" texture="office_botanical_print_1767880762_botanical_print_tex" />
+    <material name="office_wall_sign_1767880631_wall_sign_tex" texture="office_wall_sign_1767880631_wall_sign_tex" />
+    <material name="office_troffer_light_1767881502_troffer_light_tex" texture="office_troffer_light_1767881502_troffer_light_tex" />
+    <material name="office_recessed_light_1767881502_recessed_light_tex" texture="office_recessed_light_1767881502_recessed_light_tex" />
+    <material name="office_smoke_detector_1767881502_smoke_detector_tex" texture="office_smoke_detector_1767881502_smoke_detector_tex" />
+    <material name="office_sprinkler_head_1767881564_sprinkler_head_tex" texture="office_sprinkler_head_1767881564_sprinkler_head_tex" />
+    <material name="office_dental_exam_light_1767881916_dental_exam_light_tex" texture="office_dental_exam_light_1767881916_dental_exam_light_tex" />
+    <material name="office_dental_handpiece_drill_tool_1767882530_dental_handpiece_drill_tool_s0.75_0.75_0.75_tex" texture="office_dental_handpiece_drill_tool_1767882530_dental_handpiece_drill_tool_s0.75_0.75_0.75_tex" />
+    <material name="office_saliva_ejector_suction_tip_1767882280_saliva_ejector_suction_tip_tex" texture="office_saliva_ejector_suction_tip_1767882280_saliva_ejector_suction_tip_tex" />
+    <material name="office_disinfectant_wipes_tub_1767882455_disinfectant_wipes_tub_tex" texture="office_disinfectant_wipes_tub_1767882455_disinfectant_wipes_tub_tex" />
+    <material name="office_dental_instrument_tray_1767882280_dental_instrument_tray_tex" texture="office_dental_instrument_tray_1767882280_dental_instrument_tray_tex" />
+    <material name="office_dental_mouth_mirror_1767882280_dental_mouth_mirror_tex" texture="office_dental_mouth_mirror_1767882280_dental_mouth_mirror_tex" />
+    <material name="office_dental_explorer_probe_tool_1767882280_dental_explorer_probe_tool_tex" texture="office_dental_explorer_probe_tool_1767882280_dental_explorer_probe_tool_tex" />
+    <material name="office_dental_cotton_pliers_1767882455_dental_cotton_pliers_tex" texture="office_dental_cotton_pliers_1767882455_dental_cotton_pliers_tex" />
+    <mesh name="room_geometry_office_room_geometry_body_link_floor_visual_visual_mesh" file="scenesmith/office_floors_floor.obj" />
+    <mesh name="room_geometry_office_room_geometry_body_link_north_wall_visual_visual_mesh" file="scenesmith/office_north_wall_wall.obj" />
+    <mesh name="room_geometry_office_room_geometry_body_link_window_1_visual_visual_mesh" file="scenesmith/office_window_1_window.obj" />
+    <mesh name="room_geometry_office_room_geometry_body_link_window_2_visual_visual_mesh" file="scenesmith/office_window_2_window.obj" />
+    <mesh name="room_geometry_office_room_geometry_body_link_south_wall_visual_visual_mesh" file="scenesmith/office_south_wall_wall.obj" />
+    <mesh name="room_geometry_office_room_geometry_body_link_east_wall_visual_visual_mesh" file="scenesmith/office_east_wall_wall.obj" />
+    <mesh name="office_dental_chair_0_base_link_visual_visual_mesh" file="scenesmith/office_dental_chair_1767878450_dental_chair.obj" />
+    <mesh name="office_dentist_stool_0_base_link_visual_visual_mesh" file="scenesmith/office_dentist_stool_1767878450_dentist_stool.obj" />
+    <mesh name="office_side_chair_0_base_link_visual_visual_mesh" file="scenesmith/office_side_chair_1767878450_side_chair.obj" />
+    <mesh name="office_dental_base_cabinet_0_E_body_1_P_a85978e2d42ee7dd_visual_visual_mesh" file="scenesmith/office_dental_base_cabinet_1767880182_E_body_1_combined.obj" />
+    <mesh name="office_dental_base_cabinet_0_E_door_3_11_P_a59ff73b5ecd145f_visual_visual_mesh" file="scenesmith/office_dental_base_cabinet_1767880182_E_door_3_11_combined.obj" />
+    <mesh name="office_dental_base_cabinet_0_E_door_4_14_P_5cfdfc801ea6045f_visual_visual_mesh" file="scenesmith/office_dental_base_cabinet_1767880182_E_door_4_14_combined.obj" />
+    <mesh name="office_dental_base_cabinet_0_E_drawer_1_17_P_2f22767f148ed45f_visual_visual_mesh" file="scenesmith/office_dental_base_cabinet_1767880182_E_drawer_1_17_combined.obj" />
+    <mesh name="office_dental_base_cabinet_0_E_drawer_2_24_P_2fbed560bd51145f_visual_visual_mesh" file="scenesmith/office_dental_base_cabinet_1767880182_E_drawer_2_24_combined.obj" />
+    <mesh name="office_photograph_0_base_link_visual_visual_mesh" file="scenesmith/office_photograph_1767880584_photograph.obj" />
+    <mesh name="office_abstract_print_0_base_link_visual_visual_mesh" file="scenesmith/office_abstract_print_1767880762_abstract_print.obj" />
+    <mesh name="office_monitor_0_base_link_visual_visual_mesh" file="scenesmith/office_monitor_1767880584_monitor.obj" />
+    <mesh name="office_diploma_0_base_link_visual_visual_mesh" file="scenesmith/office_diploma_1767880762_diploma.obj" />
+    <mesh name="office_clock_0_base_link_visual_visual_mesh" file="scenesmith/office_clock_1767880633_clock.obj" />
+    <mesh name="office_botanical_print_0_base_link_visual_visual_mesh" file="scenesmith/office_botanical_print_1767880762_botanical_print.obj" />
+    <mesh name="office_wall_sign_0_base_link_visual_visual_mesh" file="scenesmith/office_wall_sign_1767880631_wall_sign.obj" />
+    <mesh name="office_troffer_light_0_base_link_visual_visual_mesh" file="scenesmith/office_troffer_light_1767881502_troffer_light.obj" />
+    <mesh name="office_recessed_light_0_base_link_visual_visual_mesh" file="scenesmith/office_recessed_light_1767881502_recessed_light.obj" />
+    <mesh name="office_smoke_detector_0_base_link_visual_visual_mesh" file="scenesmith/office_smoke_detector_1767881502_smoke_detector.obj" />
+    <mesh name="office_sprinkler_head_0_base_link_visual_visual_mesh" file="scenesmith/office_sprinkler_head_1767881564_sprinkler_head.obj" />
+    <mesh name="office_dental_exam_light_0_base_link_visual_visual_mesh" file="scenesmith/office_dental_exam_light_1767881916_dental_exam_light.obj" />
+    <mesh name="office_dental_handpiece_drill_tool_0_base_link_visual_visual_mesh" file="scenesmith/office_dental_handpiece_drill_tool_1767882530_dental_handpiece_drill_tool_s0.75_0.75_0.75.obj" />
+    <mesh name="office_saliva_ejector_suction_tip_0_base_link_visual_visual_mesh" file="scenesmith/office_saliva_ejector_suction_tip_1767882280_saliva_ejector_suction_tip.obj" />
+    <mesh name="office_disinfectant_wipes_tub_0_base_link_visual_visual_mesh" file="scenesmith/office_disinfectant_wipes_tub_1767882455_disinfectant_wipes_tub.obj" />
+    <mesh name="office_dental_instrument_tray_0_f0_c_base_link_visual_visual_mesh" file="scenesmith/office_dental_instrument_tray_1767882280_dental_instrument_tray.obj" />
+    <mesh name="office_dental_mouth_mirror_0_f0_0_base_link_visual_visual_mesh" file="scenesmith/office_dental_mouth_mirror_1767882280_dental_mouth_mirror.obj" />
+    <mesh name="office_dental_explorer_probe_tool_0_f0_1_base_link_visual_visual_mesh" file="scenesmith/office_dental_explorer_probe_tool_1767882280_dental_explorer_probe_tool.obj" />
+    <mesh name="office_dental_cotton_pliers_0_f0_2_base_link_visual_visual_mesh" file="scenesmith/office_dental_cotton_pliers_1767882455_dental_cotton_pliers.obj" />
+  </asset>
+  <worldbody>
+    <body name="room_geometry_office" pos="2.5 2.25 0">
+      <body name="room_geometry_office_room_geometry_body_link">
+        <geom name="room_geometry_office_room_geometry_body_link_floor_collision_collision" size="2.5 2.25 0.05" pos="0 0 -0.05" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_office_room_geometry_body_link_north_wall_collision_collision" size="2.5 0.025 1.5" pos="0 2.225 1.5" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_office_room_geometry_body_link_south_wall_collision_0_collision" size="0.252975 0.025 1.5" pos="-2.24703 -2.225 1.5" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_office_room_geometry_body_link_south_wall_collision_1_collision" size="1.74703 0.025 1.5" pos="0.752975 -2.225 1.5" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_office_room_geometry_body_link_east_wall_collision_collision" size="0.025 2.25 1.5" pos="2.475 0 1.5" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_office_room_geometry_body_link_west_wall_collision_collision" size="0.025 2.25 1.5" pos="-2.475 0 1.5" type="box" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" />
+        <geom name="room_geometry_office_room_geometry_body_link_floor_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_floors_floor_tex" mesh="room_geometry_office_room_geometry_body_link_floor_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_north_wall_visual_visual" pos="0 2.225 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_window_1_visual_visual" pos="-1.34466 2.225 1.9" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="office_window_1_window_tex" mesh="room_geometry_office_room_geometry_body_link_window_1_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_window_2_visual_visual" pos="0.934122 2.225 1.9" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="office_window_1_window_tex" mesh="room_geometry_office_room_geometry_body_link_window_2_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_north_wall_exterior_visual_visual" pos="0 2.275 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_north_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_south_wall_visual_visual" pos="0 -2.225 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_south_wall_exterior_visual_visual" pos="0 -2.275 0" quat="1 0 0 0" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_south_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_east_wall_visual_visual" pos="2.475 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_east_wall_exterior_visual_visual" pos="2.525 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_west_wall_visual_visual" pos="-2.475 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+        <geom name="room_geometry_office_room_geometry_body_link_west_wall_exterior_visual_visual" pos="-2.525 0 0" quat="0.707105 0 0 0.707108" type="mesh" contype="0" conaffinity="0" material="office_north_wall_wall_tex" mesh="room_geometry_office_room_geometry_body_link_east_wall_visual_visual_mesh" group="1" />
+      </body>
+    </body>
+    <body name="office_dental_chair_0" pos="2.30131 2.25063 -0.00449814" quat="0.999835 0.0180291 0.00212027 0.000320757">
+      <body name="office_dental_chair_0_base_link">
+        <geom name="office_dental_chair_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_chair_1767878450_dental_chair_tex" mesh="office_dental_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_chair_0_static_collision" type="box" pos="0 0 0.8627654" size="0.475 0.8616444 0.8627654" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dentist_stool_0" pos="3.34951 2.50141 -0.00210906" quat="0.619077 0.000644633 0.00184579 0.785328">
+      <body name="office_dentist_stool_0_base_link">
+        <geom name="office_dentist_stool_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dentist_stool_1767878450_dentist_stool_tex" mesh="office_dentist_stool_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dentist_stool_0_static_collision" type="box" pos="0 0 0.275" size="0.3020065 0.2973219 0.275" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_side_chair_0" pos="4.29999 0.748625 -0.000248192" quat="0.894642 0.000263496 0.000227931 0.446783">
+      <body name="office_side_chair_0_base_link">
+        <geom name="office_side_chair_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_side_chair_1767878450_side_chair_tex" mesh="office_side_chair_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_side_chair_0_static_collision" type="box" pos="0 0 0.4135192" size="0.3 0.2909793 0.4135192" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_base_cabinet_0" pos="4.78203 3.05115 0.00470632" quat="0.707108 -1.30864e-05 -1.17914e-05 0.707106">
+      <body name="office_dental_base_cabinet_0_E_body_1">
+        <geom name="office_dental_base_cabinet_0_E_body_1_P_a85978e2d42ee7dd_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_base_cabinet_1767880182_E_body_1_combined_tex" mesh="office_dental_base_cabinet_0_E_body_1_P_a85978e2d42ee7dd_visual_visual_mesh" group="1" />
+        <body name="office_dental_base_cabinet_0_E_door_3_11">
+          <geom name="office_dental_base_cabinet_0_E_door_3_11_P_a59ff73b5ecd145f_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_base_cabinet_1767880182_E_door_3_11_combined_tex" mesh="office_dental_base_cabinet_0_E_door_3_11_P_a59ff73b5ecd145f_visual_visual_mesh" group="1" />
+        </body>
+        <body name="office_dental_base_cabinet_0_E_door_4_14">
+          <geom name="office_dental_base_cabinet_0_E_door_4_14_P_5cfdfc801ea6045f_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_base_cabinet_1767880182_E_door_3_11_combined_tex" mesh="office_dental_base_cabinet_0_E_door_4_14_P_5cfdfc801ea6045f_visual_visual_mesh" group="1" />
+        </body>
+        <body name="office_dental_base_cabinet_0_E_drawer_1_17">
+          <geom name="office_dental_base_cabinet_0_E_drawer_1_17_P_2f22767f148ed45f_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_base_cabinet_1767880182_E_drawer_1_17_combined_tex" mesh="office_dental_base_cabinet_0_E_drawer_1_17_P_2f22767f148ed45f_visual_visual_mesh" group="1" />
+        </body>
+        <body name="office_dental_base_cabinet_0_E_drawer_2_24">
+          <geom name="office_dental_base_cabinet_0_E_drawer_2_24_P_2fbed560bd51145f_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_base_cabinet_1767880182_E_drawer_1_17_combined_tex" mesh="office_dental_base_cabinet_0_E_drawer_2_24_P_2fbed560bd51145f_visual_visual_mesh" group="1" />
+        </body>
+      </body>
+      <geom name="office_dental_base_cabinet_0_static_collision" type="box" pos="0 0 0.4334076" size="0.3245269 0.1543013 0.4334076" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_photograph_0" pos="0.05 2.24873 1.54806" quat="0.707107 -0.00019837 -0.00019837 -0.707107">
+      <body name="office_photograph_0_base_link">
+        <geom name="office_photograph_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_photograph_1767880584_photograph_tex" mesh="office_photograph_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_photograph_0_static_collision" type="box" pos="0 0.01940481 0" size="0.857797 0.01940481 0.45" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_abstract_print_0" pos="4.95 3.40124 1.54864" quat="0.707107 -0.000479053 0.000479053 0.707107">
+      <body name="office_abstract_print_0_base_link">
+        <geom name="office_abstract_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_abstract_print_1767880762_abstract_print_tex" mesh="office_abstract_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_abstract_print_0_static_collision" type="box" pos="0 0.01416103 0" size="0.4 0.01416103 0.4006646" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_monitor_0" pos="4.95 1.29959 1.62" quat="0.707107 0 0 0.707107">
+      <body name="office_monitor_0_base_link">
+        <geom name="office_monitor_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_monitor_1767880584_monitor_tex" mesh="office_monitor_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_monitor_0_static_collision" type="box" pos="0 0.02126631 0" size="0.5 0.02126631 0.2793822" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_diploma_0" pos="3.5016 0.05 1.59901" quat="1 0 -0.0009252 0">
+      <body name="office_diploma_0_base_link">
+        <geom name="office_diploma_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_diploma_1767880762_diploma_tex" mesh="office_diploma_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_diploma_0_static_collision" type="box" pos="0 0.01190213 0" size="0.225 0.01190213 0.3055238" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_diploma_1" pos="2.7986 0.05 1.60003" quat="0.999999 0 0.00121961 0">
+      <body name="office_diploma_1_base_link">
+        <geom name="office_diploma_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_diploma_1767880762_diploma_tex" mesh="office_diploma_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_diploma_1_static_collision" type="box" pos="0 0.01190213 0" size="0.225 0.01190213 0.3055238" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_clock_0" pos="1.89932 0.05 1.85">
+      <body name="office_clock_0_base_link">
+        <geom name="office_clock_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_clock_1767880633_clock_tex" mesh="office_clock_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_clock_0_static_collision" type="box" pos="0 0.01305826 0" size="0.175 0.01305826 0.1749736" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_botanical_print_0" pos="2.22042 4.45 1.74984" quat="0 -0.000125169 0 1">
+      <body name="office_botanical_print_0_base_link">
+        <geom name="office_botanical_print_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_botanical_print_1767880762_botanical_print_tex" mesh="office_botanical_print_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_botanical_print_0_static_collision" type="box" pos="0 0.01384086 0" size="0.2754403 0.01384086 0.375" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_wall_sign_0" pos="3.15 0.05 2.24">
+      <body name="office_wall_sign_0_base_link">
+        <geom name="office_wall_sign_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_wall_sign_1767880631_wall_sign_tex" mesh="office_wall_sign_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_wall_sign_0_static_collision" type="box" pos="0 0.01810153 0" size="0.5 0.01810153 0.1384357" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_troffer_light_0" pos="2.5 2.75 3" quat="0.707107 0 0 0.707107">
+      <body name="office_troffer_light_0_base_link">
+        <geom name="office_troffer_light_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_troffer_light_1767881502_troffer_light_tex" mesh="office_troffer_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_troffer_light_0_static_collision" type="box" pos="0 0 -0.02167042" size="0.6 0.1752452 0.02167042" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_troffer_light_1" pos="2.5 1.15 3" quat="0.707107 0 0 0.707107">
+      <body name="office_troffer_light_1_base_link">
+        <geom name="office_troffer_light_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_troffer_light_1767881502_troffer_light_tex" mesh="office_troffer_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_troffer_light_1_static_collision" type="box" pos="0 0 -0.02167042" size="0.6 0.1752452 0.02167042" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_recessed_light_0" pos="4.50072 2.44947 3" quat="1 0 0 -0.000424788">
+      <body name="office_recessed_light_0_base_link">
+        <geom name="office_recessed_light_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_recessed_light_1767881502_recessed_light_tex" mesh="office_recessed_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_recessed_light_0_static_collision" type="box" pos="0 0 -0.03528557" size="0.09 0.0880053 0.03528557" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_smoke_detector_0" pos="0.699747 3.85014 3" quat="1 0 0 0.000769562">
+      <body name="office_smoke_detector_0_base_link">
+        <geom name="office_smoke_detector_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_smoke_detector_1767881502_smoke_detector_tex" mesh="office_smoke_detector_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_smoke_detector_0_static_collision" type="box" pos="0 0 -0.01759607" size="0.06 0.0600186 0.01759607" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_sprinkler_head_0" pos="3.8 2.15 3">
+      <body name="office_sprinkler_head_0_base_link">
+        <geom name="office_sprinkler_head_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_sprinkler_head_1767881564_sprinkler_head_tex" mesh="office_sprinkler_head_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_sprinkler_head_0_static_collision" type="box" pos="0 0 -0.02196326" size="0.045 0.04499899 0.02196326" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_exam_light_0" pos="3.2 2.55 3">
+      <body name="office_dental_exam_light_0_base_link">
+        <geom name="office_dental_exam_light_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_exam_light_1767881916_dental_exam_light_tex" mesh="office_dental_exam_light_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_exam_light_0_static_collision" type="box" pos="0 0 -0.5402535" size="0.3088737 0.3 0.5402535" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_handpiece_drill_tool_0" pos="4.70283 3.17404 0.80077" quat="0.47813 0.578441 0.523671 0.403195">
+      <body name="office_dental_handpiece_drill_tool_0_base_link">
+        <geom name="office_dental_handpiece_drill_tool_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_handpiece_drill_tool_1767882530_dental_handpiece_drill_tool_s0.75_0.75_0.75_tex" mesh="office_dental_handpiece_drill_tool_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_handpiece_drill_tool_0_static_collision" type="box" pos="0 0 0.02300349" size="0.08425062 0.015 0.02300349" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_saliva_ejector_suction_tip_0" pos="4.6978 2.93267 0.78381" quat="0.000266471 -0.0185076 -0.00375199 0.999822">
+      <body name="office_saliva_ejector_suction_tip_0_base_link">
+        <geom name="office_saliva_ejector_suction_tip_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_saliva_ejector_suction_tip_1767882280_saliva_ejector_suction_tip_tex" mesh="office_saliva_ejector_suction_tip_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_saliva_ejector_suction_tip_0_static_collision" type="box" pos="0 0 0.00511263" size="0.01 0.0501501 0.00511263" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_disinfectant_wipes_tub_0" pos="4.87435 2.83716 0.784929" quat="0.707828 -0.000952976 -0.000281492 0.706384">
+      <body name="office_disinfectant_wipes_tub_0_base_link">
+        <geom name="office_disinfectant_wipes_tub_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_disinfectant_wipes_tub_1767882455_disinfectant_wipes_tub_tex" mesh="office_disinfectant_wipes_tub_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_disinfectant_wipes_tub_0_static_collision" type="box" pos="0 0 0.03016732" size="0.08353019 0.035 0.03016732" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_instrument_tray_0_f0_c" pos="4.78653 3.0513 0.786037" quat="0.714573 -0.00423494 -0.00463409 0.699533">
+      <body name="office_dental_instrument_tray_0_f0_c_base_link">
+        <geom name="office_dental_instrument_tray_0_f0_c_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_instrument_tray_1767882280_dental_instrument_tray_tex" mesh="office_dental_instrument_tray_0_f0_c_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_instrument_tray_0_f0_c_static_collision" type="box" pos="0 0 0.009854785" size="0.14 0.0595005 0.009854785" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_mouth_mirror_0_f0_0" pos="4.75945 3.04341 0.786817" quat="0.631593 -0.274841 -0.319858 0.650571">
+      <body name="office_dental_mouth_mirror_0_f0_0_base_link">
+        <geom name="office_dental_mouth_mirror_0_f0_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_mouth_mirror_1767882280_dental_mouth_mirror_tex" mesh="office_dental_mouth_mirror_0_f0_0_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_mouth_mirror_0_f0_0_static_collision" type="box" pos="0 0 0.01480914" size="0.07215581 0.005 0.01480914" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_explorer_probe_tool_0_f0_1" pos="4.74913 3.04711 0.806842" quat="0.257412 0.612939 0.68912 0.288373">
+      <body name="office_dental_explorer_probe_tool_0_f0_1_base_link">
+        <geom name="office_dental_explorer_probe_tool_0_f0_1_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_explorer_probe_tool_1767882280_dental_explorer_probe_tool_tex" mesh="office_dental_explorer_probe_tool_0_f0_1_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_explorer_probe_tool_0_f0_1_static_collision" type="box" pos="0 0 0.01272662" size="0.0734108 0.005 0.01272662" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+    <body name="office_dental_cotton_pliers_0_f0_2" pos="4.81674 3.05062 0.787594" quat="0.713683 -0.0137202 0.00129294 0.700333">
+      <body name="office_dental_cotton_pliers_0_f0_2_base_link">
+        <geom name="office_dental_cotton_pliers_0_f0_2_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="office_dental_cotton_pliers_1767882455_dental_cotton_pliers_tex" mesh="office_dental_cotton_pliers_0_f0_2_base_link_visual_visual_mesh" group="1" />
+      </body>
+      <geom name="office_dental_cotton_pliers_0_f0_2_static_collision" type="box" pos="0 0 0.00716731" size="0.08804473 0.0075 0.00716731" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
+    </body>
+  </worldbody>
+  <contact>
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_body_1_office_dental_base_cabinet_0_E_door_3_11" body1="office_dental_base_cabinet_0_E_body_1" body2="office_dental_base_cabinet_0_E_door_3_11" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_body_1_office_dental_base_cabinet_0_E_door_4_14" body1="office_dental_base_cabinet_0_E_body_1" body2="office_dental_base_cabinet_0_E_door_4_14" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_body_1_office_dental_base_cabinet_0_E_drawer_1_17" body1="office_dental_base_cabinet_0_E_body_1" body2="office_dental_base_cabinet_0_E_drawer_1_17" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_body_1_office_dental_base_cabinet_0_E_drawer_2_24" body1="office_dental_base_cabinet_0_E_body_1" body2="office_dental_base_cabinet_0_E_drawer_2_24" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_door_3_11_office_dental_base_cabinet_0_E_door_4_14" body1="office_dental_base_cabinet_0_E_door_3_11" body2="office_dental_base_cabinet_0_E_door_4_14" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_door_3_11_office_dental_base_cabinet_0_E_drawer_1_17" body1="office_dental_base_cabinet_0_E_door_3_11" body2="office_dental_base_cabinet_0_E_drawer_1_17" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_door_3_11_office_dental_base_cabinet_0_E_drawer_2_24" body1="office_dental_base_cabinet_0_E_door_3_11" body2="office_dental_base_cabinet_0_E_drawer_2_24" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_door_4_14_office_dental_base_cabinet_0_E_drawer_1_17" body1="office_dental_base_cabinet_0_E_door_4_14" body2="office_dental_base_cabinet_0_E_drawer_1_17" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_door_4_14_office_dental_base_cabinet_0_E_drawer_2_24" body1="office_dental_base_cabinet_0_E_door_4_14" body2="office_dental_base_cabinet_0_E_drawer_2_24" />
+    <exclude name="selfcol_office_dental_base_cabinet_0_E_drawer_1_17_office_dental_base_cabinet_0_E_drawer_2_24" body1="office_dental_base_cabinet_0_E_drawer_1_17" body2="office_dental_base_cabinet_0_E_drawer_2_24" />
+  </contact>
+</mujoco>

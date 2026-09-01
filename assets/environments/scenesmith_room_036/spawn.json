@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "position": [
+    4.93,
+    1.83
+  ],
+  "yaw": 0,
+  "clearanceMeters": 0.57,
+  "robotRadiusMeters": 0.45,
+  "method": "static-aabb-distance-field",
+  "sceneId": "scenesmith_room_036"
+}

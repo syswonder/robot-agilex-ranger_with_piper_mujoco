@@ -1,0 +1,24 @@
+{
+  "name": "mujoco-robonix",
+  "version": "3.3.8",
+  "type": "module",
+  "description": "Browser MuJoCo workspace with selectable SPZ and mesh environments",
+  "scripts": {
+    "start": "python3 ./scripts/serve.py --port 5180 --bind 0.0.0.0",
+    "serve": "python3 ./scripts/serve.py --port 5180 --bind 0.0.0.0"
+  },
+  "keywords": [
+    "mujoco",
+    "wasm"
+  ],
+  "author": "MuJoCo Robonix contributors",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@sparkjsdev/spark": "^2.0.0",
+    "mujoco-js": "^0.0.7",
+    "three": "0.180.0"
+  }
+}

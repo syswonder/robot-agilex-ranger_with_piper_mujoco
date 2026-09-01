@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "position": [
+    2.625,
+    1.275
+  ],
+  "yaw": -2.689439,
+  "clearanceMeters": 1.2,
+  "observedFloorMarginMeters": 1.5281,
+  "freePatchRadiusMeters": 0.75,
+  "robotRadiusMeters": 0.45,
+  "method": "observed-floor-distance-field",
+  "sceneId": "meeting_room"
+}

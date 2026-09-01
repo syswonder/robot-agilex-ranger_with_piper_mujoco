@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "sceneId": "kitchen",
+  "source": {
+    "spzPath": "./assets/environments/kitchen/kitcken.spz",
+    "byteLength": 3976454,
+    "sha256": "fa19a3c7d87b8c192d540b726be5f2c86d4907092d5b6bbe36999b2c74a552b9",
+    "splatCount": 385575
+  },
+  "estimator": {
+    "method": "floor-plane-leveling-robust-height",
+    "sourceCoordinates": "RUB",
+    "targetCeilingHeightMeters": 3,
+    "floorQuantile": 0.01,
+    "ceilingQuantile": 0.99,
+    "horizontalQuantile": 0.01,
+    "centerHorizontal": true,
+    "confidence": "high",
+    "scaleConfidence": "high",
+    "outlierExpansionRatio": 1.023380136,
+    "floorPlane": {
+      "enabled": true,
+      "plane": [
+        -0.000241042,
+        0.00223476,
+        -0.155743256
+      ],
+      "normal": [
+        0.000241042,
+        0.999997474,
+        -0.002234754
+      ],
+      "tiltDegrees": 0.128784752,
+      "candidateCells": 1081,
+      "inlierCells": 865,
+      "coverage": 0.800185014,
+      "residualRmse": 0.001064915,
+      "residualThreshold": 0.007664062,
+      "residualRatio": 0.138949208,
+      "confidence": "high"
+    }
+  },
+  "transform": {
+    "rotationQuaternion": [
+      0.001117378,
+      0,
+      0.000120521,
+      0.999999368
+    ],
+    "rotationDegrees": [
+      0.128042091,
+      0.000015432,
+      0.013810671
+    ],
+    "scale": 7.039756133,
+    "position": [
+      -0.467436108,
+      1.101114549,
+      5.926008696
+    ],
+    "groundY": 0
+  },
+  "bounds": {
+    "robustAfterRotation": {
+      "min": [
+        -0.398452833,
+        -0.156413735,
+        -1.124536464
+      ],
+      "max": [
+        0.531251782,
+        0.269737391,
+        -0.559047053
+      ]
+    },
+    "robustWorld": {
+      "min": [
+        -3.272446883,
+        0,
+        -1.990453775
+      ],
+      "max": [
+        3.272446883,
+        3,
+        1.990453775
+      ]
+    }
+  }
+}

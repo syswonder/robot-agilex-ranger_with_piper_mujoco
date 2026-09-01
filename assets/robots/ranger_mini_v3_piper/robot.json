@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "id": "ranger_mini_v3_piper",
+  "label": "Ranger Mini V3 + Piper",
+  "description": "Sensor-equipped AgileX Ranger Mini V3 with a rear-center Piper arm",
+  "model": "ranger_mini_v3_piper.xml",
+  "dragRootBody": "ranger_base_link",
+  "files": "index.json",
+  "controller": {
+    "module": "controller.js",
+    "export": "RangerPiperController"
+  },
+  "controlledActuators": [
+    "fl_wheel_motor",
+    "fr_wheel_motor",
+    "rl_wheel_motor",
+    "rr_wheel_motor",
+    "fl_steering",
+    "fr_steering",
+    "rl_steering",
+    "rr_steering",
+    "piper_joint1",
+    "piper_joint2",
+    "piper_joint3",
+    "piper_joint4",
+    "piper_joint5",
+    "piper_joint6",
+    "piper_gripper"
+  ],
+  "sensors": {
+    "lidar": {
+      "id": "mid360",
+      "label": "Livox MID-360",
+      "site": "mid360_lidar_site",
+      "horizontalFovDeg": 360,
+      "verticalFovDeg": [-7, 52],
+      "minRange": 0.1,
+      "maxRange": 40,
+      "raysPerScan": 4096,
+      "updateHz": 10
+    },
+    "imu": {
+      "id": "mid360_imu",
+      "label": "MID-360 ICM40609 IMU",
+      "site": "mid360_imu_site",
+      "gyroscope": "mid360_gyro",
+      "accelerometer": "mid360_accelerometer"
+    },
+    "cameras": [
+      {
+        "id": "front_rgbd",
+        "label": "Front Gemini 336L RGB-D",
+        "camera": "front_rgbd_camera",
+        "width": 320,
+        "height": 240,
+        "depth": true,
+        "depthWidth": 160,
+        "depthHeight": 120,
+        "minDepth": 0.17,
+        "maxDepth": 20
+      },
+      {
+        "id": "wrist_rgb",
+        "label": "Piper Wrist Orbbec DC1 RGB",
+        "camera": "piper_wrist_rgb_camera",
+        "width": 320,
+        "height": 180,
+        "depth": false
+      }
+    ]
+  }
+}

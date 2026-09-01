@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "position": [
+    -0.975,
+    -0.675
+  ],
+  "yaw": 0.605545,
+  "clearanceMeters": 1.5295,
+  "observedFloorMarginMeters": 1.0795,
+  "freePatchRadiusMeters": 1.05,
+  "robotRadiusMeters": 0.45,
+  "method": "observed-floor-distance-field",
+  "sceneId": "kitchen"
+}

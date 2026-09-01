@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mujoco model="kitchen collision environment">
+  <statistic center="0.00419 -0.10295 1.51814" extent="3.94238" />
+  <visual>
+    <headlight diffuse="0.01 0.01 0.01" ambient="0.01 0.01 0.01" specular="0 0 0" />
+  </visual>
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="3072" />
+  </asset>
+  <default>
+    <geom condim="4" friction="1 0.05 0.01" solref="0.002 1" solimp="0.95 0.99 0.001" />
+  </default>
+  <worldbody>
+    <light pos="1 0 2.5" dir="-1 0 -1" directional="true" diffuse="0.08 0.08 0.08" />
+    <geom name="floor" type="plane" size="0 0 0.05" group="3" contype="1" conaffinity="1" rgba="0.15 0.35 0.2 0.001" friction="0.8 0.03 0.01" />
+    <geom name="scene_collision_0000" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 -0.15000 0.22500" size="0.15000 1.05000 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0001" type="box" group="3" contype="1" conaffinity="1" pos="0.22500 0.97500 0.22500" size="1.42500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0002" type="box" group="3" contype="1" conaffinity="1" pos="-0.67500 1.12500 0.22500" size="1.27500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0003" type="box" group="3" contype="1" conaffinity="1" pos="1.42500 -0.22500 0.22500" size="0.37500 0.22500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0004" type="box" group="3" contype="1" conaffinity="1" pos="1.80000 -0.52500 0.22500" size="0.75000 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0005" type="box" group="3" contype="1" conaffinity="1" pos="-2.32500 0.97500 0.22500" size="0.52500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0006" type="box" group="3" contype="1" conaffinity="1" pos="1.27500 -0.97500 0.22500" size="0.22500 0.37500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0007" type="box" group="3" contype="1" conaffinity="1" pos="3.22500 -1.72500 0.22500" size="0.07500 0.52500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0008" type="box" group="3" contype="1" conaffinity="1" pos="-2.62500 0.60000 0.22500" size="0.22500 0.30000 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0009" type="box" group="3" contype="1" conaffinity="1" pos="1.50000 0.15000 0.22500" size="0.30000 0.15000 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0010" type="box" group="3" contype="1" conaffinity="1" pos="-2.70000 0.07500 0.22500" size="0.15000 0.22500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0011" type="box" group="3" contype="1" conaffinity="1" pos="1.50000 0.52500 0.22500" size="0.15000 0.22500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0012" type="box" group="3" contype="1" conaffinity="1" pos="3.07500 0.97500 0.22500" size="0.22500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0013" type="box" group="3" contype="1" conaffinity="1" pos="-2.55000 -1.12500 0.22500" size="0.15000 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0014" type="box" group="3" contype="1" conaffinity="1" pos="1.35000 1.12500 0.22500" size="0.30000 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0015" type="box" group="3" contype="1" conaffinity="1" pos="-2.47500 -0.90000 0.22500" size="0.07500 0.15000 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0016" type="box" group="3" contype="1" conaffinity="1" pos="-1.80000 1.27500 0.22500" size="0.15000 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0017" type="box" group="3" contype="1" conaffinity="1" pos="1.42500 0.82500 0.22500" size="0.22500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0018" type="box" group="3" contype="1" conaffinity="1" pos="-2.62500 -0.22500 0.22500" size="0.07500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0019" type="box" group="3" contype="1" conaffinity="1" pos="-1.87500 1.42500 0.22500" size="0.07500 0.07500 0.12500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0020" type="box" group="3" contype="1" conaffinity="1" pos="-0.60000 0.97500 0.62500" size="2.25000 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0021" type="box" group="3" contype="1" conaffinity="1" pos="-0.15000 1.12500 0.62500" size="1.80000 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0022" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 -0.15000 0.62500" size="0.15000 1.05000 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0023" type="box" group="3" contype="1" conaffinity="1" pos="1.42500 -0.22500 0.62500" size="0.37500 0.22500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0024" type="box" group="3" contype="1" conaffinity="1" pos="1.80000 -0.52500 0.62500" size="0.75000 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0025" type="box" group="3" contype="1" conaffinity="1" pos="3.22500 -1.72500 0.62500" size="0.07500 0.52500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0026" type="box" group="3" contype="1" conaffinity="1" pos="-2.92500 0.30000 0.62500" size="0.37500 0.15000 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0027" type="box" group="3" contype="1" conaffinity="1" pos="1.57500 0.22500 0.62500" size="0.22500 0.22500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0028" type="box" group="3" contype="1" conaffinity="1" pos="1.20000 -1.12500 0.62500" size="0.30000 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0029" type="box" group="3" contype="1" conaffinity="1" pos="-2.70000 0.67500 0.62500" size="0.15000 0.22500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0030" type="box" group="3" contype="1" conaffinity="1" pos="3.07500 0.97500 0.62500" size="0.22500 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0031" type="box" group="3" contype="1" conaffinity="1" pos="-2.70000 -0.07500 0.62500" size="0.15000 0.22500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0032" type="box" group="3" contype="1" conaffinity="1" pos="1.57500 0.67500 0.62500" size="0.07500 0.22500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0033" type="box" group="3" contype="1" conaffinity="1" pos="-2.77500 -0.45000 0.62500" size="0.22500 0.15000 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0034" type="box" group="3" contype="1" conaffinity="1" pos="-2.55000 -0.97500 0.62500" size="0.15000 0.22500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0035" type="box" group="3" contype="1" conaffinity="1" pos="1.72500 -0.67500 0.62500" size="0.67500 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0036" type="box" group="3" contype="1" conaffinity="1" pos="-2.70000 -0.67500 0.62500" size="0.15000 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0037" type="box" group="3" contype="1" conaffinity="1" pos="1.27500 -0.90000 0.62500" size="0.22500 0.15000 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0038" type="box" group="3" contype="1" conaffinity="1" pos="1.27500 -1.27500 0.62500" size="0.22500 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0039" type="box" group="3" contype="1" conaffinity="1" pos="-1.80000 1.27500 0.62500" size="0.15000 0.07500 0.27500" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0040" type="box" group="3" contype="1" conaffinity="1" pos="0.52500 1.95000 1.35000" size="2.47500 0.15000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0041" type="box" group="3" contype="1" conaffinity="1" pos="0.00000 0.97500 1.35000" size="3.30000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0042" type="box" group="3" contype="1" conaffinity="1" pos="0.67500 1.72500 1.35000" size="2.62500 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0043" type="box" group="3" contype="1" conaffinity="1" pos="0.30000 1.12500 1.35000" size="2.25000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0044" type="box" group="3" contype="1" conaffinity="1" pos="-1.50000 1.42500 1.35000" size="0.45000 0.22500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0045" type="box" group="3" contype="1" conaffinity="1" pos="2.77500 0.60000 1.35000" size="0.52500 0.15000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0046" type="box" group="3" contype="1" conaffinity="1" pos="1.72500 1.57500 1.35000" size="1.57500 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0047" type="box" group="3" contype="1" conaffinity="1" pos="3.22500 0.00000 1.35000" size="0.07500 0.45000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0048" type="box" group="3" contype="1" conaffinity="1" pos="1.35000 1.35000 1.35000" size="1.20000 0.15000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0049" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 -0.90000 1.35000" size="0.15000 0.30000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0050" type="box" group="3" contype="1" conaffinity="1" pos="2.40000 0.82500 1.35000" size="0.90000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0051" type="box" group="3" contype="1" conaffinity="1" pos="3.22500 -1.57500 1.35000" size="0.07500 0.37500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0052" type="box" group="3" contype="1" conaffinity="1" pos="-3.15000 1.27500 1.35000" size="0.15000 0.22500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0053" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 1.27500 1.35000" size="0.15000 0.22500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0054" type="box" group="3" contype="1" conaffinity="1" pos="-2.85000 0.60000 1.35000" size="0.45000 0.15000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0055" type="box" group="3" contype="1" conaffinity="1" pos="1.57500 0.07500 1.35000" size="0.07500 0.67500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0056" type="box" group="3" contype="1" conaffinity="1" pos="2.70000 -0.52500 1.35000" size="0.60000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0057" type="box" group="3" contype="1" conaffinity="1" pos="2.02500 -0.67500 1.35000" size="0.52500 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0058" type="box" group="3" contype="1" conaffinity="1" pos="3.07500 -2.10000 1.35000" size="0.22500 0.15000 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0059" type="box" group="3" contype="1" conaffinity="1" pos="-2.92500 0.37500 1.35000" size="0.37500 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0060" type="box" group="3" contype="1" conaffinity="1" pos="-2.55000 0.82500 1.35000" size="0.75000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0061" type="box" group="3" contype="1" conaffinity="1" pos="-3.07500 1.57500 1.35000" size="0.22500 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0062" type="box" group="3" contype="1" conaffinity="1" pos="-3.00000 0.07500 1.35000" size="0.30000 0.22500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0063" type="box" group="3" contype="1" conaffinity="1" pos="-3.15000 1.72500 1.35000" size="0.15000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0064" type="box" group="3" contype="1" conaffinity="1" pos="-2.92500 -0.37500 1.35000" size="0.07500 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0065" type="box" group="3" contype="1" conaffinity="1" pos="-2.85000 -0.22500 1.35000" size="0.15000 0.07500 0.45000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0066" type="box" group="3" contype="1" conaffinity="1" pos="0.00000 1.95000 2.35000" size="3.30000 0.15000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0067" type="box" group="3" contype="1" conaffinity="1" pos="-2.25000 1.50000 2.35000" size="1.05000 0.30000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0068" type="box" group="3" contype="1" conaffinity="1" pos="1.65000 1.72500 2.35000" size="1.65000 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0069" type="box" group="3" contype="1" conaffinity="1" pos="-2.55000 1.05000 2.35000" size="0.75000 0.15000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0070" type="box" group="3" contype="1" conaffinity="1" pos="1.57500 1.35000 2.35000" size="0.97500 0.15000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0071" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 0.30000 2.35000" size="0.15000 0.45000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0072" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 1.27500 2.35000" size="0.15000 0.22500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0073" type="box" group="3" contype="1" conaffinity="1" pos="2.62500 0.97500 2.35000" size="0.67500 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0074" type="box" group="3" contype="1" conaffinity="1" pos="2.70000 0.82500 2.35000" size="0.60000 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0075" type="box" group="3" contype="1" conaffinity="1" pos="1.95000 1.57500 2.35000" size="1.35000 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0076" type="box" group="3" contype="1" conaffinity="1" pos="3.22500 -1.72500 2.35000" size="0.07500 0.52500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0077" type="box" group="3" contype="1" conaffinity="1" pos="-3.15000 0.30000 2.35000" size="0.15000 0.30000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0078" type="box" group="3" contype="1" conaffinity="1" pos="-3.07500 0.75000 2.35000" size="0.22500 0.15000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0079" type="box" group="3" contype="1" conaffinity="1" pos="2.32500 0.67500 2.35000" size="0.22500 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0080" type="box" group="3" contype="1" conaffinity="1" pos="3.15000 -1.05000 2.35000" size="0.15000 0.15000 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0081" type="box" group="3" contype="1" conaffinity="1" pos="2.25000 1.12500 2.35000" size="0.30000 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0082" type="box" group="3" contype="1" conaffinity="1" pos="3.22500 -0.52500 2.35000" size="0.07500 0.37500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+    <geom name="scene_collision_0083" type="box" group="3" contype="1" conaffinity="1" pos="2.32500 0.52500 2.35000" size="0.07500 0.07500 0.55000" rgba="0.2 0.8 0.3 0.001" friction="0.9 0.04 0.01" />
+  </worldbody>
+</mujoco>

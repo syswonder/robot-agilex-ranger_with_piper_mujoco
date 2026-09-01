@@ -1,0 +1,43 @@
+# Dependencies and generated frontend output
+/node_modules/
+/build/
+/dist/
+
+# Tests and local reports are intentionally excluded from the release repository
+/tests/
+/test-results/
+/playwright-report/
+/coverage/
+*.test.*
+*.spec.*
+
+# Python and tool caches
+__pycache__/
+*.py[cod]
+.cache/
+.pytest_cache/
+.venv/
+.venv-*/
+
+# Source datasets and conversion intermediates. Runtime SPZ/XML/OBJ/PNG assets
+# under assets/ are not ignored and remain part of the self-contained project.
+/third_party/
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.ply
+**/collision_boxes.json
+**/collision_topdown.*
+**/generation_report.json
+**/pipeline.config.used.yaml
+
+# Local configuration and editor/OS files
+.env
+.env.*
+!.env.example
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
