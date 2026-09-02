@@ -76,6 +76,7 @@ export class SceneManager {
           spzPath: environment.spzPath ?? null,
           transformPath: environment.transformPath ?? null,
           filesPath: environment.filesPath ?? null,
+          objectsPath: environment.objectsPath ?? null,
           spawn,
           camera: environment.camera ?? null,
           label: environment.label ?? environment.id,
@@ -136,10 +137,10 @@ export class SceneManager {
       this._resetDirectory(vfsSceneDir);
 
       // Mesh environments carry their own static visual and collision assets.
-      await this._copyEnvironmentToDir(envConfig, vfsSceneDir);
+      const hasObjects = await this._copyEnvironmentToDir(envConfig, vfsSceneDir);
 
       // Copy robot files to scene directory
-      const hasObjects = await this._copyRobotToDir(robotName, vfsSceneDir, envConfig.spawn);
+      await this._copyRobotToDir(robotName, vfsSceneDir, envConfig.spawn);
 
       // Load environment XML and create scene
       const envResponse = await fetch(envConfig.xmlPath);
@@ -267,45 +268,52 @@ export class SceneManager {
 
   /** Copy an environment package into its own namespace in MuJoCo's VFS. */
   async _copyEnvironmentToDir(envConfig, targetDir) {
-    if (!envConfig.filesPath) return;
-    const response = await fetch(envConfig.filesPath, { cache: 'no-store' });
-    if (!response.ok) throw new Error(`Environment file index not found: ${envConfig.filesPath}`);
-    const files = await response.json();
-    if (!Array.isArray(files) || !files.length) throw new Error('Environment file index is empty');
-    const baseUrl = envConfig.filesPath.slice(0, envConfig.filesPath.lastIndexOf('/'));
-    const root = targetDir;
+    if (envConfig.filesPath) {
+      const response = await fetch(envConfig.filesPath, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Environment file index not found: ${envConfig.filesPath}`);
+      const files = await response.json();
+      if (!Array.isArray(files) || !files.length) throw new Error('Environment file index is empty');
+      const baseUrl = envConfig.filesPath.slice(0, envConfig.filesPath.lastIndexOf('/'));
+      const root = targetDir;
 
-    const normalizedFiles = files.map((rawFile) => {
-      const file = String(rawFile).replace(/\\/g, '/').replace(/^\.\//, '');
-      if (!file || file.startsWith('/') || file.split('/').includes('..')) {
-        throw new Error(`Invalid environment package path: ${rawFile}`);
-      }
-      return file;
-    });
+      const normalizedFiles = files.map((rawFile) => {
+        const file = String(rawFile).replace(/\\/g, '/').replace(/^\.\//, '');
+        if (!file || file.startsWith('/') || file.split('/').includes('..')) {
+          throw new Error(`Invalid environment package path: ${rawFile}`);
+        }
+        return file;
+      });
 
-    for (const file of normalizedFiles) {
-      let parent = root;
-      for (const part of file.split('/').slice(0, -1)) {
-        parent += `/${part}`;
-        this._ensureDir(parent);
+      for (const file of normalizedFiles) {
+        let parent = root;
+        for (const part of file.split('/').slice(0, -1)) {
+          parent += `/${part}`;
+          this._ensureDir(parent);
+        }
       }
+
+      let nextFile = 0;
+      const copyNext = async () => {
+        while (nextFile < normalizedFiles.length) {
+          const file = normalizedFiles[nextFile++];
+          const fileResponse = await fetch(`${baseUrl}/${file}`);
+          if (!fileResponse.ok) throw new Error(`Failed to fetch environment asset: ${file}`);
+          const extension = file.split('.').pop().toLowerCase();
+          const data = ['xml', 'mjcf', 'json', 'txt'].includes(extension)
+            ? await fileResponse.text()
+            : new Uint8Array(await fileResponse.arrayBuffer());
+          this._writeToFS(`${root}/${file}`, data);
+        }
+      };
+      const concurrency = Math.min(8, normalizedFiles.length);
+      await Promise.all(Array.from({ length: concurrency }, copyNext));
     }
 
-    let nextFile = 0;
-    const copyNext = async () => {
-      while (nextFile < normalizedFiles.length) {
-        const file = normalizedFiles[nextFile++];
-        const fileResponse = await fetch(`${baseUrl}/${file}`);
-        if (!fileResponse.ok) throw new Error(`Failed to fetch environment asset: ${file}`);
-        const extension = file.split('.').pop().toLowerCase();
-        const data = ['xml', 'mjcf', 'json', 'txt'].includes(extension)
-          ? await fileResponse.text()
-          : new Uint8Array(await fileResponse.arrayBuffer());
-        this._writeToFS(`${root}/${file}`, data);
-      }
-    };
-    const concurrency = Math.min(8, normalizedFiles.length);
-    await Promise.all(Array.from({ length: concurrency }, copyNext));
+    if (!envConfig.objectsPath) return false;
+    const objectsResponse = await fetch(envConfig.objectsPath, { cache: 'no-store' });
+    if (!objectsResponse.ok) throw new Error(`Environment objects file not found: ${envConfig.objectsPath}`);
+    this._writeToFS(`${targetDir}/objects.xml`, await objectsResponse.text());
+    return true;
   }
 
   /**
@@ -317,14 +325,19 @@ export class SceneManager {
   async loadUploadedRobot(files, envName = null) {
     envName = envName ?? this.defaultEnvironment;
     // Parse uploaded files
-    const { robotXml, objectsXml, meshFiles, robotName } =
+    const { robotXml, meshFiles, robotName } =
       await this.robotLoader.loadUploadedRobot(files);
 
     const vfsSceneDir = `/working/scenes/uploaded_${robotName}`;
 
-    // Create directories
+    const effectiveEnv = (envName === 'custom_spz') ? 'basic' : envName;
+    const envConfig = SceneManager.ENV_CONFIGS[effectiveEnv];
+    if (!envConfig) throw new Error(`Unknown environment: ${envName}`);
+
+    // Build the scene directory from the selected environment and uploaded robot.
     this._ensureDir('/working/scenes');
-    this._ensureDir(vfsSceneDir);
+    this._resetDirectory(vfsSceneDir);
+    const hasObjects = await this._copyEnvironmentToDir(envConfig, vfsSceneDir);
     this._ensureDir(`${vfsSceneDir}/assets`);
 
     // Write asset files
@@ -340,16 +353,7 @@ export class SceneManager {
     );
     this._writeToFS(`${vfsSceneDir}/robot.xml`, fixedRobotXml);
 
-    // Write objects XML if exists
-    const hasObjects = !!objectsXml;
-    if (hasObjects) {
-      this._writeToFS(`${vfsSceneDir}/objects.xml`, objectsXml);
-    }
-
     // Load environment XML
-    // If in custom_spz mode, use 'basic' environment for the XML
-    const effectiveEnv = (envName === 'custom_spz') ? 'basic' : envName;
-    const envConfig = SceneManager.ENV_CONFIGS[effectiveEnv];
     const envResponse = await fetch(envConfig.xmlPath);
     const envXml = await envResponse.text();
 
@@ -519,14 +523,9 @@ export class SceneManager {
         throw new Error('Uploaded robot files not found. Please re-upload the robot.');
       }
 
-      // Check if objects.xml exists
-      let hasObjects = false;
-      try {
-        this.mujoco.FS.readFile(`${uploadedSceneDir}/objects.xml`);
-        hasObjects = true;
-      } catch (e) {
-        // No objects file
-      }
+      // A custom SPZ has no registered environment package or task objects.
+      const objectsPath = `${uploadedSceneDir}/objects.xml`;
+      if (this.mujoco.FS.analyzePath(objectsPath).exists) this.mujoco.FS.unlink(objectsPath);
 
       // Write collision.xml if custom collision is set
       if (this.customCollisionXml) {
@@ -534,7 +533,7 @@ export class SceneManager {
       }
 
       // Create scene XML with environment, collision, and uploaded robot
-      const sceneXml = this._createSceneXmlWithCollision(envXml, 'robot', hasObjects, `custom_spz_${robotName}`, this.hasCustomCollision());
+      const sceneXml = this._createSceneXmlWithCollision(envXml, 'robot', false, `custom_spz_${robotName}`, this.hasCustomCollision());
       this._writeToFS(`${uploadedSceneDir}/scene.xml`, sceneXml);
 
       this.currentRobot = robotName;
@@ -618,13 +617,13 @@ export class SceneManager {
       robotInclude.setAttribute('file', `${robotName}.xml`);
       mujoco.insertBefore(robotInclude, insertPoint);
       insertPoint = robotInclude.nextSibling;
+    }
 
-      // Add objects include if exists
-      if (hasObjects) {
-        const objectsInclude = doc.createElement('include');
-        objectsInclude.setAttribute('file', 'objects.xml');
-        mujoco.insertBefore(objectsInclude, insertPoint);
-      }
+    // Objects belong to the environment and do not depend on a robot include.
+    if (hasObjects) {
+      const objectsInclude = doc.createElement('include');
+      objectsInclude.setAttribute('file', 'objects.xml');
+      mujoco.insertBefore(objectsInclude, insertPoint);
     }
 
     // Serialize back to string
@@ -641,16 +640,15 @@ export class SceneManager {
   }
 
   /**
-   * Copy robot files (XML, objects, meshes) to target directory
+   * Copy robot files (XML and meshes) to target directory.
    * @param {string} robotName - Robot name
    * @param {string} targetDir - Target VFS directory
-   * @returns {Promise<boolean>} - Whether objects file exists
+   * @returns {Promise<void>}
    */
   async _copyRobotToDir(robotName, targetDir, spawn = null) {
     console.log(`_copyRobotToDir: robotName=${robotName}, targetDir=${targetDir}`);
-    const hasObjects = await this.robotLoader.copyPackageToScene(robotName, targetDir);
+    await this.robotLoader.copyPackageToScene(robotName, targetDir);
     if (spawn) this._applyRobotSpawn(`${targetDir}/${robotName}.xml`, spawn, robotName);
-    return hasObjects;
   }
 
   /** Offset every robot-owned top-level body and free-joint keyframe to a collision-free scene spawn. */
@@ -667,12 +665,26 @@ export class SceneManager {
       ? [...worldbody.children].filter((element) => element.tagName === 'body')
       : [];
     if (!topLevelBodies.length) throw new Error(`${robotName}: robot XML has no top-level body`);
+    const yaw = Number.isFinite(spawn.yaw) ? Number(spawn.yaw) : 0;
+    const yawHalf = yaw * 0.5;
+    const yawQuat = [Math.cos(yawHalf), 0, 0, Math.sin(yawHalf)];
+    const multiplyQuaternion = (left, right) => [
+      left[0] * right[0] - left[1] * right[1] - left[2] * right[2] - left[3] * right[3],
+      left[0] * right[1] + left[1] * right[0] + left[2] * right[3] - left[3] * right[2],
+      left[0] * right[2] - left[1] * right[3] + left[2] * right[0] + left[3] * right[1],
+      left[0] * right[3] + left[1] * right[2] - left[2] * right[1] + left[3] * right[0]
+    ];
     for (const body of topLevelBodies) {
       const values = (body.getAttribute('pos') ?? '0 0 0').trim().split(/\s+/).map(Number);
       while (values.length < 3) values.push(0);
-      values[0] += position[0];
-      values[1] += position[1];
+      const localX = values[0];
+      const localY = values[1];
+      values[0] = position[0] + Math.cos(yaw) * localX - Math.sin(yaw) * localY;
+      values[1] = position[1] + Math.sin(yaw) * localX + Math.cos(yaw) * localY;
       body.setAttribute('pos', values.map((value) => Number(value.toFixed(9))).join(' '));
+      const currentQuat = (body.getAttribute('quat') ?? '1 0 0 0').trim().split(/\s+/).map(Number);
+      body.setAttribute('quat', multiplyQuaternion(yawQuat, currentQuat)
+        .map((value) => Number(value.toFixed(9))).join(' '));
     }
 
     const hasFreeJoint = Boolean(doc.querySelector('freejoint, joint[type="free"]'));
@@ -687,7 +699,7 @@ export class SceneManager {
       }
     }
     this._writeToFS(robotXmlPath, new XMLSerializer().serializeToString(doc));
-    console.log(`Applied ${robotName} spawn: [${position.join(', ')}], clearance=${spawn.clearanceMeters}m`);
+    console.log(`Applied ${robotName} spawn: [${position.join(', ')}], yaw=${yaw}, clearance=${spawn.clearanceMeters}m`);
   }
 
   /**
@@ -763,14 +775,9 @@ export class SceneManager {
     const envResponse = await fetch(envConfig.xmlPath);
     const envXml = await envResponse.text();
 
-    // Check if objects.xml exists
-    let hasObjects = false;
-    try {
-      this.mujoco.FS.readFile(`${vfsSceneDir}/objects.xml`);
-      hasObjects = true;
-    } catch (e) {
-      // No objects file
-    }
+    const objectsPath = `${vfsSceneDir}/objects.xml`;
+    if (this.mujoco.FS.analyzePath(objectsPath).exists) this.mujoco.FS.unlink(objectsPath);
+    const hasObjects = await this._copyEnvironmentToDir(envConfig, vfsSceneDir);
 
     // Recreate scene XML with environment
     const sceneName = `${effectiveEnv}_${this.currentRobot}`;

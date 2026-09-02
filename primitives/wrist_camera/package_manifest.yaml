@@ -1,0 +1,19 @@
+manifestVersion: 1
+package:
+  name: com.robonix.sim.wrist_orbbec
+  version: 0.2.0
+  description: Simulated Piper wrist RGB-D camera.
+  tags: [primitive, camera, rgbd, simulation, mujoco, orbbec, piper]
+  maintainers:
+    - Chen Yanting <1154270143@qq.com>
+  license: Apache-2.0
+build: bash ../../scripts/build-primitive.sh primitives/wrist_camera
+start: bash ../../scripts/start-primitive.sh primitives/wrist_camera primitives.common.camera wrist_camera
+stop: bash ../../scripts/stop-primitive.sh wrist_camera
+capabilities:
+  - name: robonix/primitive/camera/rgb
+  - name: robonix/primitive/camera/depth
+  - name: robonix/primitive/camera/intrinsics
+  - name: robonix/primitive/camera/snapshot
+  - name: robonix/primitive/camera/depth_snapshot
+  - name: robonix/primitive/camera/driver

@@ -18,6 +18,7 @@ export class KeyboardController {
     this.mujoco = null;
     this.keyStates = {};
     this.customController = null;
+    this.keyboardInputEnabled = false;
 
     // Bind event handlers
     this._onKeyDown = this._onKeyDown.bind(this);
@@ -82,10 +83,12 @@ export class KeyboardController {
       this.keyStates[key] = false;
     }
 
-    // Add event listeners
-    document.addEventListener('keydown', this._onKeyDown);
-    document.addEventListener('keyup', this._onKeyUp);
-    window.addEventListener('blur', this._onBlur);
+    this.keyboardInputEnabled = new URLSearchParams(window.location.search).get('dev') === '1';
+    if (this.keyboardInputEnabled) {
+      document.addEventListener('keydown', this._onKeyDown);
+      document.addEventListener('keyup', this._onKeyUp);
+      window.addEventListener('blur', this._onBlur);
+    }
 
     this.enabled = true;
     console.log(`Keyboard control enabled for robot: ${robot.id}`);
@@ -109,6 +112,7 @@ export class KeyboardController {
     this.mujoco = null;
     this.keyStates = {};
     this.customController = null;
+    this.keyboardInputEnabled = false;
   }
 
   /**
@@ -130,6 +134,44 @@ export class KeyboardController {
       return this.customController.getDescription();
     }
     return this.config ? this.config.description : '';
+  }
+
+  setExternalControlEnabled(enabled) {
+    this.customController?.setExternalControlEnabled?.(enabled);
+  }
+
+  setTwist(command) {
+    return this.customController?.setTwist?.(command) ?? false;
+  }
+
+  setArmJointCommand(command) {
+    return this.customController?.setArmJointCommand?.(command, this.model, this.data) ?? false;
+  }
+
+  setArmPoseCommand(command) {
+    return this.customController?.setArmPoseCommand?.(command, this.model, this.data) ?? false;
+  }
+
+  startPickObject(name) {
+    return this.customController?.startPickObject?.(name, this.model, this.data) ?? false;
+  }
+
+  getPickStatus() {
+    return this.customController?.getPickStatus?.() ?? null;
+  }
+
+  emergencyStop() {
+    return this.customController?.emergencyStop?.() ?? false;
+  }
+
+  resetRobot() {
+    if (!this.customController || !this.model || !this.data) return false;
+    this.customController.reset(this.model, this.data);
+    return true;
+  }
+
+  getRobotState() {
+    return this.customController?.getRobotState?.(this.model, this.data) ?? null;
   }
 
   _onKeyDown(event) {

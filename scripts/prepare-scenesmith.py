@@ -257,22 +257,36 @@ def world_aabb(
 
 
 def find_spawn(
-    floor_minimum: list[float],
-    floor_maximum: list[float],
+    floors: list[tuple[list[float], list[float]]],
     obstacles: list[tuple[list[float], list[float]]],
     robot_radius: float,
 ) -> tuple[list[float], float]:
+    if not floors:
+        raise RuntimeError("Could not locate any SceneSmith floor collision")
     step = 0.10
     margin = robot_radius + 0.08
     best_position = None
     best_clearance = -math.inf
-    x = floor_minimum[0] + margin
-    while x <= floor_maximum[0] - margin:
-        y = floor_minimum[1] + margin
-        while y <= floor_maximum[1] - margin:
-            wall_clearance = min(
-                x - floor_minimum[0], floor_maximum[0] - x,
-                y - floor_minimum[1], floor_maximum[1] - y,
+    overall_minimum = [min(floor[0][axis] for floor in floors) for axis in range(2)]
+    overall_maximum = [max(floor[1][axis] for floor in floors) for axis in range(2)]
+    x = overall_minimum[0] + margin
+    while x <= overall_maximum[0] - margin:
+        y = overall_minimum[1] + margin
+        while y <= overall_maximum[1] - margin:
+            containing_floors = [
+                floor for floor in floors
+                if floor[0][0] + margin <= x <= floor[1][0] - margin
+                and floor[0][1] + margin <= y <= floor[1][1] - margin
+            ]
+            if not containing_floors:
+                y += step
+                continue
+            wall_clearance = max(
+                min(
+                    x - minimum[0], maximum[0] - x,
+                    y - minimum[1], maximum[1] - y,
+                )
+                for minimum, maximum in containing_floors
             )
             clearance = wall_clearance
             for minimum, maximum in obstacles:
@@ -292,12 +306,93 @@ def find_spawn(
     return best_position, best_clearance
 
 
+def subtract_intervals(
+    interval: tuple[float, float], cuts: list[tuple[float, float]], tolerance: float = 1e-5
+) -> list[tuple[float, float]]:
+    remaining = [interval]
+    for cut_start, cut_end in cuts:
+        updated = []
+        for start, end in remaining:
+            if cut_end <= start + tolerance or cut_start >= end - tolerance:
+                updated.append((start, end))
+                continue
+            if cut_start > start + tolerance:
+                updated.append((start, min(cut_start, end)))
+            if cut_end < end - tolerance:
+                updated.append((max(cut_end, start), end))
+        remaining = updated
+    return remaining
+
+
+def add_floor_perimeter_guards(
+    worldbody: ET.Element,
+    floors: list[tuple[list[float], list[float]]],
+    wall_height: float = 3.0,
+) -> int:
+    """Seal only the exposed boundary of an axis-aligned floor union."""
+    tolerance = 1e-4
+    segments: list[tuple[str, float, float, float]] = []
+    for index, (minimum, maximum) in enumerate(floors):
+        edges = (
+            ("vertical", minimum[0], minimum[1], maximum[1], "left"),
+            ("vertical", maximum[0], minimum[1], maximum[1], "right"),
+            ("horizontal", minimum[1], minimum[0], maximum[0], "bottom"),
+            ("horizontal", maximum[1], minimum[0], maximum[0], "top"),
+        )
+        for orientation, coordinate, start, end, side in edges:
+            cuts = []
+            for other_index, (other_minimum, other_maximum) in enumerate(floors):
+                if other_index == index:
+                    continue
+                if orientation == "vertical":
+                    adjacent = (
+                        abs(other_maximum[0] - coordinate) < tolerance if side == "left"
+                        else abs(other_minimum[0] - coordinate) < tolerance
+                    )
+                    if adjacent:
+                        cuts.append((other_minimum[1], other_maximum[1]))
+                else:
+                    adjacent = (
+                        abs(other_maximum[1] - coordinate) < tolerance if side == "bottom"
+                        else abs(other_minimum[1] - coordinate) < tolerance
+                    )
+                    if adjacent:
+                        cuts.append((other_minimum[0], other_maximum[0]))
+            for exposed_start, exposed_end in subtract_intervals((start, end), cuts):
+                if exposed_end - exposed_start > tolerance:
+                    segments.append((orientation, coordinate, exposed_start, exposed_end))
+
+    for index, (orientation, coordinate, start, end) in enumerate(segments):
+        midpoint = (start + end) * 0.5
+        half_length = (end - start) * 0.5
+        if orientation == "vertical":
+            position = [coordinate, midpoint, wall_height * 0.5]
+            size = [0.04, half_length, wall_height * 0.5]
+        else:
+            position = [midpoint, coordinate, wall_height * 0.5]
+            size = [half_length, 0.04, wall_height * 0.5]
+        worldbody.append(ET.Element("geom", {
+            "name": f"generated_perimeter_guard_{index}",
+            "type": "box",
+            "pos": fmt(position),
+            "size": fmt(size),
+            "group": "3",
+            "contype": "1",
+            "conaffinity": "1",
+            "rgba": "0.2 0.8 0.3 0.001",
+            "friction": "0.8 0.02 0.002",
+        }))
+    return len(segments)
+
+
 def build_package(
     source: Path,
     output: Path,
     robot_radius: float,
     scene_id: str,
     source_archive: str,
+    source_subset: str,
+    interactive_config: Path | None,
 ) -> dict:
     source_xml = source / "scene.xml"
     source_meshes = source / "meshes"
@@ -317,32 +412,69 @@ def build_package(
     bounds_cache = {}
     static_boxes = []
     original_collision_geoms = 0
+    interactive_spec = {"objects": []}
+    if interactive_config is not None:
+        interactive_spec = json.loads(interactive_config.read_text(encoding="utf-8"))
+    interactive_by_source = {
+        item["sourceBody"]: item for item in interactive_spec.get("objects", [])
+    }
+    objects_root = ET.Element("mujoco", {"model": f"{scene_id}_objects"})
+    objects_worldbody = ET.SubElement(objects_root, "worldbody")
+    dynamic_objects = []
 
     ground = worldbody.find("geom[@name='ground_plane']")
     if ground is not None:
         worldbody.remove(ground)
 
-    floor_minimum = None
-    floor_maximum = None
-    room_body = next(body for body in worldbody.findall("body") if body.get("name", "").startswith("room_geometry_"))
-    room_type = room_body.get("name", "room_geometry_unknown").removeprefix("room_geometry_").split("_room_geometry")[0]
-    room_position = vector(room_body.get("pos"), 3, (0, 0, 0))
-    for geom in room_body.iter("geom"):
-        name = geom.get("name", "")
-        if "collision" in name:
-            geom.set("group", "3")
-            geom.set("contype", "1")
-            geom.set("conaffinity", "1")
-            geom.set("rgba", "0.2 0.8 0.3 0.001")
-        if "floor_collision" in name and geom.get("type") == "box":
-            center = vector(geom.get("pos"), 3, (0, 0, 0))
-            size = vector(geom.get("size"), 3, (0, 0, 0))
-            center = [center[index] + room_position[index] for index in range(3)]
-            floor_minimum = [center[index] - size[index] for index in range(3)]
-            floor_maximum = [center[index] + size[index] for index in range(3)]
+    floors = []
+    room_bodies = [
+        body for body in worldbody.findall("body")
+        if body.get("name", "").startswith("room_geometry_")
+    ]
+    if not room_bodies:
+        raise RuntimeError("Could not locate any SceneSmith room geometry")
+    room_types = []
+    for room_body in room_bodies:
+        room_types.append(
+            room_body.get("name", "room_geometry_unknown")
+            .removeprefix("room_geometry_")
+            .split("_room_geometry")[0]
+        )
+        room_position = vector(room_body.get("pos"), 3, (0, 0, 0))
+        room_quaternion = vector(room_body.get("quat"), 4, (1, 0, 0, 0))
+
+        def visit_room(body: ET.Element, position: list[float], quaternion: list[float]) -> None:
+            for geom in body.findall("geom"):
+                name = geom.get("name", "")
+                if "collision" in name:
+                    geom.set("group", "3")
+                    geom.set("contype", "1")
+                    geom.set("conaffinity", "1")
+                    geom.set("rgba", "0.2 0.8 0.3 0.001")
+                if "floor_collision" in name and geom.get("type") == "box":
+                    center, orientation = compose(
+                        position,
+                        quaternion,
+                        vector(geom.get("pos"), 3, (0, 0, 0)),
+                        vector(geom.get("quat"), 4, (1, 0, 0, 0)),
+                    )
+                    size = vector(geom.get("size"), 3, (0, 0, 0))
+                    floors.append(world_aabb(
+                        [-value for value in size], size, center, orientation
+                    ))
+            for child in body.findall("body"):
+                child_position, child_quaternion = compose(
+                    position,
+                    quaternion,
+                    vector(child.get("pos"), 3, (0, 0, 0)),
+                    vector(child.get("quat"), 4, (1, 0, 0, 0)),
+                )
+                visit_room(child, child_position, child_quaternion)
+
+        visit_room(room_body, room_position, room_quaternion)
 
     for top_body in list(worldbody.findall("body")):
-        if top_body is room_body:
+        if top_body in room_bodies:
             continue
         name = top_body.get("name", "object")
         local_minimum, local_maximum = relative_visual_bounds(
@@ -358,6 +490,36 @@ def build_package(
                     parent.remove(geom)
         center = [(local_minimum[index] + local_maximum[index]) * 0.5 for index in range(3)]
         size = [max((local_maximum[index] - local_minimum[index]) * 0.5, 0.005) for index in range(3)]
+        interactive = interactive_by_source.get(name)
+        if interactive is not None:
+            task_name = interactive["name"]
+            top_body.set("name", task_name)
+            if "position" in interactive:
+                top_body.set("pos", fmt(interactive["position"]))
+            if "quaternion" in interactive:
+                top_body.set("quat", fmt(interactive["quaternion"]))
+            top_body.insert(0, ET.Element("freejoint", {"name": f"{task_name}_freejoint"}))
+            top_body.append(ET.Element("geom", {
+                "name": f"{task_name}_collision",
+                "type": "box",
+                "pos": fmt(center),
+                "size": fmt(size),
+                "group": "3",
+                "contype": "1",
+                "conaffinity": "1",
+                "rgba": "0.2 0.8 0.3 0.001",
+                "friction": "0.9 0.03 0.003",
+                "density": str(interactive.get("density", 350)),
+            }))
+            worldbody.remove(top_body)
+            objects_worldbody.append(top_body)
+            dynamic_objects.append({
+                "name": task_name,
+                "sourceBody": name,
+                "position": vector(top_body.get("pos"), 3, (0, 0, 0)),
+                "size": [round(value * 2, 5) for value in size],
+            })
+            continue
         top_body.append(ET.Element("geom", {
             "name": f"{name}_static_collision",
             "type": "box",
@@ -378,23 +540,30 @@ def build_package(
             geom.set("group", "1")
             geom.set("contype", "0")
             geom.set("conaffinity", "0")
+    for geom in objects_worldbody.iter("geom"):
+        if "visual" in geom.get("name", ""):
+            geom.set("group", "1")
+            geom.set("contype", "0")
+            geom.set("conaffinity", "0")
 
     original_mesh_count = len(asset.findall("mesh"))
     original_texture_count = len([item for item in asset.findall("texture") if item.get("file")])
     deduplicated = deduplicate_assets(root, source_meshes)
 
-    referenced_mesh_names = {geom.get("mesh") for geom in worldbody.iter("geom") if geom.get("mesh")}
+    referenced_mesh_names = {
+        geom.get("mesh")
+        for container in (worldbody, objects_worldbody)
+        for geom in container.iter("geom")
+        if geom.get("mesh")
+    }
     for mesh in list(asset.findall("mesh")):
         if mesh.get("name") not in referenced_mesh_names:
             asset.remove(mesh)
         else:
             mesh.set("file", f"scenesmith/{mesh.get('file')}")
 
-    if floor_minimum is None or floor_maximum is None:
-        raise RuntimeError("Could not locate the SceneSmith floor collision")
-    spawn_position, spawn_clearance = find_spawn(
-        floor_minimum, floor_maximum, static_boxes, robot_radius
-    )
+    perimeter_guard_count = add_floor_perimeter_guards(worldbody, floors)
+    spawn_position, spawn_clearance = find_spawn(floors, static_boxes, robot_radius)
 
     used_files = {Path(mesh.get("file")).name for mesh in asset.findall("mesh")}
     used_files.update(Path(texture.get("file")).name for texture in asset.findall("texture") if texture.get("file"))
@@ -421,6 +590,9 @@ def build_package(
     output.mkdir(parents=True, exist_ok=True)
     ET.indent(root, space="  ")
     ET.ElementTree(root).write(output / "scene.xml", encoding="unicode")
+    if dynamic_objects:
+        ET.indent(objects_root, space="  ")
+        ET.ElementTree(objects_root).write(output / "objects.xml", encoding="unicode")
     package_files = [f"meshes/scenesmith/{name}" for name in sorted(used_files)]
     (output / "index.json").write_text(json.dumps(package_files, indent=2) + "\n", encoding="utf-8")
     spawn = {
@@ -435,12 +607,12 @@ def build_package(
     (output / "spawn.json").write_text(json.dumps(spawn, indent=2) + "\n", encoding="utf-8")
     notice = f"""# SceneSmith {source_archive.removesuffix('.tar')}
 
-This runtime package is derived from `Room/{source_archive}` in
+This runtime package is derived from `{source_subset}/{source_archive}` in
 `nepfaff/scenesmith-example-scenes`.
 
 - Source: https://huggingface.co/datasets/nepfaff/scenesmith-example-scenes
 - SceneSmith project: https://github.com/nepfaff/scenesmith
-- License: Apache-2.0 (as declared for the generated Room subset)
+- License: Apache-2.0 (as declared by the source dataset)
 
 `scripts/prepare-scenesmith.py` removes furniture free joints, replaces the
 generated convex decomposition with one static collision box per object, keeps
@@ -448,9 +620,10 @@ the textured visual meshes, and computes a collision-free robot spawn.
 """
     (output / "NOTICE.md").write_text(notice, encoding="utf-8")
     report = {
-        "source": f"nepfaff/scenesmith-example-scenes Room/{source_archive}",
+        "source": f"nepfaff/scenesmith-example-scenes {source_subset}/{source_archive}",
         "sourceLicense": "Apache-2.0",
-        "roomType": room_type,
+        "roomTypes": room_types,
+        "roomCount": len(room_bodies),
         "furnitureMode": "static",
         "visualMeshCount": len(asset.findall("mesh")),
         "textureCount": len([item for item in asset.findall("texture") if item.get("file")]),
@@ -462,7 +635,11 @@ the textured visual meshes, and computes a collision-free robot spawn.
         "objOptimization": obj_optimization,
         "originalFurnitureCollisionGeomCount": original_collision_geoms,
         "staticFurnitureCollisionBoxCount": len(static_boxes),
+        "floorCollisionCount": len(floors),
+        "perimeterGuardCount": perimeter_guard_count,
         "runtimeAssetCount": len(used_files),
+        "dynamicObjects": dynamic_objects,
+        "taskApproach": interactive_spec.get("approach"),
         "spawn": spawn,
     }
     (output / "generation_report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
@@ -475,6 +652,12 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True, help="Runtime environment package directory")
     parser.add_argument("--scene-id", required=True, help="Environment ID written to spawn metadata")
     parser.add_argument("--source-archive", required=True, help="Dataset archive name, e.g. scene_036.tar")
+    parser.add_argument("--source-subset", choices=("Room", "House"), default="Room")
+    parser.add_argument(
+        "--interactive-config",
+        type=Path,
+        help="JSON mapping SceneSmith bodies to environment-level task objects",
+    )
     parser.add_argument("--robot-radius", type=float, default=0.45)
     args = parser.parse_args()
     report = build_package(
@@ -483,6 +666,8 @@ def main() -> None:
         args.robot_radius,
         args.scene_id,
         args.source_archive,
+        args.source_subset,
+        args.interactive_config.resolve() if args.interactive_config else None,
     )
     print(json.dumps(report, indent=2))
 

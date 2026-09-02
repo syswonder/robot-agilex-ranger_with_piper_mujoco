@@ -1,0 +1,121 @@
+urdf:
+  path: ./urdf/ranger_piper.urdf
+  root_link: base_link
+  model_name: mujoco_ranger_piper
+
+robot:
+  id: mujoco_ranger_piper_01
+  display_name: "MuJoCo Ranger Mini V3 with Piper"
+  family: mobile_manipulator
+  root_part: base
+  dimensions: {length_m: 0.74, width_m: 0.50, height_m: 1.05}
+  footprint:
+    base_frame: base_link
+    points: [[0.37, 0.25], [0.37, -0.25], [-0.37, -0.25], [-0.37, 0.25]]
+  exports:
+    - provider_id: mapping
+      capabilities:
+        - {path: robonix/service/map/occupancy_grid, description: "Live indoor occupancy grid."}
+        - {path: robonix/service/map/pointcloud, description: "Fused scene point cloud."}
+        - {path: robonix/service/map/pose, description: "Map-frame robot pose."}
+    - provider_id: nav2
+      capabilities:
+        - {path: robonix/service/navigation/navigate, description: "Collision-aware 2D navigation."}
+        - {path: robonix/service/navigation/adjust_speed, description: "Adjust the active navigation speed."}
+        - {path: robonix/service/navigation/set_speed_limit, description: "Set a bounded navigation speed percentage."}
+        - {path: robonix/service/navigation/get_speed_limit, description: "Read the effective navigation speed limit."}
+    - provider_id: scene
+      capabilities:
+        - {path: robonix/system/scene/list_objects, description: "List semantic objects observed in the room."}
+        - {path: robonix/system/scene/goal_near, description: "Find a navigation goal near an observed object."}
+    - provider_id: explore
+      capabilities:
+        - {path: robonix/skill/explore/explore, description: "Run frontier exploration using the live map."}
+    - provider_id: pick
+      capabilities:
+        - {path: robonix/skill/pick/pick, description: "VLM-confirmed tabletop pick."}
+        - {path: robonix/skill/pick/put_down, description: "Release the held object."}
+  components:
+    - id: base
+      type: mobile_base
+      urdf_link: base_link
+      exports:
+        - provider_id: ranger_chassis
+          capabilities:
+            - {path: robonix/primitive/chassis/move, description: "Command the Ranger base."}
+            - {path: robonix/primitive/chassis/odom, description: "Read base odometry."}
+      components:
+        - id: lidar
+          type: lidar_3d
+          urdf_link: mid360_link
+          exports:
+            - provider_id: mid360_lidar
+              capabilities:
+                - {path: robonix/primitive/lidar/lidar, description: "Planar navigation scan."}
+                - {path: robonix/primitive/lidar/lidar3d, description: "MID-360 point cloud."}
+        - id: imu
+          type: imu
+          urdf_link: mid360_link
+          exports:
+            - provider_id: mid360_imu
+              capabilities:
+                - {path: robonix/primitive/imu/imu, description: "Simulated IMU."}
+        - id: front_rgbd
+          type: rgbd_camera
+          urdf_link: front_camera_optical_frame
+          exports:
+            - provider_id: front_camera
+              capabilities:
+                - {path: robonix/primitive/camera/rgb, description: "Front RGB stream."}
+                - {path: robonix/primitive/camera/depth, description: "Aligned front depth."}
+                - {path: robonix/primitive/camera/intrinsics, description: "Front camera calibration."}
+                - {path: robonix/primitive/camera/extrinsics, description: "Static front camera mount transform."}
+                - {path: robonix/primitive/camera/snapshot, description: "Capture one front RGB frame."}
+                - {path: robonix/primitive/camera/depth_snapshot, description: "Capture one front depth preview."}
+        - id: arm
+          type: manipulator
+          urdf_link: arm_base_link
+          exports:
+            - provider_id: piper_ctl
+              capabilities:
+                - {path: robonix/primitive/arm/joint_states, description: "Piper joint feedback."}
+                - {path: robonix/primitive/arm/joint_command, description: "Piper named joint command."}
+                - {path: robonix/primitive/arm/end_pose, description: "Piper TCP pose."}
+                - {path: robonix/primitive/arm/pos_command, description: "Piper Cartesian command."}
+          components:
+            - id: gripper
+              type: parallel_jaw_gripper
+              urdf_link: piper_tcp
+              state:
+                joint_name: gripper
+                open_position_m: 0.070
+                open_tolerance_m: 0.003
+              exports:
+                - provider_id: piper_ctl
+                  capabilities:
+                    - {path: robonix/primitive/arm/joint_command, description: "Command the gripper through the named arm joint input."}
+            - id: wrist_rgbd
+              type: rgbd_camera
+              urdf_link: wrist_camera_optical_frame
+              exports:
+                - provider_id: wrist_camera
+                  capabilities:
+                    - {path: robonix/primitive/camera/rgb, description: "Wrist RGB for grasp perception."}
+                    - {path: robonix/primitive/camera/depth, description: "Wrist depth for grasp geometry."}
+                    - {path: robonix/primitive/camera/intrinsics, description: "Wrist camera calibration."}
+                    - {path: robonix/primitive/camera/snapshot, description: "Capture one wrist RGB frame."}
+                    - {path: robonix/primitive/camera/depth_snapshot, description: "Capture one wrist depth preview."}
+
+description:
+  summary: "A browser MuJoCo mobile manipulator with ROS2-compatible sensors and Robonix control."
+  can_do:
+    - "Build maps and localize with LiDAR, odometry, and RGB-D."
+    - "Navigate while avoiding collision geometry in SPZ and mesh environments."
+    - "Pick named task objects with VLM confirmation and closed-loop Piper motion."
+    - "Resolve environment task objects through Pick's own inventory and wrist camera after navigation."
+  cannot_do:
+    - "Produce or consume audio; the simulation package intentionally omits audio I/O."
+    - "Manipulate static SceneSmith furniture."
+    - "Use Scene list_objects or the front camera to resolve rear-side Piper task objects; call Pick directly."
+    - "Use task objects in environments that do not declare an objectsPath."
+    - "Treat SPZ splats as physics geometry; SPZ environments require a registered collision XML."

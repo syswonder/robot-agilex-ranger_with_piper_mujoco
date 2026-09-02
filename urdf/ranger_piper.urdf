@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="mujoco_ranger_piper">
+  <link name="base_link"/>
+  <link name="mid360_link"/>
+  <joint name="base_to_mid360" type="fixed"><parent link="base_link"/><child link="mid360_link"/><origin xyz="0.18 0 0.425"/></joint>
+  <link name="front_camera_optical_frame"/>
+  <joint name="base_to_front_camera" type="fixed"><parent link="base_link"/><child link="front_camera_optical_frame"/><origin xyz="0.302 0 0.30" rpy="-1.5708 0 -1.5708"/></joint>
+  <link name="arm_base_link"/>
+  <joint name="base_to_arm" type="fixed"><parent link="base_link"/><child link="arm_base_link"/><origin xyz="-0.20 0 0.025" rpy="0 0 3.14159"/></joint>
+  <link name="piper_link1"/><joint name="joint1" type="revolute"><parent link="arm_base_link"/><child link="piper_link1"/><origin xyz="0 0 0.123"/><axis xyz="0 0 1"/><limit lower="-2.618" upper="2.618" effort="100" velocity="3"/></joint>
+  <link name="piper_link2"/><joint name="joint2" type="revolute"><parent link="piper_link1"/><child link="piper_link2"/><origin rpy="1.5708 -0.1359 -3.1416"/><axis xyz="0 0 1"/><limit lower="0" upper="3.14" effort="100" velocity="3"/></joint>
+  <link name="piper_link3"/><joint name="joint3" type="revolute"><parent link="piper_link2"/><child link="piper_link3"/><origin xyz="0.28503 0 0" rpy="0 0 -1.7939"/><axis xyz="0 0 1"/><limit lower="-2.697" upper="0" effort="100" velocity="3"/></joint>
+  <link name="piper_link4"/><joint name="joint4" type="revolute"><parent link="piper_link3"/><child link="piper_link4"/><origin xyz="-0.021984 -0.25075 0" rpy="1.5708 0 0"/><axis xyz="0 0 1"/><limit lower="-1.832" upper="1.832" effort="100" velocity="3"/></joint>
+  <link name="piper_link5"/><joint name="joint5" type="revolute"><parent link="piper_link4"/><child link="piper_link5"/><origin rpy="-1.5708 0 0"/><axis xyz="0 0 1"/><limit lower="-1.22" upper="1.22" effort="100" velocity="3"/></joint>
+  <link name="piper_link6"/><joint name="joint6" type="revolute"><parent link="piper_link5"/><child link="piper_link6"/><origin xyz="0 -0.091 0" rpy="1.5708 0 0"/><axis xyz="0 0 1"/><limit lower="-3.14" upper="3.14" effort="100" velocity="3"/></joint>
+  <link name="piper_tcp"/><joint name="piper_tcp_joint" type="fixed"><parent link="piper_link6"/><child link="piper_tcp"/><origin xyz="0 0 0.205"/></joint>
+  <link name="wrist_camera_optical_frame"/><joint name="tcp_to_wrist_camera" type="fixed"><parent link="piper_link6"/><child link="wrist_camera_optical_frame"/><origin xyz="0.04 0 0.096" rpy="3.14159 0 0"/></joint>
+</robot>

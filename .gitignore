@@ -3,13 +3,10 @@
 /build/
 /dist/
 
-# Tests and local reports are intentionally excluded from the release repository
-/tests/
+# Generated test reports are excluded; test source remains in the repository
 /test-results/
 /playwright-report/
 /coverage/
-*.test.*
-*.spec.*
 
 # Python and tool caches
 __pycache__/
@@ -18,6 +15,9 @@ __pycache__/
 .pytest_cache/
 .venv/
 .venv-*/
+**/rbnx-build/
+/rbnx-boot/
+/.runtime/
 
 # Source datasets and conversion intermediates. Runtime SPZ/XML/OBJ/PNG assets
 # under assets/ are not ignored and remain part of the self-contained project.

@@ -66,6 +66,8 @@ export async function reloadFunc() {
 /** @param {MuJoCoDemo} parentContext*/
 export async function setupGUI(parentContext) {
 
+  const developerMode = new URLSearchParams(window.location.search).get('dev') === '1';
+
   // Make sure we reset the camera when the scene is changed or reloaded.
   parentContext.updateGUICallbacks.length = 0;
   parentContext.updateGUICallbacks.push((model, data, params) => {
@@ -269,7 +271,7 @@ export async function setupGUI(parentContext) {
   };
 
   // Add robot selection dropdown
-  parentContext.gui.add(
+  const robotController = parentContext.gui.add(
     parentContext.params,
     'robot',
     initializedSceneManager.getRobotOptions()
@@ -278,6 +280,7 @@ export async function setupGUI(parentContext) {
       console.error('Robot switch failed:', error);
     });
   });
+  if (!developerMode) robotController.hide();
 
   // Add upload robot button
   const uploadRobotBtn = {
@@ -313,7 +316,9 @@ export async function setupGUI(parentContext) {
       input.click();
     }
   };
-  parentContext.gui.add(uploadRobotBtn, 'uploadRobot').name('Upload Robot Folder');
+  const uploadRobotController = parentContext.gui.add(uploadRobotBtn, 'uploadRobot')
+    .name('Upload Robot Folder');
+  if (!developerMode) uploadRobotController.hide();
 
   // Add upload SPZ button for custom 3DGS scenes
   const uploadSpzBtn = {
@@ -349,7 +354,9 @@ export async function setupGUI(parentContext) {
       input.click();
     }
   };
-  parentContext.gui.add(uploadSpzBtn, 'uploadSpz').name('Upload 3DGS (.spz)');
+  const uploadSpzController = parentContext.gui.add(uploadSpzBtn, 'uploadSpz')
+    .name('Upload 3DGS (.spz)');
+  if (!developerMode) uploadSpzController.hide();
 
   // Add upload collision XML button for custom SPZ scenes
   const uploadCollisionBtn = {
@@ -388,7 +395,9 @@ export async function setupGUI(parentContext) {
       input.click();
     }
   };
-  parentContext.gui.add(uploadCollisionBtn, 'uploadCollision').name('Upload Collision (.xml)');
+  const uploadCollisionController = parentContext.gui.add(uploadCollisionBtn, 'uploadCollision')
+    .name('Upload Collision (.xml)');
+  if (!developerMode) uploadCollisionController.hide();
 
   // Add a help menu.
   // Parameters:
@@ -573,6 +582,7 @@ export async function setupGUI(parentContext) {
 
   // Add actuator sliders.
   let actuatorFolder = simulationFolder.addFolder("Actuators");
+  if (!developerMode) actuatorFolder.hide();
   
   // Package metadata identifies actuators owned by a keyboard controller.
   const addActuators = (model, data, params) => {
@@ -714,6 +724,7 @@ export async function setupGUI(parentContext) {
     if (keyboardController.hasConfig(robot)) {
       await keyboardController.enable(robot, model, data, parentContext.mujoco);
 
+      if (!developerMode) return;
       keyboardFolder = simulationFolder.addFolder("Keyboard Controls");
       // Add description labels - support multi-line descriptions
       const desc = keyboardController.getDescription();

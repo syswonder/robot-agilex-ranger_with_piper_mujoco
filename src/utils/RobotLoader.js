@@ -31,7 +31,7 @@ export class RobotLoader {
     const files = await filesResponse.json();
     if (!Array.isArray(files) || !files.length) throw new Error(`${robotId}: simulation file index is empty`);
     const normalizedFiles = files.map((file) => normalizeRelativePath(file, robotId));
-    for (const required of [robot.model, robot.objects].filter(Boolean)) {
+    for (const required of [robot.model]) {
       if (!normalizedFiles.includes(required)) throw new Error(`${robotId}: file index is missing ${required}`);
     }
 
@@ -64,19 +64,16 @@ export class RobotLoader {
     for (const rawFile of files) {
       const file = normalizeRelativePath(rawFile, robotId);
       const source = `/working/robots/${robotId}/${file}`;
-      const destinationFile = file === robot.model ? `${robotId}.xml` :
-        file === robot.objects ? 'objects.xml' : file;
+      const destinationFile = file === robot.model ? `${robotId}.xml` : file;
       this._ensureParentDirectories(targetDir, destinationFile);
       this.mujoco.FS.writeFile(`${targetDir}/${destinationFile}`, this.mujoco.FS.readFile(source));
     }
-    return Boolean(robot.objects);
   }
 
   /** Parse one user-selected folder while retaining the existing upload behavior. */
   async loadUploadedRobot(files) {
     const meshFiles = new Map();
     let robotXml = null;
-    let objectsXml = null;
     let robotName = null;
     for (const file of files) {
       const path = file.webkitRelativePath || file.name;
@@ -85,15 +82,14 @@ export class RobotLoader {
       if (path.endsWith('.xml')) {
         const content = await file.text();
         const fileName = path.split('/').pop().toLowerCase();
-        if (fileName.includes('object')) objectsXml = content;
-        else if (!robotXml) robotXml = content;
+        if (!fileName.includes('object') && !robotXml) robotXml = content;
       } else if (path.includes('assets/') || path.includes('meshes/') || path.includes('mesh/')) {
         const meshName = path.split(/(?:assets|meshes?)\//).pop();
         meshFiles.set(meshName, await file.arrayBuffer());
       }
     }
     if (!robotXml) throw new Error('No robot XML file found in uploaded folder');
-    return { robotXml, objectsXml, meshFiles, robotName: robotName ?? 'user_robot' };
+    return { robotXml, meshFiles, robotName: robotName ?? 'user_robot' };
   }
 
   _ensureDirectory(path) {

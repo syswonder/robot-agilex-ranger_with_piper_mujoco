@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 
-// Generated scene collision geometry lives in group 3. Restricting sensor rays
-// to that layer prevents the robot's visual meshes from reflecting into its own sensors.
+// Generated scene collision geometry lives in group 3 and task objects use
+// group 5. Robot collision geometry remains in group 4 and is intentionally
+// excluded so simulated sensors do not report the carrier or arm.
 function createSensorGeomGroupMask(mujoco) {
   // mujoco-js 0.0.7 interprets TypedArray.byteOffset as a WASM pointer. Store
   // the bytes 00 00 00 01 00 00 in WASM-owned memory and expose that pointer.
-  const storage = mujoco.IntBuffer.FromArray([0x01000000, 0]);
+  const storage = mujoco.IntBuffer.FromArray([0x01000000, 0x00000100]);
   return {
     storage,
     argument: { byteOffset: storage.GetPointer(), length: 6 }
@@ -83,6 +84,21 @@ export function generatePinholeDirections(width, height, fovyDeg) {
   return directions;
 }
 
+/** Generate an ordered counter-clockwise planar scan in the LiDAR frame. */
+export function generatePlanarDirections(count, elevationDeg = 0) {
+  if (!Number.isInteger(count) || count < 2) throw new Error('Planar LiDAR ray count must be at least 2');
+  const elevation = THREE.MathUtils.degToRad(elevationDeg);
+  const horizontal = Math.cos(elevation);
+  const directions = new Float64Array(count * 3);
+  for (let index = 0; index < count; index++) {
+    const azimuth = -Math.PI + index * (2 * Math.PI / count);
+    directions[index * 3] = horizontal * Math.cos(azimuth);
+    directions[index * 3 + 1] = horizontal * Math.sin(azimuth);
+    directions[index * 3 + 2] = Math.sin(elevation);
+  }
+  return directions;
+}
+
 function flipRgbaRows(source, width, height) {
   const result = new Uint8Array(source.length);
   const rowBytes = width * 4;
@@ -104,6 +120,7 @@ export class RobotSensorSuite {
     this.imu = null;
     this.cameras = new Map();
     this.latestLidar = null;
+    this.latestPlanarLidar = null;
     this.latestImu = null;
     this.showLidar = false;
     this.status = this._newStatus();
@@ -144,6 +161,8 @@ export class RobotSensorSuite {
     if (this.lidar) {
       this.lidar.geomIds.delete();
       this.lidar.distances.delete();
+      this.lidar.planarGeomIds.delete();
+      this.lidar.planarDistances.delete();
     }
     for (const camera of this.cameras.values()) {
       camera.target?.dispose();
@@ -154,6 +173,7 @@ export class RobotSensorSuite {
     this.imu = null;
     this.cameras.clear();
     this.latestLidar = null;
+    this.latestPlanarLidar = null;
     this.latestImu = null;
     this.pointGeometry.deleteAttribute('position');
     this.pointGeometry.setDrawRange(0, 0);
@@ -178,15 +198,21 @@ export class RobotSensorSuite {
       const siteId = sites.get(config.site);
       if (siteId === undefined) throw new Error(`LiDAR site not found: ${config.site}`);
       const rayCount = config.raysPerScan;
+      const planarRayCount = config.planarRays ?? 720;
       this.lidar = {
         config,
         siteId,
         siteBodyId: model.site_bodyid[siteId],
         localDirections: generateMid360Directions(rayCount, config.verticalFovDeg),
+        scanLocalDirections: new Float32Array(rayCount * 3),
         worldDirections: new Array(rayCount * 3).fill(0),
         geomIds: new this.mujoco.IntBuffer(rayCount),
         distances: new this.mujoco.DoubleBuffer(rayCount),
         visualPoints: new Float32Array(rayCount * 3),
+        planarLocalDirections: generatePlanarDirections(planarRayCount, config.planarElevationDeg ?? 0),
+        planarWorldDirections: new Array(planarRayCount * 3).fill(0),
+        planarGeomIds: new this.mujoco.IntBuffer(planarRayCount),
+        planarDistances: new this.mujoco.DoubleBuffer(planarRayCount),
         nextScanTimeMs: 0,
         scanIndex: 0
       };
@@ -232,6 +258,7 @@ export class RobotSensorSuite {
     if (this.imu) this.readImu();
     if (this.lidar && timeMs >= this.lidar.nextScanTimeMs) {
       this.scanLidar();
+      this.scanPlanarLidar();
       this.lidar.nextScanTimeMs = timeMs + 1000 / this.lidar.config.updateHz;
     }
   }
@@ -255,7 +282,7 @@ export class RobotSensorSuite {
 
   scanLidar() {
     if (!this.lidar) return null;
-    const { config, siteId, localDirections, worldDirections } = this.lidar;
+    const { config, siteId, localDirections, scanLocalDirections, worldDirections } = this.lidar;
     const originOffset = siteId * 3;
     const matrixOffset = siteId * 9;
     const origin = [
@@ -270,6 +297,9 @@ export class RobotSensorSuite {
       const offset = index * 3;
       const localX = cosine * localDirections[offset] - sine * localDirections[offset + 1];
       const localY = sine * localDirections[offset] + cosine * localDirections[offset + 1];
+      scanLocalDirections[offset] = localX;
+      scanLocalDirections[offset + 1] = localY;
+      scanLocalDirections[offset + 2] = localDirections[offset + 2];
       const [x, y, z] = multiplyMat3(
         this.data.site_xmat,
         matrixOffset,
@@ -300,6 +330,7 @@ export class RobotSensorSuite {
     const rawGeomIds = this.lidar.geomIds.GetView();
     const ranges = new Float32Array(config.raysPerScan);
     const pointsMujoco = new Float32Array(config.raysPerScan * 3);
+    const pointsLocal = new Float32Array(config.raysPerScan * 3);
     const hitGeomIds = new Int32Array(config.raysPerScan);
     let validPoints = 0;
     let minimumRange = Infinity;
@@ -321,6 +352,9 @@ export class RobotSensorSuite {
       pointsMujoco[pointOffset] = x;
       pointsMujoco[pointOffset + 1] = y;
       pointsMujoco[pointOffset + 2] = z;
+      pointsLocal[pointOffset] = distance * scanLocalDirections[directionOffset];
+      pointsLocal[pointOffset + 1] = distance * scanLocalDirections[directionOffset + 1];
+      pointsLocal[pointOffset + 2] = distance * scanLocalDirections[directionOffset + 2];
       this.lidar.visualPoints[pointOffset] = x;
       this.lidar.visualPoints[pointOffset + 1] = z;
       this.lidar.visualPoints[pointOffset + 2] = -y;
@@ -337,6 +371,7 @@ export class RobotSensorSuite {
       origin: Float32Array.from(origin),
       ranges,
       points: pointsMujoco.slice(0, validPoints * 3),
+      pointsLocal: pointsLocal.slice(0, validPoints * 3),
       hitGeomIds: hitGeomIds.slice(0, validPoints),
       validPoints,
       minimumRange,
@@ -345,6 +380,68 @@ export class RobotSensorSuite {
     const rangeText = validPoints ? `${minimumRange.toFixed(2)}-${maximumRange.toFixed(2)} m` : 'no returns';
     this.status.lidar = `${config.label}: ${validPoints}/${config.raysPerScan}, ${rangeText}`;
     return this.latestLidar;
+  }
+
+  scanPlanarLidar() {
+    if (!this.lidar) return null;
+    const {
+      config, siteId, siteBodyId, planarLocalDirections, planarWorldDirections,
+      planarGeomIds, planarDistances
+    } = this.lidar;
+    const originOffset = siteId * 3;
+    const matrixOffset = siteId * 9;
+    const origin = Array.from(this.data.site_xpos.subarray(originOffset, originOffset + 3));
+    const rayCount = planarLocalDirections.length / 3;
+    for (let index = 0; index < rayCount; index++) {
+      const offset = index * 3;
+      const [x, y, z] = multiplyMat3(
+        this.data.site_xmat,
+        matrixOffset,
+        planarLocalDirections[offset],
+        planarLocalDirections[offset + 1],
+        planarLocalDirections[offset + 2]
+      );
+      planarWorldDirections[offset] = x;
+      planarWorldDirections[offset + 1] = y;
+      planarWorldDirections[offset + 2] = z;
+    }
+    this.mujoco.mj_multiRay(
+      this.model,
+      this.data,
+      origin,
+      planarWorldDirections,
+      this.sensorGeomGroupMask.argument,
+      1,
+      siteBodyId,
+      planarGeomIds,
+      planarDistances,
+      rayCount,
+      config.maxRange
+    );
+    const rawDistances = planarDistances.GetView();
+    const rawGeomIds = planarGeomIds.GetView();
+    const ranges = new Float32Array(rayCount);
+    const hitGeomIds = new Int32Array(rayCount);
+    let validPoints = 0;
+    for (let index = 0; index < rayCount; index++) {
+      const distance = rawDistances[index];
+      ranges[index] = distance >= config.minRange && distance <= config.maxRange ? distance : Infinity;
+      hitGeomIds[index] = rawGeomIds[index];
+      if (Number.isFinite(ranges[index])) validPoints++;
+    }
+    this.latestPlanarLidar = {
+      timestamp: Number(this.data.time),
+      frame: config.site,
+      angleMin: -Math.PI,
+      angleMax: Math.PI - 2 * Math.PI / rayCount,
+      angleIncrement: 2 * Math.PI / rayCount,
+      rangeMin: config.minRange,
+      rangeMax: config.maxRange,
+      ranges,
+      hitGeomIds,
+      validPoints
+    };
+    return this.latestPlanarLidar;
   }
 
   setLidarVisible(visible) {
@@ -391,13 +488,19 @@ export class RobotSensorSuite {
     const lidarWasVisible = this.pointCloud.visible;
     this.pointCloud.visible = false;
     const pixels = new Uint8Array(width * height * 4);
+    const gl = this.renderer.getContext();
+    const previousPixelPackBuffer = gl.getParameter(gl.PIXEL_PACK_BUFFER_BINDING);
     try {
       this.renderer.setRenderTarget(camera.target);
       this.renderer.setClearColor(0x111820, 1);
       this.renderer.clear(true, true, true);
       this.renderer.render(this.scene, camera.threeCamera);
+      // Spark uses asynchronous PBO readback. Three's synchronous helper
+      // requires the default pack target, then Spark needs its binding back.
+      gl.bindBuffer(gl.PIXEL_PACK_BUFFER, null);
       this.renderer.readRenderTargetPixels(camera.target, 0, 0, width, height, pixels);
     } finally {
+      gl.bindBuffer(gl.PIXEL_PACK_BUFFER, previousPixelPackBuffer);
       this.renderer.setRenderTarget(previousTarget);
       this.renderer.setClearColor(previousClearColor, previousClearAlpha);
       this.pointCloud.visible = lidarWasVisible;

@@ -1,114 +1,315 @@
-# MuJoCo Robonix
+# MuJoCo Ranger Piper for Robonix
 
-一个可直接在浏览器中运行的 MuJoCo 移动操作机器人仿真项目。项目只包含
-`Ranger Mini V3 + Piper` 本体，并支持两种由环境自动选择的视觉方式：
+<p align="center">
+  <strong>English</strong> | <a href="README.zh-CN.md">简体中文</a>
+</p>
 
-- SPZ Gaussian Splatting：真实感视觉与独立 MuJoCo 碰撞模型；
-- 带纹理 Mesh：视觉 mesh、静态家具碰撞、LiDAR 和 RGB-D 使用同一个坐标系。
+<p align="center">
+  <img src="docs/media/screenshots/scenesmith-apartment-overview.webp" alt="Ranger Piper in the default SceneSmith apartment" width="900">
+</p>
 
-项目包含运行所需的场景和机器人资产。克隆后不需要下载 SceneSmith 原始数据、
-MuJoCo 源码或其他模型仓库。
+A self-contained Robonix body package for a browser-simulated AgileX Ranger
+Mini V3 carrying a Piper arm. Start MuJoCo in one terminal, load the body package
+with `rbnx boot` in another, then use `rbnx chat` for mapping, exploration,
+navigation, obstacle avoidance, perception, grasping, and placement.
 
-## 已有场景
+The simulator supports both Gaussian Splatting (`.spz`) and textured Mesh
+environments. The selected environment determines the visual mode automatically.
+MuJoCo geometry remains the source of contact, LiDAR, and depth data in both modes,
+so visual assets and robot capabilities stay cleanly separated.
 
-| 环境 ID | 页面名称 | 视觉 | 内容 |
-| --- | --- | --- | --- |
-| `kitchen` | Kitchen - SPZ | SPZ | 厨房 |
-| `meeting_room` | Meeting Room - SPZ | SPZ | 会议室 |
-| `scenesmith_room_005` | SceneSmith Bedroom 005 - Mesh | Mesh | 卧室 |
-| `scenesmith_room_030` | SceneSmith Living Room 030 - Mesh | Mesh | 客厅 |
-| `scenesmith_room_036` | SceneSmith Dining Room 036 - Mesh | Mesh | 餐厅 |
-| `scenesmith_room_125` | SceneSmith Office 125 - Mesh | Mesh | 办公室 |
+## Demo
 
-页面根据所选环境自动启用 SPZ 或 Mesh，不提供单独的 `visual_mode` 选项。
+<p align="center">
+  <a href="docs/media/demos/navigation-and-cup-pick.mp4">
+    <img src="docs/media/demos/navigation-and-cup-pick.gif" alt="Ranger Piper grasping and lifting a water glass" width="720">
+  </a>
+</p>
 
-## 系统要求
+<p align="center">
+  <a href="docs/media/demos/navigation-and-cup-pick.mp4">Watch the complete 64-second navigation and cup-pick demo</a>
+</p>
 
-- Linux、macOS 或 Windows；
-- Node.js 18 或更高版本；
-- Python 3；
-- 支持 WebGL 2 的现代 Chrome、Chromium 或 Edge。
-
-SPZ 和 Mesh 都在浏览器本地渲染。建议使用独立显卡；Meeting Room 包含约
-479 万个原始 splat，第一次进入时需要等待下载和 LOD 构建。
-
-## 启动
-
-```bash
-git clone <your-repository-url>
-cd mujoco_robonix
-npm ci
-npm start
-```
-
-浏览器打开：
-
-```text
-http://localhost:5180/
-```
-
-也可以通过 URL 直接打开场景：
-
-```text
-http://localhost:5180/?environment=meeting_room
-http://localhost:5180/?environment=scenesmith_room_036
-```
-
-端口被占用时可绕过 npm 脚本指定其他端口：
-
-```bash
-python3 scripts/serve.py --bind 0.0.0.0 --port 8080
-```
-
-必须通过 HTTP 服务打开，不能直接双击 `index.html`。项目在运行时从
-`node_modules` 加载 MuJoCo WASM、Three.js 和 Spark。
-
-## 操作
-
-| 功能 | 按键 |
+| Gaussian Splatting | Textured Mesh |
 | --- | --- |
-| 前进 / 后退 | `W` / `S` |
-| 左右转向 | `A` / `D` |
-| 蟹行 | `Q` / `E` / `Z` / `C` |
-| 原地旋转 | `J` / `L` |
-| 急停 | `Space` |
-| 重置机器人 | `X` |
-| Piper 关节 1-6 | `1/Y`、`2/U`、`3/I`、`4/O`、`5/P`、`6/[` |
-| 夹爪开合 | `V` / `B` |
-| 重置观察相机 | `Ctrl+A` |
+| ![Meeting Room SPZ](docs/media/screenshots/gaussian-meeting-room.webp) | ![SceneSmith living room](docs/media/screenshots/scenesmith-living-room.webp) |
+| Meeting Room | SceneSmith Living Room 030 |
+| ![Kitchen SPZ](docs/media/screenshots/gaussian-kitchen.webp) | ![SceneSmith dining room](docs/media/screenshots/scenesmith-dining-room.webp) |
+| Kitchen | SceneSmith Dining Room 036 |
 
-鼠标拖动空白处或场景用于旋转视角，只有机器人本体允许拖动。右上角 GUI
-可以切换环境、暂停仿真、控制执行器以及读取传感器。
+See the complete [environment gallery](#environment-gallery) below. Repository
+media lives under `docs/media/`.
 
-## 传感器
+## Capabilities
 
-机器人包含：
+| Component or service | Provider | Exposed capability |
+| --- | --- | --- |
+| Ranger Mini V3 base | `ranger_chassis` | Relative motion, continuous Twist commands, odometry |
+| MID-360 LiDAR | `mid360_lidar` | 2D LaserScan, 3D PointCloud2, snapshots |
+| MID-360 IMU | `mid360_imu` | Angular velocity and linear acceleration |
+| Front Gemini 336L | `front_camera` | RGB, depth, intrinsics, extrinsics, snapshots |
+| Piper wrist camera | `wrist_camera` | RGB, depth, intrinsics, snapshots |
+| Piper and gripper | `piper_ctl` | Joint/TCP state and commands, gripper control |
+| RTAB-Map | `mapping` | Online occupancy map, fused cloud, map-frame pose, persistence |
+| Nav2 | `nav2` | Goal navigation, speed limits, obstacle avoidance |
+| Scene | `scene` | Objects, spatial relations, nearby navigation goals |
+| Explore | `explore` | Asynchronous frontier exploration |
+| Pick | `pick` | Object resolution, physical grasp verification, safe placement |
 
-- Livox MID-360 风格 3D LiDAR；
-- MID-360 IMU；
-- 前置 Orbbec Gemini 336L RGB-D；
-- Piper 腕部 RGB 相机。
+Audio is intentionally omitted. SPZ splats and static SceneSmith furniture are not
+graspable; manipulation is limited to dynamic objects explicitly registered by an
+environment.
 
-SPZ 场景的彩色图像来自 Gaussian 视觉，深度与 LiDAR 来自 MuJoCo 碰撞模型；
-Mesh 场景的三类数据均使用 mesh 场景对应的物理空间。环境碰撞统一使用
-`geom group="3"`，机器人碰撞使用 group 4，避免传感器返回本体反射。
+## Architecture
 
-浏览器控制台或上层应用可以调用：
-
-```js
-window.mujocoSensors.list();
-window.mujocoSensors.scanLidar();
-window.mujocoSensors.readImu();
-window.mujocoSensors.captureCamera('front_rgbd');
-window.mujocoSensors.previewCamera('wrist_rgb');
-window.mujocoSensors.startLiveCamera('front_rgbd');
-window.mujocoSensors.stopLiveCamera();
-window.mujocoSensors.showLidar(true);
+```text
+rbnx chat / rbnx ask
+        |
+Pilot + Executor + Atlas + Soma + Scene
+        |
+Mapping / Nav2 / Explore / Pick
+        |
+six local primitives
+        |
+ROS 2 <-> WebSocket bridge <-> browser MuJoCo
+                              |-- SPZ or Mesh visuals
+                              |-- physics, sensors, dynamic objects
 ```
 
-## 添加 SPZ 场景
+Robot dimensions, footprint, hierarchy, and gripper state are defined in
+`soma.yaml`; the transform tree is in `urdf/ranger_piper.urdf`; robot-specific
+RTAB-Map and Nav2 parameters live in `config/`. Each local package contains a
+`package_manifest.yaml`, `config.spec`, and `CAPABILITY.md`.
 
-每个 SPZ 环境是一个独立目录。最小运行包如下：
+For implementation details, see [Robonix integration](docs/ROBONIX_INTEGRATION.md)
+and [simulation architecture](docs/ARCHITECTURE.md).
+
+## Requirements
+
+The end-to-end setup is tested on x86_64 Ubuntu 22.04 with ROS 2 Humble, Docker,
+and `rbnx 0.1.0`. You need:
+
+- Docker Engine with the Compose plugin; the current user must be able to run `docker ps`;
+- Node.js 20 or newer, Python 3, and `curl`;
+- a desktop graphics session with WebGL 2 support;
+- a Robonix source tree and the `rbnx` command;
+- network access to npm, GitHub, and the Playwright browser download service during bootstrap.
+
+SPZ rendering is expensive under software WebGL. Use a visible, GPU-backed browser
+for normal work. `SIM_HEADLESS=1` is useful for CI smoke tests, but large SPZ scenes
+such as Meeting Room are not intended for CPU-only testing.
+
+## Installation
+
+### 1. Install Robonix
+
+Install Robonix using the [official documentation](https://book.robonix.ai/) and
+make its source tree available locally.
+
+### 2. Configure this body package
+
+```bash
+git clone <repository-url> ~/mujoco_robonix
+cd ~/mujoco_robonix
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```dotenv
+ROBONIX_SOURCE_PATH=/home/your-name/robonix
+VLM_BASE_URL=your-model-url
+VLM_API_KEY=replace-me
+VLM_MODEL=your-model-name
+# Optional. The bridge image contains Fast DDS by default.
+MUJOCO_RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+```
+
+`VLM_API_KEY` is shared by Pilot and the Pick skill. Keep it out of Git. Define it
+in the project `.env` or export it before sourcing `scripts/env.sh`.
+
+### 3. Bootstrap
+
+```bash
+cd ~/mujoco_robonix
+bash scripts/bootstrap.sh
+```
+
+Bootstrap installs frontend dependencies from the lockfile, installs Playwright
+Chromium, builds the ROS 2 Humble bridge image, validates the six primitives and
+Pick skill, and runs `rbnx build -f robonix_manifest.yaml` for the official
+Mapping, Navigation, and Explore packages.
+
+Generated dependencies, virtual environments, Robonix build state, and runtime
+logs are excluded by `.gitignore`.
+
+## Start
+
+The lifecycle mirrors the Robonix Webots example: simulator, Robonix stack, and
+chat each use a separate terminal.
+
+### Terminal 1: MuJoCo simulator
+
+```bash
+cd ~/mujoco_robonix
+bash sim/start.sh
+```
+
+Wait for `[sim/start] bridge ready`. The default UI is:
+
+```text
+http://127.0.0.1:5180/?environment=scenesmith_house_187
+```
+
+Bridge health is available at `http://127.0.0.1:8766/health`. Startup failures are
+captured in `.runtime/bridge.log` and `.runtime/browser.log`. The bridge uses
+`MUJOCO_RMW_IMPLEMENTATION` and deliberately does not inherit a generic shell
+`RMW_IMPLEMENTATION`; keep the Humble image on `rmw_fastrtps_cpp` unless you also
+install another RMW implementation in that image.
+
+### Terminal 2: Robonix body package
+
+```bash
+cd ~/mujoco_robonix
+source scripts/env.sh
+rbnx boot
+```
+
+Run `rbnx boot` from the repository root so it finds `robonix_manifest.yaml`.
+The six primitives plus Mapping, Nav2, and Scene should become `ACTIVE`. Pick and
+Explore are on-demand skills and may initially appear as `INACTIVE`.
+
+Check the running system from another configured shell:
+
+```bash
+cd ~/mujoco_robonix
+source scripts/env.sh
+rbnx caps -v
+rbnx tools
+curl -fsS http://127.0.0.1:8766/health
+```
+
+### Terminal 3: chat
+
+```bash
+cd ~/mujoco_robonix
+source scripts/env.sh
+rbnx chat
+```
+
+Example requests:
+
+```text
+What capabilities does this robot have?
+Capture the front camera and describe what the robot sees.
+Move forward by 0.3 meters.
+Explore the living room, bedroom, and bathroom for up to 300 seconds at no more than 0.18 m/s; return the task ID.
+Navigate to map coordinate x=3.92, y=3.25 with final yaw=0, then pick up the water glass on the side table.
+Put down the held object safely.
+```
+
+The side table also contains a TV remote and a small succulent. Exploration is
+asynchronous: start it once, retain the returned task ID, and query that task for
+progress. Do not run manual base commands, navigation, or grasping concurrently
+with exploration.
+
+For non-interactive debugging:
+
+```bash
+rbnx ask "Explore the apartment for up to 300 seconds and return the task ID."
+rbnx ask "Navigate to x=3.92, y=3.25, yaw=0, then pick up the water glass on the side table."
+```
+
+## Environments
+
+| Environment ID | Display name | Visual mode | Dynamic objects |
+| --- | --- | --- | --- |
+| `scenesmith_house_187` | SceneSmith One-Bedroom Apartment 187 (default) | Mesh | Water glass, TV remote, succulent |
+| `kitchen` | Kitchen | SPZ | None |
+| `meeting_room` | Meeting Room | SPZ | None |
+| `scenesmith_room_005` | SceneSmith Bedroom 005 | Mesh | None |
+| `scenesmith_room_030` | SceneSmith Living Room 030 | Mesh | Glass jar, hardcover book, plant |
+| `scenesmith_room_036` | SceneSmith Dining Room 036 | Mesh | None |
+| `scenesmith_room_125` | SceneSmith Office 125 | Mesh | None |
+
+### Environment gallery
+
+| Default apartment | Bedroom |
+| --- | --- |
+| ![SceneSmith apartment overview](docs/media/screenshots/scenesmith-apartment-overview.webp) | ![SceneSmith bedroom](docs/media/screenshots/scenesmith-bedroom.webp) |
+| SceneSmith One-Bedroom Apartment 187 | SceneSmith Bedroom 005 |
+| Living room | Dining room |
+| ![SceneSmith living room](docs/media/screenshots/scenesmith-living-room.webp) | ![SceneSmith dining room](docs/media/screenshots/scenesmith-dining-room.webp) |
+| SceneSmith Living Room 030 | SceneSmith Dining Room 036 |
+| Office | Meeting Room SPZ |
+| ![SceneSmith office](docs/media/screenshots/scenesmith-office.webp) | ![Gaussian meeting room](docs/media/screenshots/gaussian-meeting-room.webp) |
+| SceneSmith Office 125 | Meeting Room |
+
+Kitchen SPZ:
+
+![Gaussian kitchen](docs/media/screenshots/gaussian-kitchen.webp)
+
+To switch environments, stop Robonix and the simulator, then restart the simulator
+with another ID:
+
+```bash
+bash sim/start.sh --environment scenesmith_room_005
+```
+
+The environment changes visuals and geometry, not provider IDs or robot
+capabilities. `assets/environments/manifest.json` selects `visualMode`
+automatically; it is not a user-facing startup option.
+
+## Validation
+
+With the default environment and Robonix stack running:
+
+```bash
+cd ~/mujoco_robonix
+bash scripts/acceptance.sh
+```
+
+The acceptance suite verifies provider state, both RGB-D cameras, LiDAR, point
+cloud, IMU, a non-empty occupancy map, Nav2 lifecycle, real base displacement,
+precise Nav2 arrival at the manipulation pose, five-second grasp stability, safe
+placement, and arm stow. It resets and moves the robot; do not run it alongside
+manual controls or a chat task.
+
+Validate local packages without starting the simulator:
+
+```bash
+source scripts/env.sh
+for package_dir in primitives/* skills/pick; do
+  [[ -f "$package_dir/package_manifest.yaml" ]] && rbnx validate "$package_dir"
+done
+```
+
+## Stop
+
+Stop Robonix from Terminal 2 with `Ctrl-C`, or from another configured shell:
+
+```bash
+rbnx shutdown
+```
+
+Then stop Terminal 1 with `Ctrl-C`, or run:
+
+```bash
+bash sim/stop.sh
+```
+
+The two lifecycles are intentionally independent: `sim/stop.sh` does not shut
+down Robonix, and `rbnx shutdown` does not close the simulator.
+
+The normal UI hides keyboard driving and actuator debug controls. Add `&dev=1`
+to the URL during development to restore them. Orbiting the camera is always
+available, while only the robot itself is draggable.
+
+## Add environments
+
+The environment registry is `assets/environments/manifest.json`.
+
+A minimal SPZ environment contains:
 
 ```text
 assets/environments/my_room/
@@ -118,144 +319,74 @@ assets/environments/my_room/
   spawn.json
 ```
 
-要求：
+`collision.xml` must include continuous ground and obstacles. Environment geoms
+visible to sensors use `group="3"`. `transform.json` registers SPZ and MuJoCo
+coordinates, and `spawn.json` defines a collision-free initial base pose. PLY to
+SPZ conversion, collision generation, and spawn search are offline environment
+authoring steps rather than robot primitives. Commit the final runtime assets,
+not raw datasets or diagnostics.
 
-- `scene.spz` 是 Spark 可以读取的视觉文件；
-- `collision.xml` 是完整的 MuJoCo XML，必须包含地面和障碍物，传感器可见的
-  环境 geom 使用 `group="3"`；
-- `transform.json` 把 SPZ 的原始坐标映射到 MuJoCo/Three.js 世界；
-- `spawn.json` 给出无碰撞的机器人平面出生点和朝向。
-
-`transform.json` 的最小格式：
-
-```json
-{
-  "schemaVersion": 1,
-  "sceneId": "my_room",
-  "transform": {
-    "rotationQuaternion": [0, 0, 0, 1],
-    "scale": 1,
-    "position": [0, 0, 0],
-    "groundY": 0
-  }
-}
-```
-
-`spawn.json` 的最小格式：
-
-```json
-{
-  "schemaVersion": 1,
-  "sceneId": "my_room",
-  "position": [0, 0],
-  "yaw": 0
-}
-```
-
-最后向 `assets/environments/manifest.json` 的 `environments` 数组加入：
-
-```json
-{
-  "id": "my_room",
-  "label": "My Room - SPZ",
-  "visualMode": "spz",
-  "xmlPath": "./assets/environments/my_room/collision.xml",
-  "spzPath": "./assets/environments/my_room/scene.spz",
-  "transformPath": "./assets/environments/my_room/transform.json",
-  "spawnPath": "./assets/environments/my_room/spawn.json",
-  "camera": null
-}
-```
-
-刷新页面后场景会自动出现在 `Environment` 列表。原始 PLY、转换日志、碰撞盒
-诊断图等中间文件已被 `.gitignore` 排除，不应放入 Git；运行目录只保留上述
-四个文件。
-
-## 添加 Mesh 场景
-
-通用 Mesh 环境最少需要：
+A minimal Mesh environment contains:
 
 ```text
 assets/environments/my_mesh_room/
   scene.xml
   index.json
   spawn.json
+  objects.xml       # optional; environment-level dynamic objects
   meshes/...
 ```
 
-`scene.xml` 是环境 MJCF，不要包含机器人；`index.json` 是需要复制到 MuJoCo
-浏览器 MEMFS 的相对资产路径数组；`spawn.json` 与 SPZ 场景相同。manifest
-条目格式：
-
-```json
-{
-  "id": "my_mesh_room",
-  "label": "My Mesh Room - Mesh",
-  "visualMode": "mesh",
-  "xmlPath": "./assets/environments/my_mesh_room/scene.xml",
-  "filesPath": "./assets/environments/my_mesh_room/index.json",
-  "spawnPath": "./assets/environments/my_mesh_room/spawn.json",
-  "camera": {
-    "position": [4, 3, -4],
-    "target": [0, 0.7, 0]
-  }
-}
-```
-
-针对 SceneSmith 的原始 MuJoCo 包，可以使用项目保留的标准库脚本生成静态、
-裁剪后的运行包：
+Convert a SceneSmith Room or House export with the repository tool:
 
 ```bash
 python3 scripts/prepare-scenesmith.py \
-  --source third_party/scenesmith/source/scene_036/mujoco \
-  --output assets/environments/scenesmith_room_036 \
-  --scene-id scenesmith_room_036 \
-  --source-archive scene_036.tar \
-  --robot-radius 0.45
+  --source third_party/scenesmith/source/scene_187/mujoco \
+  --output assets/environments/scenesmith_house_187 \
+  --scene-id scenesmith_house_187 \
+  --source-archive scene_187.tar \
+  --source-subset House \
+  --interactive-config config/scenes/scenesmith_house_187.interactive.json
 ```
 
-`third_party/` 整体不会上传。重新生成时自行把 SceneSmith 原始目录放到该位置；
-脚本会静态化家具、生成碰撞盒、搜索出生点、去除未引用资产并生成
-`index.json`。生成后的 `scene.xml`、`spawn.json`、OBJ 和 PNG 才需要提交。
+The converter makes furniture static, generates collision geometry, searches for
+a safe spawn, prunes unused assets, and preserves doorways between floor regions.
+`--interactive-config` extracts selected small SceneSmith objects into an
+environment-level `objects.xml` with free joints and compact colliders. Register
+that file as `objectsPath`; dynamic task object names use the `task_` prefix.
 
-## 项目结构
+## Limitations and safety
+
+- This is a simulation body package; it does not include real Ranger or Piper CAN drivers.
+- SPZ is visual-only, so sensor and contact fidelity depend on its registered collision XML.
+- Pick implements a verified vertical grasp for registered task objects, not arbitrary 6-DoF grasp planning.
+- The front camera serves Scene and Mapping; the wrist camera serves manipulation confirmation.
+- Acceptance tests actively move the base and arm and modify dynamic object state.
+
+## Repository layout
 
 ```text
-index.html                                  浏览器入口
-src/                                        仿真、渲染、交互和传感器代码
-assets/environments/manifest.json           环境注册表
-assets/environments/kitchen/                Kitchen SPZ 运行包
-assets/environments/meeting_room/           Meeting Room SPZ 运行包
-assets/environments/scenesmith_room_*/       SceneSmith Mesh 运行包
-assets/robots/ranger_mini_v3_piper/          自包含机器人包
-scripts/serve.py                             静态文件服务
-scripts/prepare-scenesmith.py                SceneSmith 运行包生成器
-docs/ARCHITECTURE.md                         架构与坐标层说明
+assets/robots/ranger_mini_v3_piper/   Ranger, Piper, and sensor assets
+assets/environments/                  replaceable SPZ and Mesh environments
+primitives/                           six local Robonix primitives
+skills/pick/                          object resolution, pick, and placement
+sim/bridge/                           browser-to-ROS 2 bridge
+sim/tests/                            end-to-end runtime acceptance
+config/                               RTAB-Map and Nav2 robot parameters
+docs/media/                           README screenshots and demo recordings
+urdf/ + soma.yaml                     transform tree, topology, footprint
+robonix_manifest.yaml                 rbnx boot deployment entry point
+scripts/                              bootstrap, lifecycle, validation, conversion
 ```
 
-仓库运行资产约 285 MB，最大单文件为约 53 MB 的 `meeting_room.spz`，低于
-GitHub 100 MB 单文件限制。`node_modules`、构建目录、测试、数据集原件和所有
-可再生报告均不会上传。
+## Upstream projects and license
 
-## 借鉴与上游项目
+- [Robonix](https://github.com/syswonder/robonix), the [Robonix Book](https://github.com/syswonder/robonix-book), and the [real Ranger Mini V3 package](https://github.com/syswonder/robot-agilex-ranger_mini_v3) for package, deployment, Soma, and lifecycle conventions;
+- [MuJoCo-GS-Web](https://github.com/Vector-Wangel/MuJoCo-GS-Web) for the browser MuJoCo and Gaussian Splatting foundation;
+- [MuJoCo Menagerie AgileX Piper](https://github.com/google-deepmind/mujoco_menagerie/tree/main/agilex_piper) for Piper MJCF and meshes;
+- [SceneSmith](https://github.com/nepfaff/scenesmith) and [SceneSmith Example Scenes](https://huggingface.co/datasets/nepfaff/scenesmith-example-scenes) for textured room and apartment assets;
+- [Spark](https://github.com/sparkjsdev/spark) for SPZ rendering;
+- [MuJoCo-LiDAR](https://github.com/discoverse-dev/MuJoCo-LiDAR) for batched ray sensor references.
 
-- [MuJoCo-GS-Web](https://github.com/Vector-Wangel/MuJoCo-GS-Web)：前端交互、
-  MuJoCo 与 Gaussian Splatting 同场景渲染基础；
-- [mujoco-wasm](https://github.com/zalo/mujoco_wasm) / `mujoco-js`：浏览器中的
-  MuJoCo WebAssembly 运行时；
-- [Spark](https://github.com/sparkjsdev/spark)：SPZ / Gaussian Splatting 渲染；
-- [SceneSmith](https://github.com/nepfaff/scenesmith) 和
-  [示例场景数据集](https://huggingface.co/datasets/nepfaff/scenesmith-example-scenes)：
-  四个 Mesh 室内场景；
-- [MuJoCo Menagerie AgileX Piper](https://github.com/google-deepmind/mujoco_menagerie/tree/main/agilex_piper)：
-  Piper MJCF 与 mesh；
-- [Robonix](https://github.com/syswonder/robonix)：Ranger-Piper 实机布局与传感器
-  位姿参考；
-- [Piper_mujoco](https://github.com/soulde/Piper_mujoco)：Piper 控制参考；
-- [MuJoCo-LiDAR](https://github.com/discoverse-dev/MuJoCo-LiDAR)：MuJoCo 批量射线
-  LiDAR 实现参考。
-
-根目录代码使用 ISC License。SceneSmith 派生场景的说明位于各场景的
-`NOTICE.md`；Piper 的 MIT License 副本位于
-`assets/robots/ranger_mini_v3_piper/third_party/`。使用或再分发时请同时遵守
-各上游资产的许可证。
+Project code is licensed under Apache-2.0. Third-party asset licenses and notices
+are stored with their corresponding assets and continue to apply on redistribution.

@@ -1,0 +1,131 @@
+manifestVersion: 1
+name: mujoco-ranger-piper-deploy
+
+catalog:
+  name: robonix.robot.agilex.ranger_with_piper_mujoco
+  version: 0.2.0
+  description: Browser MuJoCo simulation of Ranger Mini V3 and Piper for Robonix.
+  license: Apache-2.0
+  tags: [robot, deploy, simulation, mujoco, ranger, piper, mapping, navigation, manipulation]
+  maintainers:
+    - Chen Yanting <ytchen25@stu.pku.edu.cn>
+
+env:
+  ROS_DOMAIN_ID: "0"
+  RMW_IMPLEMENTATION: rmw_fastrtps_cpp
+  MAPPING_MAPS_DIR: ${HOME}/.robonix/maps/mujoco-ranger-piper
+  SCENE_OBJECT_MEMORY_DB: ${HOME}/.robonix/scene/mujoco-ranger-piper.db
+
+system:
+  atlas:
+    listen: 0.0.0.0:50051
+  executor:
+    listen: 127.0.0.1:50061
+  pilot:
+    listen: 127.0.0.1:50071
+    vlm:
+      upstream: ${VLM_BASE_URL}
+      api_key: ${VLM_API_KEY}
+      model: ${VLM_MODEL}
+      api_format: openai
+  liaison:
+    listen: 0.0.0.0:50081
+  soma:
+    listen: 127.0.0.1:50091
+    robot_yaml: soma.yaml
+  scene:
+    camera_frame: front_camera_optical_frame
+
+primitive:
+  - name: ranger_chassis
+    path: ./primitives/chassis
+    config:
+      odom_topic: /odom
+      command_topic: /cmd_vel
+  - name: mid360_lidar
+    path: ./primitives/lidar
+    config:
+      scan_topic: /scan
+      cloud_topic: /mid360/points
+      sentinel_timeout_s: 90
+  - name: mid360_imu
+    path: ./primitives/imu
+    config:
+      topic: /mid360/imu
+      sentinel_timeout_s: 90
+  - name: front_camera
+    path: ./primitives/front_camera
+    config:
+      rgb_topic: /front/rgb
+      depth_topic: /front/depth
+      info_topic: /front/camera_info
+      extrinsics_topic: /front/extrinsics
+      sentinel_timeout_s: 90
+  - name: wrist_camera
+    path: ./primitives/wrist_camera
+    config:
+      rgb_topic: /wrist/rgb
+      depth_topic: /wrist/depth
+      info_topic: /wrist/camera_info
+      advertise_streams: false
+      sentinel_timeout_s: 90
+  - name: piper_ctl
+    path: ./primitives/arm
+    config:
+      joint_states_topic: /arm/joint_states_single
+      joint_command_topic: /arm/joint_command
+      end_pose_topic: /arm/end_pose
+      pos_command_topic: /arm/pos_command
+      sentinel_timeout_s: 90
+
+service:
+  - name: mapping
+    url: https://github.com/syswonder/service-map-rbnx
+    branch: main
+    config:
+      use_sim_time: true
+      occupancy_sources: [lidar, depth]
+      rtabmap_inputs: [lidar, rgbd, odom]
+      params_file: config/rtabmap_params.yaml
+      sensor_providers:
+        lidar2d: mid360_lidar
+        lidar3d: mid360_lidar
+        rgb: front_camera
+        depth: front_camera
+        odom: ranger_chassis
+  - name: nav2
+    url: https://github.com/syswonder/service-navigation-rbnx
+    branch: main
+    config:
+      params_file: config/nav2_params.yaml
+      use_sim_time: true
+      action_wait_s: 120
+      # DWB may still align with the final path segment inside the generic
+      # 0.45 m terminal zone. Guard terminal yaw only at the precise goal.
+      # Keep this below Nav2's 0.04 m goal tolerance. Otherwise the guard can
+      # mistake DWB's final path alignment for a stalled final-yaw rotation.
+      guard_terminal_xy_m: 0.02
+      dynamic_speed:
+        max_linear_speed_mps: 0.26
+        default_percentage: 100
+        step_percentage: 20
+        min_percentage: 20
+      provider_ids:
+        map: mapping
+        odom: ranger_chassis
+        scan: mid360_lidar
+
+skill:
+  - name: explore
+    url: https://github.com/syswonder/skill-explore-rbnx
+    branch: main
+    config:
+      timeout_s: 600
+  - name: pick
+    path: ./skills/pick
+    config:
+      vlm_base_url: ${VLM_BASE_URL}
+      vlm_api_key: ${VLM_API_KEY}
+      vlm_model: ${VLM_MODEL}
+      vlm_timeout_s: 30
+      pick_timeout_s: 45

@@ -52,7 +52,6 @@ export function normalizeRobotPackage(metadata, packagePath, expectedId = null) 
     ...metadata,
     packagePath,
     modelPath: resolvePackagePath(packagePath, metadata.model),
-    objectsPath: resolvePackagePath(packagePath, metadata.objects),
     filesPath: resolvePackagePath(packagePath, metadata.files),
     controller: metadata.controller ? Object.freeze({
       ...metadata.controller,

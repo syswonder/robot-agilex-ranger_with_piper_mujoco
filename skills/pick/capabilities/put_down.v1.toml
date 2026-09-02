@@ -1,0 +1,9 @@
+[contract]
+id = "robonix/skill/pick/put_down"
+version = "1"
+kind = "skill"
+idl = "pick/srv/PutDown.srv"
+[mode]
+type = "rpc"
+[semantics]
+user_invocable = true

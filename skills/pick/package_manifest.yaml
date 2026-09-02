@@ -1,0 +1,19 @@
+manifestVersion: 1
+package:
+  name: com.robonix.sim.pick
+  version: 0.2.0
+  description: VLM-confirmed closed-loop pick skill for the simulated Piper arm.
+  tags: [skill, manipulation, pick, simulation, mujoco, piper, vlm]
+  maintainers:
+    - Chen Yanting <1154270143@qq.com>
+  license: Apache-2.0
+build: bash ../../scripts/build-primitive.sh skills/pick
+start: bash ../../scripts/start-primitive.sh skills/pick skills.pick.pick_skill pick
+stop: bash ../../scripts/stop-primitive.sh pick
+capabilities:
+  - name: robonix/skill/pick/driver
+    path: capabilities/driver.v1.toml
+  - name: robonix/skill/pick/pick
+    path: capabilities/pick.v1.toml
+  - name: robonix/skill/pick/put_down
+    path: capabilities/put_down.v1.toml

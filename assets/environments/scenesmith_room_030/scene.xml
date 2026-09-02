@@ -248,24 +248,6 @@
       </body>
       <geom name="living_room_glass_tumbler_0_s0_1_static_collision" type="box" pos="0 0 0.04823677" size="0.04 0.04153081 0.04823677" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
     </body>
-    <body name="living_room_potted_succulent_plant_0" pos="3.18434 0.851894 0.596485" quat="0.998055 -0.00195237 -0.000559801 -0.0623134">
-      <body name="living_room_potted_succulent_plant_0_base_link">
-        <geom name="living_room_potted_succulent_plant_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_potted_succulent_plant_1767844729_potted_succulent_plant_tex" mesh="living_room_potted_succulent_plant_0_base_link_visual_visual_mesh" group="1" />
-      </body>
-      <geom name="living_room_potted_succulent_plant_0_static_collision" type="box" pos="0 0 0.07781003" size="0.06 0.0584597 0.07781003" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
-    </body>
-    <body name="living_room_glass_jar_0" pos="3.3561 0.826367 0.596711" quat="0.995596 -0.00278657 -0.00244443 0.0936734">
-      <body name="living_room_glass_jar_0_base_link">
-        <geom name="living_room_glass_jar_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_glass_jar_1767844787_glass_jar_tex" mesh="living_room_glass_jar_0_base_link_visual_visual_mesh" group="1" />
-      </body>
-      <geom name="living_room_glass_jar_0_static_collision" type="box" pos="0 0 0.04323448" size="0.0375 0.03805421 0.04323448" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
-    </body>
-    <body name="living_room_hardcover_book_0" pos="3.3441 1.01177 0.594354" quat="0.996093 -0.00252896 0.00451051 0.0881582">
-      <body name="living_room_hardcover_book_0_base_link">
-        <geom name="living_room_hardcover_book_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_hardcover_book_1767844974_hardcover_book_s0.7_0.7_0.7_tex" mesh="living_room_hardcover_book_0_base_link_visual_visual_mesh" group="1" />
-      </body>
-      <geom name="living_room_hardcover_book_0_static_collision" type="box" pos="0 0 0.0173558" size="0.077 0.1089785 0.0173558" group="3" contype="1" conaffinity="1" rgba="0.2 0.8 0.3 0.001" friction="0.8 0.02 0.002" />
-    </body>
     <body name="living_room_throw_pillow_0" pos="1.93344 0.83744 0.488918" quat="0.998662 -0.0515196 -0.00434809 0.00139106">
       <body name="living_room_throw_pillow_0_base_link">
         <geom name="living_room_throw_pillow_0_base_link_visual_visual" type="mesh" contype="0" conaffinity="0" material="living_room_throw_pillow_1767845800_throw_pillow_tex" mesh="living_room_throw_pillow_0_base_link_visual_visual_mesh" group="1" />

@@ -1,7 +1,25 @@
 {
   "schemaVersion": 2,
-  "defaultEnvironment": "kitchen",
+  "defaultEnvironment": "scenesmith_house_187",
   "environments": [
+    {
+      "id": "scenesmith_house_187",
+      "label": "SceneSmith One-Bedroom Apartment 187 - Mesh",
+      "visualMode": "mesh",
+      "xmlPath": "./assets/environments/scenesmith_house_187/scene.xml",
+      "filesPath": "./assets/environments/scenesmith_house_187/index.json",
+      "objectsPath": "./assets/environments/scenesmith_house_187/objects.xml",
+      "camera": {
+        "position": [4.5, 2.4, -0.5],
+        "target": [2.0, 0.6, -2.0]
+      },
+      "spawnPath": "./assets/environments/scenesmith_house_187/spawn.json",
+      "acceptance": {
+        "pickObject": "task_water_glass",
+        "pickBasePosition": [3.92, 3.25],
+        "pickWaypoints": [[0.93, 1.0], [3.92, 1.0]]
+      }
+    },
     {
       "id": "kitchen",
       "label": "Kitchen - SPZ",
@@ -46,6 +64,7 @@
       "visualMode": "mesh",
       "xmlPath": "./assets/environments/scenesmith_room_030/scene.xml",
       "filesPath": "./assets/environments/scenesmith_room_030/index.json",
+      "objectsPath": "./assets/environments/scenesmith_room_030/objects.xml",
       "camera": null,
       "spawnPath": "./assets/environments/scenesmith_room_030/spawn.json"
     },

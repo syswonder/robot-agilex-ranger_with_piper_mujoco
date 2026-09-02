@@ -1,24 +1,31 @@
 {
   "name": "mujoco-robonix",
   "version": "3.3.8",
+  "private": true,
   "type": "module",
-  "description": "Browser MuJoCo workspace with selectable SPZ and mesh environments",
+  "description": "Robonix body package for a browser-simulated Ranger Mini V3 with Piper",
   "scripts": {
-    "start": "python3 ./scripts/serve.py --port 5180 --bind 0.0.0.0",
     "serve": "python3 ./scripts/serve.py --port 5180 --bind 0.0.0.0"
   },
   "keywords": [
     "mujoco",
+    "robonix",
+    "ranger",
+    "piper",
+    "robotics",
     "wasm"
   ],
-  "author": "MuJoCo Robonix contributors",
-  "license": "ISC",
+  "author": "Chen Yanting",
+  "license": "Apache-2.0",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "@sparkjsdev/spark": "^2.0.0",
     "mujoco-js": "^0.0.7",
     "three": "0.180.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
   }
 }

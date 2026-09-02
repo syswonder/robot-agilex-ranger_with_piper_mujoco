@@ -1,0 +1,18 @@
+manifestVersion: 1
+package:
+  name: com.robonix.sim.piper_arm
+  version: 0.2.0
+  description: Simulated AgileX Piper arm and parallel gripper.
+  tags: [primitive, arm, gripper, simulation, mujoco, piper]
+  maintainers:
+    - Chen Yanting <1154270143@qq.com>
+  license: Apache-2.0
+build: bash ../../scripts/build-primitive.sh primitives/arm
+start: bash ../../scripts/start-primitive.sh primitives/arm primitives.common.arm piper_ctl
+stop: bash ../../scripts/stop-primitive.sh piper_ctl
+capabilities:
+  - name: robonix/primitive/arm/joint_states
+  - name: robonix/primitive/arm/joint_command
+  - name: robonix/primitive/arm/end_pose
+  - name: robonix/primitive/arm/pos_command
+  - name: robonix/primitive/arm/driver

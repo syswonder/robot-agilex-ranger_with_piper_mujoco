@@ -9,6 +9,7 @@ import   load_mujoco        from '../node_modules/mujoco-js/dist/mujoco_wasm.js'
 import { getSceneManager } from './utils/SceneManager.js';
 import { applySplatTransform } from './utils/SplatTransform.js';
 import { RobotSensorSuite } from './utils/RobotSensorSuite.js';
+import { MujocoBridgeClient } from './utils/MujocoBridgeClient.js';
 
 // ===== 新增：后处理相关 =====
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -135,6 +136,7 @@ export class MuJoCoDemo {
 
     // Robot packages can opt into browser-native LiDAR, IMU and camera sensors.
     this.sensorSuite = new RobotSensorSuite(this.mujoco, this.renderer, this.scene);
+    this.bridge = null;
 
     // ===== 新增：Toon 后处理 =====
     this.setupToonRendering();
@@ -382,6 +384,7 @@ export class MuJoCoDemo {
 
     // Sensor sampling follows the completed MuJoCo step so every frame is coherent.
     this.sensorSuite.update(timeMS);
+    this.bridge?.update(timeMS);
     const renderCamera = this.sensorSuite.getRenderCamera(this.camera);
     this.dragStateManager.camera = renderCamera;
 
@@ -595,6 +598,8 @@ class GaussianSplatController {
 const gsController = new GaussianSplatController(demo.container, demo.scene, demo.renderer);
 demo.gsController = gsController;  // Attach to demo for render loop access
 await demo.syncEnvironmentVisual?.();
+demo.bridge = new MujocoBridgeClient(demo);
+demo.bridge.start();
 
 window.mujocoApp = Object.freeze({
   switchEnvironment: (environment) => demo.switchEnvironment(environment),
@@ -621,4 +626,11 @@ window.mujocoApp = Object.freeze({
       joints: demo.model.njnt
     } : null
   })
+});
+
+window.mujocoBridge = Object.freeze({
+  status: () => ({ ...demo.bridge.status }),
+  emergencyStop: () => keyboardController.emergencyStop(),
+  resetRobot: () => keyboardController.resetRobot(),
+  robotState: () => keyboardController.getRobotState()
 });

@@ -36,7 +36,9 @@
       "verticalFovDeg": [-7, 52],
       "minRange": 0.1,
       "maxRange": 40,
-      "raysPerScan": 4096,
+      "raysPerScan": 1536,
+      "planarRays": 720,
+      "planarElevationDeg": 0,
       "updateHz": 10
     },
     "imu": {
@@ -54,18 +56,22 @@
         "width": 320,
         "height": 240,
         "depth": true,
-        "depthWidth": 160,
-        "depthHeight": 120,
+        "depthWidth": 80,
+        "depthHeight": 60,
         "minDepth": 0.17,
         "maxDepth": 20
       },
       {
         "id": "wrist_rgb",
-        "label": "Piper Wrist Orbbec DC1 RGB",
+        "label": "Piper Wrist Orbbec DC1 RGB-D",
         "camera": "piper_wrist_rgb_camera",
         "width": 320,
         "height": 180,
-        "depth": false
+        "depth": true,
+        "depthWidth": 80,
+        "depthHeight": 45,
+        "minDepth": 0.10,
+        "maxDepth": 5
       }
     ]
   }

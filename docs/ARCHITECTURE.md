@@ -3,7 +3,7 @@
 ## 环境与机器人解耦
 
 环境由 `assets/environments/manifest.json` 注册。每个条目声明视觉模式、MJCF、
-运行资产索引、出生点和可选相机预设。`SceneManager` 将选中的环境资产与机器
+运行资产索引、出生点、可选相机预设和可选的环境级 `objectsPath`。`SceneManager` 将选中的环境资产与机器
 人包复制到同一个 MuJoCo MEMFS 场景目录，再通过 `<include>` 组合模型。
 
 机器人包不引用 Kitchen、Meeting Room、SceneSmith 或任何外部绝对路径。环境也不包含
@@ -45,5 +45,6 @@ Three.js 侧按 MuJoCo 材质和纹理 ID 复用 GPU 资源；本地服务允许
 SPZ、WASM 等大型静态资产进入浏览器缓存。
 
 这种表示优先保证导航、避障、LiDAR/RGB-D 和实时步进。它不声称能替代精细
-操作接触模型；需要交互的少数家具应作为独立 MJCF 对象包加入，而不是把整个
-房间重新变成动态刚体集合。
+操作接触模型；需要交互的少数物件应写入该环境自己的 `objects.xml`，而不是放入
+机器人包或把整个房间重新变成动态刚体集合。客厅 `030` 将 SceneSmith 原有的
+玻璃罐、精装书和盆栽从静态节点转换为带 freejoint 的动态刚体，其余家具仍静态化。

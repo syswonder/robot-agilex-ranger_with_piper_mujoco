@@ -226,6 +226,7 @@
                   <joint name="joint6" axis="0 0 1" range="-3.14 3.14"/>
                   <geom quat="0.707105 0 0 0.707108" mesh="link6" material="gray_mat" class="visual"/>
                   <geom quat="0.707105 0 0 0.707108" mesh="link6" class="collision"/>
+                  <site name="tcp_site" pos="0 0 0.205" type="sphere" size="0.004" rgba="1 0.7 0.1 0.45"/>
                   <body name="link7" pos="0 0 0.13503" quat="1.89468e-08 1.89469e-08 0.707108 0.707105" gravcomp="1">
                     <inertial pos="-0.000277778 -0.0467673 -0.00921029" quat="0.46134 0.536174 -0.553273 0.439968"
                       mass="0.0264823" diaginertia="0.001 0.001 0.001"/>
@@ -281,6 +282,6 @@
   </actuator>
 
   <keyframe>
-    <key name="home" qpos="0 1.57 -1.3485 0 0 0 0 0" ctrl="0 1.57 -1.3485 0 0 0 0"/>
+    <key name="home" qpos="0 0.82 -2.2 0 1.1 0 0 0" ctrl="0 0.82 -2.2 0 1.1 0 0"/>
   </keyframe>
 </mujoco>
