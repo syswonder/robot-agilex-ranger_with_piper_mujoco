@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/media/screenshots/scenesmith-apartment-overview.webp" alt="Ranger Piper in the default SceneSmith apartment" width="900">
+  <img src="docs/media/screenshots/native-viewer.png" alt="Ranger Piper in the native MuJoCo default apartment" width="900">
 </p>
 
 A self-contained Robonix body package for an AgileX Ranger Mini V3 carrying a

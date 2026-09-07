@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="docs/media/screenshots/scenesmith-apartment-overview.webp" alt="Ranger Piper in the default SceneSmith apartment" width="900">
+  <img src="docs/media/screenshots/native-viewer.png" alt="原生 MuJoCo 默认公寓中的 Ranger Piper" width="900">
 </p>
 
 这是一个面向 Robonix 的 `Ranger Mini V3 + Piper` 仿真本体包。仿真容器可选择
