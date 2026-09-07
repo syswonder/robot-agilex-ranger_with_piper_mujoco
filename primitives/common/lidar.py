@@ -45,7 +45,7 @@ def snapshot(_request: Empty) -> LaserScan:
 
 @provider.on_init
 def initialize(config):
-    """Declare both lidar streams and wait for a browser-produced scan."""
+    """Declare both lidar streams and wait for a simulator-produced scan."""
     try:
         scan_topic = topic_value(config, "scan_topic", "/scan")
         cloud_topic = topic_value(config, "cloud_topic", "/mid360/points")
@@ -56,7 +56,7 @@ def initialize(config):
         "robonix/primitive/lidar/lidar", topic=scan_topic, msg_type="LaserScan",
         callback=receive_scan, qos="best_effort", declare=False)
     if not provider.wait_for_topic(scan_topic, "LaserScan", sentinel_timeout_s):
-        return Err(f"no LaserScan received on {scan_topic}; open the simulator page first")
+        return Err(f"no LaserScan received on {scan_topic}; start the simulator runtime first")
     provider.declare_ros2_topic("robonix/primitive/lidar/lidar", scan_topic, qos="best_effort")
     provider.declare_ros2_topic("robonix/primitive/lidar/lidar3d", cloud_topic, qos="best_effort")
     return Ok()

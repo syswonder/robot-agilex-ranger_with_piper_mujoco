@@ -63,7 +63,7 @@ def receive_objects(message) -> None:
 
 
 def receive_status(message) -> None:
-    """Wake a synchronous pick request when the browser reports progress."""
+    """Wake a synchronous pick request when the simulator reports progress."""
     global latest_status
     try:
         parsed = json.loads(message.data)

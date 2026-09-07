@@ -107,10 +107,10 @@ robot:
                     - {path: robonix/primitive/camera/depth_snapshot, description: "Capture one wrist depth preview."}
 
 description:
-  summary: "A browser MuJoCo mobile manipulator with ROS2-compatible sensors and Robonix control."
+  summary: "A selectable Web/native MuJoCo mobile manipulator with ROS2-compatible sensors and Robonix control."
   can_do:
     - "Build maps and localize with LiDAR, odometry, and RGB-D."
-    - "Navigate while avoiding collision geometry in SPZ and mesh environments."
+    - "Navigate while avoiding collision geometry in SPZ Web scenes and mesh scenes on either backend."
     - "Pick named task objects with VLM confirmation and closed-loop Piper motion."
     - "Resolve environment task objects through Pick's own inventory and wrist camera after navigation."
   cannot_do:
@@ -119,3 +119,4 @@ description:
     - "Use Scene list_objects or the front camera to resolve rear-side Piper task objects; call Pick directly."
     - "Use task objects in environments that do not declare an objectsPath."
     - "Treat SPZ splats as physics geometry; SPZ environments require a registered collision XML."
+    - "Run SPZ environments with the native backend; use the Web backend for SPZ."

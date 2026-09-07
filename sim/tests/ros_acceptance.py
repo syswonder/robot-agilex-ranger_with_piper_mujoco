@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Runtime acceptance checks for the browser MuJoCo/ROS bridge."""
+"""Runtime acceptance checks for either MuJoCo/ROS bridge backend."""
 from __future__ import annotations
 
 import argparse

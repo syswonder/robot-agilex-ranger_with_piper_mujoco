@@ -4,7 +4,7 @@ name: mujoco-ranger-piper-deploy
 catalog:
   name: robonix.robot.agilex.ranger_with_piper_mujoco
   version: 0.2.0
-  description: Browser MuJoCo simulation of Ranger Mini V3 and Piper for Robonix.
+  description: Selectable Web/native MuJoCo simulation of Ranger Mini V3 and Piper for Robonix.
   license: Apache-2.0
   tags: [robot, deploy, simulation, mujoco, ranger, piper, mapping, navigation, manipulation]
   maintainers:

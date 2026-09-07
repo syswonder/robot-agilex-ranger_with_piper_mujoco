@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bridge the browser MuJoCo runtime to the ROS 2 graph used by Robonix."""
+"""Bridge a selectable MuJoCo runtime to the ROS 2 graph used by Robonix."""
 from __future__ import annotations
 
 import asyncio
@@ -17,6 +17,7 @@ import rclpy
 from builtin_interfaces.msg import Time as RosTime
 from geometry_msgs.msg import Pose, TransformStamped, Twist
 from nav_msgs.msg import Odometry
+from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 from rosgraph_msgs.msg import Clock
@@ -84,12 +85,13 @@ class BridgeState:
     def __init__(self) -> None:
         self.lock = threading.Lock()
         self.connected = False
+        self.backend = ""
         self.environment = ""
         self.last_frame_wall_time = 0.0
         self.frames: dict[str, int] = {}
 
     def record(self, kind: str) -> None:
-        """Record one received browser frame."""
+        """Record one received simulator frame."""
         with self.lock:
             self.last_frame_wall_time = time.time()
             self.frames[kind] = self.frames.get(kind, 0) + 1
@@ -100,7 +102,9 @@ class BridgeState:
             age = time.time() - self.last_frame_wall_time if self.last_frame_wall_time else None
             return {
                 "ok": self.connected and age is not None and age < 3.0,
+                "runtimeConnected": self.connected,
                 "browserConnected": self.connected,
+                "backend": self.backend,
                 "environment": self.environment,
                 "lastFrameAgeSec": age,
                 "frames": dict(self.frames),
@@ -125,7 +129,7 @@ class HealthHandler(BaseHTTPRequestHandler):
 
 
 class MujocoRosBridge(Node):
-    """Publish browser state as standard ROS messages and forward commands."""
+    """Publish simulator state as standard ROS messages and forward commands."""
 
     def __init__(self, shared_state: BridgeState) -> None:
         super().__init__("mujoco_robonix_bridge")
@@ -229,7 +233,7 @@ class MujocoRosBridge(Node):
         self.map_cloud_pub.publish(msg)
 
     def receive(self, payload: dict[str, Any]) -> None:
-        """Route one browser protocol frame to its ROS publisher."""
+        """Route one simulator protocol frame to its ROS publisher."""
         kind = str(payload.get("type", ""))
         self.shared_state.record(kind)
         if kind == "state":
@@ -356,12 +360,12 @@ class MujocoRosBridge(Node):
 
 
 async def websocket_main(node: MujocoRosBridge, host: str, port: int) -> None:
-    """Accept one active browser and replace stale sessions deterministically."""
+    """Accept one active simulator runtime and replace stale sessions deterministically."""
     node.loop = asyncio.get_running_loop()
 
     async def handle(websocket: Any) -> None:
         if node.websocket is not None and node.websocket is not websocket:
-            await node.websocket.close(4001, "replaced by a newer browser")
+            await node.websocket.close(4001, "replaced by a newer simulator runtime")
         node.websocket = websocket
         node.shared_state.connected = True
         try:
@@ -372,8 +376,10 @@ async def websocket_main(node: MujocoRosBridge, host: str, port: int) -> None:
                     continue
                 if payload.get("type") == "hello":
                     node.shared_state.environment = str(payload.get("environment", ""))
+                    node.shared_state.backend = str(payload.get("backend") or "web")
                     node.get_logger().info(
-                        f"browser connected: environment={node.shared_state.environment} "
+                        f"runtime connected: backend={node.shared_state.backend} "
+                        f"environment={node.shared_state.environment} "
                         f"mode={payload.get('visualMode')}"
                     )
                 else:
@@ -382,7 +388,7 @@ async def websocket_main(node: MujocoRosBridge, host: str, port: int) -> None:
             if node.websocket is websocket:
                 node.websocket = None
                 node.shared_state.connected = False
-                node.get_logger().warning("browser bridge disconnected; motion watchdog will stop the robot")
+                node.get_logger().warning("simulator runtime disconnected; motion watchdog will stop the robot")
 
     async with websockets.serve(handle, host, port, max_size=32 * 1024 * 1024, ping_interval=10, ping_timeout=10):
         await asyncio.Future()
@@ -393,7 +399,14 @@ def main() -> None:
     rclpy.init()
     state = BridgeState()
     node = MujocoRosBridge(state)
-    ros_thread = threading.Thread(target=rclpy.spin, args=(node,), daemon=True)
+
+    def spin_ros() -> None:
+        try:
+            rclpy.spin(node)
+        except ExternalShutdownException:
+            pass
+
+    ros_thread = threading.Thread(target=spin_ros, daemon=True)
     ros_thread.start()
     HealthHandler.state = state
     health = ThreadingHTTPServer((os.environ.get("BRIDGE_BIND", "0.0.0.0"), int(os.environ.get("BRIDGE_HEALTH_PORT", "8766"))), HealthHandler)

@@ -21,6 +21,8 @@ export RMW_IMPLEMENTATION="${MUJOCO_RMW_IMPLEMENTATION:-rmw_fastrtps_cpp}"
 HOST_PYTHON="${HOST_PYTHON:-/usr/bin/python3}"
 
 environment="${SIM_ENVIRONMENT:-scenesmith_house_187}"
+backend="${SIM_BACKEND:-web}"
+headless="${SIM_HEADLESS:-0}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --environment|-e)
@@ -28,19 +30,37 @@ while [[ $# -gt 0 ]]; do
       environment="$2"
       shift 2
       ;;
+    --backend|-b)
+      [[ $# -ge 2 ]] || { echo "[sim/start] --backend requires web or native" >&2; exit 2; }
+      backend="$2"
+      shift 2
+      ;;
+    --headless)
+      headless=1
+      shift
+      ;;
+    --viewer)
+      headless=0
+      shift
+      ;;
     --help|-h)
-      echo "Usage: $0 [--environment ENVIRONMENT_ID]"
+      echo "Usage: $0 [--backend web|native] [--environment ENVIRONMENT_ID] [--viewer|--headless]"
       exit 0
       ;;
     *)
       echo "[sim/start] unknown argument: $1" >&2
-      echo "Usage: $0 [--environment ENVIRONMENT_ID]" >&2
+      echo "Usage: $0 [--backend web|native] [--environment ENVIRONMENT_ID] [--viewer|--headless]" >&2
       exit 2
       ;;
   esac
 done
 
-if [[ ! -d "$ROOT/node_modules/playwright" ]]; then
+if [[ "$backend" != "web" && "$backend" != "native" ]]; then
+  echo "[sim/start] invalid backend: $backend (expected web or native)" >&2
+  exit 2
+fi
+
+if [[ "$backend" == "web" && ! -d "$ROOT/node_modules/playwright" ]]; then
   echo "[sim/start] dependencies are missing; run: bash scripts/bootstrap.sh" >&2
   exit 1
 fi
@@ -72,6 +92,13 @@ trap cleanup EXIT INT TERM HUP
 
 cd "$ROOT"
 compose=(docker compose -f sim/compose.yaml)
+export SIM_BACKEND="$backend"
+export SIM_ENVIRONMENT="$environment"
+export SIM_HEADLESS="$headless"
+if [[ "$backend" == "native" ]]; then
+  compose+=(-f sim/compose.native.yaml)
+  export MUJOCO_GL="${MUJOCO_GL:-glfw}"
+fi
 bridge_log="$RUNTIME/bridge.log"
 : >"$bridge_log"
 
@@ -90,7 +117,7 @@ bridge_http_ready() {
   local health
   health="$(curl -fsS http://127.0.0.1:8766/health 2>/dev/null || true)"
   [[ -n "$health" ]] && "$HOST_PYTHON" -c \
-    'import json,sys; h=json.loads(sys.argv[1]); assert isinstance(h.get("browserConnected"), bool) and "frames" in h' \
+    'import json,sys; h=json.loads(sys.argv[1]); assert isinstance(h.get("runtimeConnected"), bool) and "frames" in h' \
     "$health" >/dev/null 2>&1
 }
 
@@ -125,6 +152,35 @@ if [[ "$bridge_ready" != true ]]; then
   echo "[sim/start] bridge failed after 3 attempts; inspect $bridge_log" >&2
   tail -80 "$bridge_log" >&2 || true
   exit 1
+fi
+
+if [[ "$backend" == "native" ]]; then
+  for _ in $(seq 1 360); do
+    if curl -fsS http://127.0.0.1:8766/health 2>/dev/null \
+      | "$HOST_PYTHON" -c 'import json,sys; h=json.load(sys.stdin); ready=h.get("runtimeConnected", False) and h.get("backend")=="native" and h.get("environment")==sys.argv[1] and h.get("frames", {}).get("state", 0)>0; raise SystemExit(not ready)' "$environment" 2>/dev/null; then
+      break
+    fi
+    state="$(docker inspect "$ROBONIX_SIM_CONTAINER" --format '{{.State.Status}}' 2>/dev/null || true)"
+    [[ "$state" == "running" ]] || break
+    sleep 0.5
+  done
+  health_json="$(curl -fsS http://127.0.0.1:8766/health 2>/dev/null || true)"
+  if [[ -z "$health_json" ]] || ! "$HOST_PYTHON" -c \
+    'import json,sys; h=json.loads(sys.argv[2]); assert h.get("runtimeConnected", False) and h.get("backend")=="native" and h.get("environment")==sys.argv[1] and h.get("frames", {}).get("state", 0)>0; print("[sim/start] native runtime ready:", h.get("environment"), h.get("frames"))' \
+    "$environment" "$health_json"; then
+    capture_bridge_log "native-connect"
+    echo "[sim/start] native runtime did not become ready; inspect $bridge_log" >&2
+    exit 1
+  fi
+
+  echo
+  echo "[sim/start] MuJoCo backend: native ($([[ "$headless" == "1" ]] && echo headless || echo viewer))"
+  echo "[sim/start] Environment:    $environment"
+  echo "[sim/start] Bridge health: http://127.0.0.1:8766/health"
+  echo "[sim/start] In terminal 2: source scripts/env.sh && rbnx boot"
+  echo "[sim/start] Ctrl-C stops only the simulator."
+  docker wait "$ROBONIX_SIM_CONTAINER" >/dev/null
+  exit 0
 fi
 
 echo "[sim/start] starting static web server"

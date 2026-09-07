@@ -8,18 +8,21 @@
   <img src="docs/media/screenshots/scenesmith-apartment-overview.webp" alt="Ranger Piper in the default SceneSmith apartment" width="900">
 </p>
 
-A self-contained Robonix body package for a browser-simulated AgileX Ranger
-Mini V3 carrying a Piper arm. Start MuJoCo in one terminal, load the body package
+A self-contained Robonix body package for an AgileX Ranger Mini V3 carrying a
+Piper arm. The simulator can use a Web or native MuJoCo backend and defaults to
+Web. Start MuJoCo in one terminal, load the body package
 with `rbnx boot` in another, then use `rbnx chat` for mapping, exploration,
 navigation, obstacle avoidance, perception, grasping, and placement.
 
-The simulator supports both Gaussian Splatting (`.spz`) and textured Mesh
-environments. The selected environment determines the visual mode automatically.
+The Web backend supports both Gaussian Splatting (`.spz`) and textured Mesh
+environments. The native backend supports Mesh environments and exits with an
+error for SPZ. The selected environment determines the visual mode automatically.
 MuJoCo geometry remains the source of contact, LiDAR, and depth data in both modes,
 so visual assets and robot capabilities stay cleanly separated.
 
 ## Demo
 
+### Web MuJoCo Viewer
 <p align="center">
   <a href="docs/media/demos/navigation-and-cup-pick.mp4">
     <img src="docs/media/demos/navigation-and-cup-pick.gif" alt="Ranger Piper grasping and lifting a water glass" width="720">
@@ -39,6 +42,30 @@ so visual assets and robot capabilities stay cleanly separated.
 
 See the complete [environment gallery](#environment-gallery) below. Repository
 media lives under `docs/media/`.
+
+### Native MuJoCo viewer
+
+<p align="center">
+  <a href="docs/media/demos/native-navigation-and-cup-pick.mp4">
+    <img src="docs/media/demos/native-navigation-and-cup-pick.gif" alt="Native MuJoCo Viewer navigation and water-glass pick demo" width="720">
+  </a>
+</p>
+
+<p align="center">
+  <a href="docs/media/demos/native-navigation-and-cup-pick.mp4">Watch the complete 103-second native navigation and cup-pick demo</a>
+</p>
+
+The native viewer renders Mesh environments directly through MuJoCo's
+hardware-accelerated OpenGL path, generally producing clearer and more stable
+materials, lighting, and overall presentation than the Web viewer. It requires
+a connected display and an available X11 or WSLg graphics session. Use
+`--headless` when no display is available; RGB cameras still require the GPU.
+The viewer starts with a free camera: right-drag pans, `Shift + right-drag`
+pans horizontally, left-drag rotates, and the wheel zooms.
+
+| Default apartment | Dining room 036 |
+| --- | --- |
+| ![Native MuJoCo default apartment](docs/media/screenshots/native-viewer.png) | ![Native MuJoCo dining room 036](docs/media/screenshots/native-scenesmith_room_036.png) |
 
 ## Capabilities
 
@@ -71,9 +98,9 @@ Mapping / Nav2 / Explore / Pick
         |
 six local primitives
         |
-ROS 2 <-> WebSocket bridge <-> browser MuJoCo
-                              |-- SPZ or Mesh visuals
-                              |-- physics, sensors, dynamic objects
+ROS 2 <-> WebSocket bridge <-> Web MuJoCo (default, SPZ/Mesh)
+                         \----> native MuJoCo (Mesh, GPU viewer/RGB)
+                               |-- physics, sensors, dynamic objects
 ```
 
 Robot dimensions, footprint, hierarchy, and gripper state are defined in
@@ -91,13 +118,15 @@ and `rbnx 0.1.0`. You need:
 
 - Docker Engine with the Compose plugin; the current user must be able to run `docker ps`;
 - Node.js 20 or newer, Python 3, and `curl`;
-- a desktop graphics session with WebGL 2 support;
+- a WebGL 2 desktop session for the Web backend;
+- X11/WSLg, hardware OpenGL, and `/dev/dxg` for the native backend;
 - a Robonix source tree and the `rbnx` command;
 - network access to npm, GitHub, and the Playwright browser download service during bootstrap.
 
-SPZ rendering is expensive under software WebGL. Use a visible, GPU-backed browser
-for normal work. `SIM_HEADLESS=1` is useful for CI smoke tests, but large SPZ scenes
-such as Meeting Room are not intended for CPU-only testing.
+SPZ rendering is expensive under software WebGL. Native MuJoCo physics still runs
+on the CPU, while its viewer and offscreen RGB cameras use the GPU. Native startup
+rejects `llvmpipe` and other software renderers. `--headless` disables only the
+native viewer; camera rendering remains GPU-backed.
 
 ## Installation
 
@@ -123,6 +152,12 @@ VLM_API_KEY=replace-me
 VLM_MODEL=your-model-name
 # Optional. The bridge image contains Fast DDS by default.
 MUJOCO_RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+# Default simulator backend. Valid values: web, native.
+# SIM_BACKEND=web
+# Native mode opens the MuJoCo viewer unless this is 1.
+# SIM_HEADLESS=0
+# Native mode rejects software OpenGL unless explicitly disabled.
+# SIM_GPU_REQUIRED=1
 ```
 
 `VLM_API_KEY` is shared by Pilot and the Pick skill. Keep it out of Git. Define it
@@ -155,7 +190,8 @@ cd ~/mujoco_robonix
 bash sim/start.sh
 ```
 
-Wait for `[sim/start] bridge ready`. The default UI is:
+With no backend option this starts `web`. Wait for `[sim/start] ... ready`.
+The default UI is:
 
 ```text
 http://127.0.0.1:5180/?environment=scenesmith_house_187
@@ -166,6 +202,25 @@ captured in `.runtime/bridge.log` and `.runtime/browser.log`. The bridge uses
 `MUJOCO_RMW_IMPLEMENTATION` and deliberately does not inherit a generic shell
 `RMW_IMPLEMENTATION`; keep the Humble image on `rmw_fastrtps_cpp` unless you also
 install another RMW implementation in that image.
+
+Start the native viewer for a Mesh environment. A connected display and an
+X11/WSLg graphics session are required:
+
+```bash
+bash sim/start.sh --backend native --viewer --environment scenesmith_house_187
+```
+
+Run native MuJoCo without the viewer, retaining GPU RGB rendering:
+
+```bash
+bash sim/start.sh --backend native --headless --environment scenesmith_house_187
+```
+
+The same defaults can be set with `SIM_BACKEND=web|native` and
+`SIM_HEADLESS=0|1` in `.env`. Native mode accepts only `visualMode=mesh`;
+starting `kitchen` or `meeting_room` with native mode prints
+`native backend does not support SPZ` and exits nonzero. GPU enforcement is on
+by default; set `SIM_GPU_REQUIRED=0` only for deliberate software-rendering diagnostics.
 
 ### Terminal 2: Robonix body package
 
@@ -234,6 +289,8 @@ rbnx ask "Navigate to x=3.92, y=3.25, yaw=0, then pick up the water glass on the
 
 ### Environment gallery
 
+#### Web MuJoCo Viewer
+
 | Default apartment | Bedroom |
 | --- | --- |
 | ![SceneSmith apartment overview](docs/media/screenshots/scenesmith-apartment-overview.webp) | ![SceneSmith bedroom](docs/media/screenshots/scenesmith-bedroom.webp) |
@@ -249,6 +306,18 @@ Kitchen SPZ:
 
 ![Gaussian kitchen](docs/media/screenshots/gaussian-kitchen.webp)
 
+#### Native MuJoCo Viewer
+
+All Mesh environments supported by native MuJoCo are shown below:
+
+| Default apartment | Dining room 036 |
+| --- | --- |
+| ![Native MuJoCo default apartment](docs/media/screenshots/native-viewer.png) | ![Native MuJoCo dining room 036](docs/media/screenshots/native-scenesmith_room_036.png) |
+| Bedroom 005 | Living room 030 |
+| ![Native MuJoCo bedroom 005](docs/media/screenshots/native-scenesmith_room_005.png) | ![Native MuJoCo living room 030](docs/media/screenshots/native-scenesmith_room_030.png) |
+| Office 125 | |
+| ![Native MuJoCo office 125](docs/media/screenshots/native-scenesmith_room_125.png) | |
+
 To switch environments, stop Robonix and the simulator, then restart the simulator
 with another ID:
 
@@ -259,10 +328,12 @@ bash sim/start.sh --environment scenesmith_room_005
 The environment changes visuals and geometry, not provider IDs or robot
 capabilities. `assets/environments/manifest.json` selects `visualMode`
 automatically; it is not a user-facing startup option.
+`kitchen` and `meeting_room` require the Web backend. Every Mesh environment can
+run with either backend.
 
 ## Validation
 
-With the default environment and Robonix stack running:
+With the default environment and Robonix stack running, on either backend:
 
 ```bash
 cd ~/mujoco_robonix
@@ -284,6 +355,13 @@ for package_dir in primitives/* skills/pick; do
 done
 ```
 
+While the native container is running, use this fast model, SPZ guard, ray-sensor,
+and GPU RGB smoke test:
+
+```bash
+docker exec mujoco_robonix_sim python3 /workspace/sim/tests/native_smoke.py
+```
+
 ## Stop
 
 Stop Robonix from Terminal 2 with `Ctrl-C`, or from another configured shell:
@@ -299,7 +377,7 @@ bash sim/stop.sh
 ```
 
 The two lifecycles are intentionally independent: `sim/stop.sh` does not shut
-down Robonix, and `rbnx shutdown` does not close the simulator.
+down Robonix, and `rbnx shutdown` does not close the simulator runtime.
 
 The normal UI hides keyboard driving and actuator debug controls. Add `&dev=1`
 to the URL during development to restore them. Orbiting the camera is always
@@ -370,7 +448,8 @@ assets/robots/ranger_mini_v3_piper/   Ranger, Piper, and sensor assets
 assets/environments/                  replaceable SPZ and Mesh environments
 primitives/                           six local Robonix primitives
 skills/pick/                          object resolution, pick, and placement
-sim/bridge/                           browser-to-ROS 2 bridge
+sim/bridge/                           simulator-runtime-to-ROS 2 bridge
+sim/native/                           native scene, control, sensors, and viewer
 sim/tests/                            end-to-end runtime acceptance
 config/                               RTAB-Map and Nav2 robot parameters
 docs/media/                           README screenshots and demo recordings

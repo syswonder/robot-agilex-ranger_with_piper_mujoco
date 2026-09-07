@@ -9,7 +9,7 @@ user's object description. Do not call Scene `list_objects` or the front camera
 first: environment task objects are intentionally kept in the Pick inventory,
 and this skill already reads that inventory plus the rear Piper wrist image.
 It restricts selection to the simulator's dynamic objects, confirms ambiguous
-names with the configured VLM, starts the browser grasp state machine, and waits
+names with the configured VLM, starts the active runtime's grasp state machine, and waits
 for contact, lift, and three seconds of sustained-hold verification. The operation can take up to
 `pick_timeout_s`.
 

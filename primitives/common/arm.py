@@ -1,4 +1,4 @@
-"""Piper arm capability provider backed by the browser controller."""
+"""Piper arm capability provider backed by the active simulator runtime."""
 from robonix_api import Primitive, Ok, Err
 
 from .runtime import package_root, provider_id, timeout_value, topic_value
@@ -21,7 +21,7 @@ def initialize(config):
     except ValueError as error:
         return Err(str(error))
     if not provider.wait_for_topic(joints, "JointState", sentinel_timeout_s):
-        return Err(f"no Piper JointState received on {joints}; open the simulator page first")
+        return Err(f"no Piper JointState received on {joints}; start the simulator runtime first")
     provider.declare_ros2_topic("robonix/primitive/arm/joint_states", joints, qos="reliable")
     provider.declare_ros2_topic("robonix/primitive/arm/joint_command", joint_command, qos="reliable")
     provider.declare_ros2_topic("robonix/primitive/arm/end_pose", end_pose, qos="reliable")
@@ -31,7 +31,7 @@ def initialize(config):
 
 @provider.on_shutdown
 def shutdown():
-    """Complete lifecycle shutdown; the browser watchdog holds the last pose."""
+    """Complete lifecycle shutdown; the simulator watchdog holds the last pose."""
     return Ok()
 
 

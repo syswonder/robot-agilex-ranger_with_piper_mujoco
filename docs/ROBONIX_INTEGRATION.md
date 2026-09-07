@@ -24,11 +24,12 @@
 
 ## 2. 数据与控制链路
 
-浏览器是 MuJoCo 真值和物理步进的唯一所有者。`MujocoBridgeClient` 以固定频率
-发送机器人状态、任务物体、LiDAR、IMU 和相机帧；Python bridge 转为 ROS 2
-message 并维护 TF。反向的 `/cmd_vel`、Piper 关节/TCP、抓取和 reset 命令经同一
-WebSocket 返回浏览器。primitive 只通过 ROS 2 接口访问仿真，不读取浏览器内部
-状态。
+选定的 MuJoCo 运行时是仿真真值和物理步进的唯一所有者。Web 后端使用
+`MujocoBridgeClient`，原生后端使用 `sim/native/runtime.py`；二者通过同一
+WebSocket 协议发送机器人状态、任务物体、LiDAR、IMU 和相机帧，Python bridge
+转为 ROS 2 message 并维护 TF。反向的 `/cmd_vel`、Piper 关节/TCP、抓取和 reset
+命令经同一连接返回当前运行时。primitive 只通过 ROS 2 接口访问仿真，不读取
+任一后端的内部状态。
 
 关键 topic：
 
@@ -56,7 +57,7 @@ Nav2 消费该栅格、`/scan` 和 odom；局部/全局 costmap 的机器人 foo
 直接从同一几何空间产生视觉与传感器返回。
 
 导航命令由 `rbnx chat` 规划到 `robonix/service/navigation/navigate`，而不是通过
-网页键盘。Nav2 控制器发布 `/cmd_vel`，bridge 将速度传给 Ranger 全向驱动器。
+Web 页面键盘。Nav2 控制器发布 `/cmd_vel`，bridge 将速度传给 Ranger 全向驱动器。
 本体包将到达容差设为 `0.04 m` 和 `0.05 rad`；这是后置 Piper 操作位需要的精度，
 可避免普通移动导航的宽松到达判定让目标落到机械臂工作区之外。
 全局 costmap 使用固定 `16 m x 12 m` 滚动窗口，在叠加实时 RTAB-Map 的同时允许
@@ -73,7 +74,7 @@ Nav2 消费该栅格、`/scan` 和 odom；局部/全局 costmap 的机器人 foo
 2. 获取腕部 RGB 图像；
 3. 使用配置的 OpenAI-compatible VLM 将自然语言指代约束到允许对象 ID；
 4. 向 `/sim/pick_command` 发送目标；
-5. 浏览器控制器执行预抓取、下探、闭合、抬升和持续持稳状态机；
+5. 当前后端控制器执行预抓取、下探、闭合、抬升和持续持稳状态机；
 6. 只有夹爪接触目标且抬升后持续稳定 3 秒才返回抓取成功；
 7. `put_down` 将物体降到原支撑高度，松爪并确认稳定，再后撤和收纳机械臂。
 
@@ -101,9 +102,12 @@ PLY -> SPZ 和 PLY -> collision 是离线“环境编译”链路。其最终产
 
 ## 6. 生命周期与启动
 
-`sim/start.sh` 只启动 ROS bridge、HTTP 服务和浏览器，并在前台维持仿真生命
-周期。浏览器连接 bridge 后，操作者在第二个终端从仓库根目录直接执行
-`rbnx boot`；primitive/service/skill 的启动完全由部署清单管理。停止时先用
+`sim/start.sh` 启动 ROS bridge 和选定的 Web/原生运行时，并在前台维持仿真生命
+周期。运行时连接 bridge 后，操作者在第二个终端从仓库根目录直接执行
+`rbnx boot`；primitive/service/skill 的启动完全由部署清单管理。后端默认是
+`web`，`--backend native` 启动 Python MuJoCo，原生 viewer 可由
+`--viewer|--headless` 控制。原生模式在模型加载前拒绝 SPZ，并在启动时验证硬件
+OpenGL renderer。停止时先用
 `rbnx shutdown` 回收 provider 和 service，再用 `sim/stop.sh` 关闭仿真。两层
 互不代管，行为与 Robonix Webots example 一致。
 

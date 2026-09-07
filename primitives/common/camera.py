@@ -100,7 +100,7 @@ def initialize(config):
         "robonix/primitive/camera/rgb", topic=rgb_topic, msg_type="Image",
         callback=receive_rgb, qos="best_effort", declare=False)
     if not provider.wait_for_topic(rgb_topic, "Image", sentinel_timeout_s):
-        return Err(f"no RGB image received on {rgb_topic}; open the simulator page first")
+        return Err(f"no RGB image received on {rgb_topic}; start the simulator runtime first")
     if depth_topic:
         provider.create_subscription(
             "robonix/primitive/camera/depth", topic=depth_topic, msg_type="Image",

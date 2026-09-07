@@ -8,16 +8,18 @@
   <img src="docs/media/screenshots/scenesmith-apartment-overview.webp" alt="Ranger Piper in the default SceneSmith apartment" width="900">
 </p>
 
-这是一个面向 Robonix 的 `Ranger Mini V3 + Piper` 仿真本体包。用户启动浏览器
-MuJoCo 后，可以直接执行 `rbnx boot` 加载本体，再通过 `rbnx chat` 完成观察、
+这是一个面向 Robonix 的 `Ranger Mini V3 + Piper` 仿真本体包。仿真容器可选择
+Web 或原生 MuJoCo 后端，默认仍为 Web；启动后可直接执行 `rbnx boot` 加载本体，
+再通过 `rbnx chat` 完成观察、
 建图、导航、避障、底盘运动以及动态物体抓取和放置。
 
-项目同时支持 Gaussian Splatting SPZ 和带纹理 Mesh 室内环境。视觉模式由所选
-环境自动决定；物理接触、LiDAR 和深度相机始终使用 MuJoCo 几何。环境资产与
+Web 后端支持 Gaussian Splatting SPZ 和带纹理 Mesh 室内环境；原生后端只支持
+Mesh，选择 SPZ 会报错并退出。物理接触、LiDAR 和深度相机始终使用 MuJoCo 几何。环境资产与
 本体能力解耦，不需要为每个房间复制一套 Robonix 本体包。
 
 ## 运行画面
 
+### Web MuJoCo Viewer
 <p align="center">
   <a href="docs/media/demos/navigation-and-cup-pick.mp4">
     <img src="docs/media/demos/navigation-and-cup-pick.gif" alt="Ranger Piper 抓取并抬升水杯" width="720">
@@ -36,6 +38,28 @@ MuJoCo 后，可以直接执行 `rbnx boot` 加载本体，再通过 `rbnx chat`
 | Kitchen | SceneSmith Dining Room 036 |
 
 更多环境截图见[场景画廊](#场景画廊)。演示媒体统一存放在 `docs/media/`。
+
+### 原生 MuJoCo viewer
+
+<p align="center">
+  <a href="docs/media/demos/native-navigation-and-cup-pick.mp4">
+    <img src="docs/media/demos/native-navigation-and-cup-pick.gif" alt="原生 MuJoCo Viewer 导航并抓取水杯演示" width="720">
+  </a>
+</p>
+
+<p align="center">
+  <a href="docs/media/demos/native-navigation-and-cup-pick.mp4">观看 103 秒完整原生导航与水杯抓取演示</a>
+</p>
+
+原生 viewer 直接使用 MuJoCo 的硬件 OpenGL 渲染 Mesh 场景，材质、光照和场景整体
+展示通常比 Web viewer 更清晰、稳定。但是原生 viewer 要求机器连接显示器，并存在可用的
+X11 或 WSLg 图形会话；无显示器环境应使用 `--headless`，但 RGB 相机仍需要 GPU。
+viewer 默认使用自由相机：右键拖动可平移视角，`Shift + 右键拖动`可水平平移，
+左键拖动旋转，滚轮缩放。
+
+| 默认公寓 | 餐厅 036 |
+| --- | --- |
+| ![原生 MuJoCo 默认公寓](docs/media/screenshots/native-viewer.png) | ![原生 MuJoCo 餐厅 036](docs/media/screenshots/native-scenesmith_room_036.png) |
 
 ## 能力
 
@@ -67,9 +91,9 @@ Mapping / Nav2 / Explore / Pick
         |
 六个本地 primitive
         |
-ROS 2 <-> WebSocket bridge <-> 浏览器 MuJoCo
-                              |-- SPZ 或 Mesh 视觉
-                              |-- 碰撞、传感器和动态物体
+ROS 2 <-> WebSocket bridge <-> Web MuJoCo（默认，SPZ/Mesh）
+                         \----> 原生 MuJoCo（Mesh，GPU viewer/RGB）
+                               |-- 碰撞、传感器和动态物体
 ```
 
 本体尺寸、footprint、组件层级和夹爪状态位于 `soma.yaml`；机器人坐标树位于
@@ -86,12 +110,14 @@ ROS 2 <-> WebSocket bridge <-> 浏览器 MuJoCo
 
 - Docker Engine 和 Compose plugin，当前用户可以执行 `docker ps`；
 - Node.js 20 或更高版本、Python 3 和 `curl`；
-- 支持 WebGL 2 的桌面图形会话；
+- Web 后端需要支持 WebGL 2 的桌面图形会话；
+- 原生后端需要 X11/WSLg、可用的硬件 OpenGL 和 `/dev/dxg`；
 - 可用的 Robonix 源码树及 `rbnx` 命令；
 - 首次构建时可访问 npm、GitHub 和 Playwright 下载站。
 
-SPZ 在纯软件 WebGL 下开销较高，日常使用建议采用可见浏览器和 GPU。CI 可设置
-`SIM_HEADLESS=1`，但 Meeting Room 等较大 SPZ 场景不适合作为无 GPU 冒烟测试。
+SPZ 在纯软件 WebGL 下开销较高，日常使用建议采用可见浏览器和 GPU。原生模式的
+MuJoCo 物理步进仍在 CPU 上执行，viewer 和 RGB 离屏渲染使用 GPU；启动脚本会拒绝
+`llvmpipe` 等软件 renderer。原生 `--headless` 只关闭 viewer，不关闭 GPU 相机渲染。
 
 ## 第一次安装
 
@@ -116,6 +142,12 @@ VLM_API_KEY=replace-me
 VLM_MODEL=your-model-name
 # 可选；Bridge 镜像默认使用已安装的 Fast DDS
 MUJOCO_RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+# Default simulator backend. Valid values: web, native.
+# SIM_BACKEND=web
+# Native mode opens the MuJoCo viewer unless this is 1.
+# SIM_HEADLESS=0
+# Native mode rejects software OpenGL unless explicitly disabled.
+# SIM_GPU_REQUIRED=1
 ```
 
 `VLM_API_KEY` 同时供 Pilot 和抓取 skill 使用，不能提交到 Git。它必须在项目
@@ -150,14 +182,31 @@ cd ~/mujoco_robonix
 bash sim/start.sh
 ```
 
-脚本只启动 bridge、静态资源服务和浏览器，并保持在前台。看到
-`[sim/start] bridge ready` 后再启动 Robonix。默认页面地址是
+未指定时使用 `web` 后端。脚本启动 bridge 和选定的仿真运行时，并保持在前台。看到
+`[sim/start] ... ready` 后再启动 Robonix。默认页面地址是
 `http://127.0.0.1:5180/?environment=scenesmith_house_187`，bridge 健康检查地址是
 `http://127.0.0.1:8766/health`。Bridge 若在 Docker 启动阶段异常退出，脚本会先
 保存容器输出并有限重试；最终失败时检查 `.runtime/bridge.log` 和
 `.runtime/browser.log`。
 项目使用专用的 `MUJOCO_RMW_IMPLEMENTATION`，不会继承其他 ROS/Robonix 终端中的
 通用 `RMW_IMPLEMENTATION`；当前 Humble Bridge 镜像应保持为 `rmw_fastrtps_cpp`。
+
+选择原生 MuJoCo viewer（要求连接显示器并具备 X11/WSLg 图形会话）：
+
+```bash
+bash sim/start.sh --backend native --viewer --environment scenesmith_house_187
+```
+
+不显示 viewer、但保留 GPU RGB 渲染：
+
+```bash
+bash sim/start.sh --backend native --headless --environment scenesmith_house_187
+```
+
+也可以在 `.env` 中设置 `SIM_BACKEND=web|native`、`SIM_HEADLESS=0|1`。原生模式只
+支持 `visualMode=mesh`；例如 `--backend native --environment kitchen` 会打印
+`native backend does not support SPZ` 并以非零状态退出。GPU 检测默认开启，仅在
+明确接受软件渲染的诊断环境中才设置 `SIM_GPU_REQUIRED=0`。
 
 只有正常启动仿真后才能执行后续步骤，正常启动终端应该打印类似如下日志：
 ```bash
@@ -240,6 +289,8 @@ rbnx ask "导航到地图坐标 x=3.92, y=3.25，最终朝向 yaw=0；到达后�
 
 ### 场景画廊
 
+#### Web MuJoCo Viewer
+
 | 默认公寓 | 卧室 |
 | --- | --- |
 | ![SceneSmith apartment overview](docs/media/screenshots/scenesmith-apartment-overview.webp) | ![SceneSmith bedroom](docs/media/screenshots/scenesmith-bedroom.webp) |
@@ -255,6 +306,18 @@ Kitchen SPZ：
 
 ![Gaussian kitchen](docs/media/screenshots/gaussian-kitchen.webp)
 
+#### 原生 MuJoCo Viewer
+
+原生 MuJoCo 支持的全部 Mesh 场景如下：
+
+| 默认公寓 | 餐厅 036 |
+| --- | --- |
+| ![原生 MuJoCo 默认公寓](docs/media/screenshots/native-viewer.png) | ![原生 MuJoCo 餐厅 036](docs/media/screenshots/native-scenesmith_room_036.png) |
+| 卧室 005 | 客厅 030 |
+| ![原生 MuJoCo 卧室 005](docs/media/screenshots/native-scenesmith_room_005.png) | ![原生 MuJoCo 客厅 030](docs/media/screenshots/native-scenesmith_room_030.png) |
+| 办公室 125 | |
+| ![原生 MuJoCo 办公室 125](docs/media/screenshots/native-scenesmith_room_125.png) | |
+
 切换场景时先停止终端 2 的 Robonix，再停止终端 1，然后使用新的环境 ID 重启：
 
 ```bash
@@ -263,10 +326,11 @@ bash sim/start.sh --environment scenesmith_room_005
 
 环境改变不会改变本体 provider ID 和能力。`visualMode` 由
 `assets/environments/manifest.json` 自动选择，不是用户启动参数。
+`kitchen` 和 `meeting_room` 必须使用 Web 后端；所有 Mesh 环境均可使用 Web 或原生后端。
 
 ## 验证
 
-完整系统启动在默认的 `scenesmith_house_187` 后执行：
+完整系统启动在默认的 `scenesmith_house_187` 后执行；同一脚本适用于 Web 和原生后端：
 
 ```bash
 cd ~/mujoco_robonix
@@ -287,6 +351,12 @@ for package_dir in primitives/* skills/pick; do
 done
 ```
 
+原生模型、SPZ 拒绝、射线传感器和 GPU RGB 的快速测试可在原生容器运行时执行：
+
+```bash
+docker exec mujoco_robonix_sim python3 /workspace/sim/tests/native_smoke.py
+```
+
 ## 停止
 
 先在终端 2 按 `Ctrl-C`，或从另一个已加载环境的终端执行：
@@ -301,8 +371,8 @@ rbnx shutdown
 bash sim/stop.sh
 ```
 
-`sim/stop.sh` 不会终止 Robonix，`rbnx shutdown` 也不会关闭浏览器，两层生命周期
-相互独立。网页默认关闭键盘底盘控制和 actuator 调试项；开发时追加 `&dev=1`
+`sim/stop.sh` 不会终止 Robonix，`rbnx shutdown` 也不会关闭仿真运行时，两层生命周期
+相互独立。Web 页面默认关闭键盘底盘控制和 actuator 调试项；开发时追加 `&dev=1`
 可以恢复这些面板。无论是否为开发模式，只有机器人本体可拖动，视角可旋转。
 
 ## 添加场景
@@ -367,7 +437,8 @@ assets/robots/ranger_mini_v3_piper/   Ranger、Piper 和传感器
 assets/environments/                  可替换的 SPZ/Mesh 运行环境
 primitives/                           六个本地 Robonix primitive
 skills/pick/                          VLM 目标确认和抓取/放置 skill
-sim/bridge/                           浏览器与 ROS 2 双向 bridge
+sim/bridge/                           仿真运行时与 ROS 2 双向 bridge
+sim/native/                           原生 MuJoCo 场景、控制器、传感器和 viewer
 sim/tests/                            端到端运行时验证
 config/                               RTAB-Map 与 Nav2 本体参数
 docs/media/                           README 截图与演示视频

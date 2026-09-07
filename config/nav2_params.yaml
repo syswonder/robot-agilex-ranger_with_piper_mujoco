@@ -185,7 +185,11 @@ local_costmap:
       width: 5
       height: 5
       resolution: 0.05
-      robot_radius: 0.42
+      # Match the Ranger chassis instead of approximating it with a 0.42 m
+      # circle. The circular approximation marks the side-table manipulation
+      # pose (3.92, 3.25) as an inscribed obstacle even though the rectangular
+      # chassis fits when yaw=0.
+      footprint: "[[0.37, 0.25], [0.37, -0.25], [-0.37, -0.25], [-0.37, 0.25]]"
       # static_layer first: the rolling local window is cropped from the live
       # rtabmap /map, so the local controller (DWB) sees mapped walls and
       # avoids them reactively. obstacle_layer adds anything not yet mapped.
@@ -233,7 +237,7 @@ global_costmap:
       width: 16
       height: 12
       use_sim_time: True
-      robot_radius: 0.42
+      footprint: "[[0.37, 0.25], [0.37, -0.25], [-0.37, -0.25], [-0.37, 0.25]]"
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]

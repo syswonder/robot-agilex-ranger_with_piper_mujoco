@@ -17,7 +17,7 @@ def initialize(config):
     except ValueError as error:
         return Err(str(error))
     if not provider.wait_for_topic(topic, "Imu", sentinel_timeout_s):
-        return Err(f"no Imu received on {topic}; open the simulator page first")
+        return Err(f"no Imu received on {topic}; start the simulator runtime first")
     provider.declare_ros2_topic("robonix/primitive/imu/imu", topic, qos="best_effort")
     return Ok()
 
