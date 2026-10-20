@@ -7,6 +7,10 @@ PROVIDER="${RBNX_INSTANCE_NAME:-$DEFAULT_PROVIDER}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CT="${ROBONIX_SIM_CONTAINER:-mujoco_robonix_sim}"
 docker ps --format '{{.Names}}' | grep -qx "$CT" || { echo "sim container $CT is not running" >&2; exit 1; }
+docker exec "$CT" test -f /robonix-api/robonix_api/__init__.py || {
+  echo "sim container $CT has no robonix-api mount; recreate it with bash sim/start.sh" >&2
+  exit 1
+}
 exec docker exec \
   -w "/workspace/$PKG" \
   -e ROBONIX_ATLAS="${ROBONIX_ATLAS:-127.0.0.1:50051}" \
@@ -15,5 +19,5 @@ exec docker exec \
   -e RBNX_INSTANCE_NAME="$PROVIDER" \
   -e RBNX_PACKAGE_ROOT="/workspace/$PKG" \
   -e SIM_PROVIDER_ID="$PROVIDER" \
-  -e PYTHONPATH="/robonix/pylib/robonix-api:/workspace/$PKG/rbnx-build/codegen/proto_gen:/workspace/$PKG/rbnx-build/codegen/robonix_mcp_types:/workspace" \
+  -e PYTHONPATH="/robonix-api:/workspace/$PKG/rbnx-build/codegen/proto_gen:/workspace/$PKG/rbnx-build/codegen/robonix_mcp_types:/workspace" \
   "$CT" bash -lc "source /opt/ros/humble/setup.bash && exec python3 -m $MODULE mujoco-robonix-provider=$PROVIDER"

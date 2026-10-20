@@ -136,7 +136,10 @@ cp .env.example .env
 编辑 `.env`：
 
 ```dotenv
-ROBONIX_SOURCE_PATH=/home/your-name/robonix
+# 通常会通过 `rbnx path robonix-api` 自动发现 Robonix。
+# 仅在无法自动发现时设置以下任意一项。
+# ROBONIX_SOURCE_PATH=/home/your-name/robonix
+# ROBONIX_API_PATH=/home/your-name/robonix/pylib/robonix-api
 VLM_BASE_URL=your-model-url
 VLM_API_KEY=replace-me
 VLM_MODEL=your-model-name
@@ -152,6 +155,9 @@ MUJOCO_RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 # Native mode rejects software OpenGL unless explicitly disabled.
 # SIM_GPU_REQUIRED=1
 ```
+
+仿真器会在创建 Bridge 容器前解析并校验 `robonix-api`。显式路径、Robonix
+Console 安装目录、相邻源码目录以及 `rbnx path robonix-api` 均受支持，无需修改脚本。
 
 `VLM_API_KEY` 同时供 Pilot 和抓取 skill 使用，不能提交到 Git。它必须在项目
 `.env` 中填写，或在执行 `source scripts/env.sh` 前由当前 shell 导出。

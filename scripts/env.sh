@@ -6,7 +6,8 @@ if [[ -f "$PROJECT_ROOT/.env" ]]; then
   source "$PROJECT_ROOT/.env"
   set +a
 fi
-export ROBONIX_SOURCE_PATH="${ROBONIX_SOURCE_PATH:-$PROJECT_ROOT/../robonix}"
+source "$PROJECT_ROOT/scripts/resolve-robonix-paths.sh"
+resolve_robonix_paths "$PROJECT_ROOT"
 export ROBONIX_DEPLOY_DIR="${ROBONIX_DEPLOY_DIR:-$PROJECT_ROOT}"
 export VLM_BASE_URL="${VLM_BASE_URL:-https://api.openai.com/v1}"
 export VLM_MODEL="${VLM_MODEL:-gpt-5.6-sol}"
