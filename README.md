@@ -146,7 +146,10 @@ cp .env.example .env
 Edit `.env`:
 
 ```dotenv
-ROBONIX_SOURCE_PATH=/home/your-name/robonix
+# Robonix is normally discovered through `rbnx path robonix-api`.
+# Set one of these only when automatic discovery is unavailable.
+# ROBONIX_SOURCE_PATH=/home/your-name/robonix
+# ROBONIX_API_PATH=/home/your-name/robonix/pylib/robonix-api
 VLM_BASE_URL=your-model-url
 VLM_API_KEY=replace-me
 VLM_MODEL=your-model-name
@@ -163,6 +166,10 @@ MUJOCO_RMW_IMPLEMENTATION=rmw_fastrtps_cpp
 # Native mode rejects software OpenGL unless explicitly disabled.
 # SIM_GPU_REQUIRED=1
 ```
+
+The simulator resolves and validates `robonix-api` before creating its bridge
+container. Explicit paths, Robonix Console installations, sibling source
+checkouts, and `rbnx path robonix-api` are supported without editing scripts.
 
 `VLM_API_KEY` is shared by Pilot and the Pick skill. Keep it out of Git. Define it
 in the project `.env` or export it before sourcing `scripts/env.sh`.

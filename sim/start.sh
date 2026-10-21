@@ -13,7 +13,8 @@ if [[ -f "$ROOT/.env" ]]; then
   set +a
 fi
 
-export ROBONIX_SOURCE_PATH="${ROBONIX_SOURCE_PATH:-$ROOT/../robonix}"
+source "$ROOT/scripts/resolve-robonix-paths.sh"
+resolve_robonix_paths "$ROOT"
 export ROBONIX_SIM_CONTAINER="${ROBONIX_SIM_CONTAINER:-mujoco_robonix_sim}"
 # Do not inherit a generic ROS shell's RMW_IMPLEMENTATION. The Humble bridge
 # image installs Fast DDS; other Robonix workspaces commonly export Zenoh.

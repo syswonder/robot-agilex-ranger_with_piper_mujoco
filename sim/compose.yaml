@@ -21,4 +21,7 @@ services:
     volumes:
       - ./no_shm_profile.xml:/etc/fastrtps_no_shm.xml:ro
       - ..:/workspace
-      - ${ROBONIX_SOURCE_PATH:-/home/cyt/robonix}/pylib:/robonix/pylib:ro
+      - type: bind
+        source: ${ROBONIX_API_PATH:?run sim/start.sh or set ROBONIX_API_PATH}
+        target: /robonix-api
+        read_only: true
